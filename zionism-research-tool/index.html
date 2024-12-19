@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v13</title>
+    <title>Zionism Research Tool v15</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v13</header>
+        <header>Zionism Research Tool v15</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -290,18 +290,18 @@
 
 
         document.getElementById("submitBtn").addEventListener("click", async function () {
-            const inputText = document.getElementById("inputText").value.trim();
-            const selectedModel = document.getElementById("aiModel").value;
-            if (!inputText) {
-                alert("Please enter a statement to analyze.");
-                return;
-            }
+    const inputText = document.getElementById("inputText").value.trim();
+    const selectedModel = document.getElementById("aiModel").value;
+    if (!inputText) {
+        alert("Please enter a statement to analyze.");
+        return;
+    }
 
-            document.getElementById("loading").style.display = "block";
-            document.getElementById("result").style.display = "none";
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("result").style.display = "none";
 
-            const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
-            const requestData = {
+    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+    const requestData = {
                 model: selectedModel,
                 messages: [
                     {
@@ -339,6 +339,53 @@ Use a name-value pair for the data within contextual_analysis, classification, s
                 }
             };
 
+    // Retry configuration
+    const maxRetries = 6;
+    const baseDelay = 1000; // Start with 1 second delay
+
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    // Update loading message with retry information
+    const updateLoadingMessage = (attempt) => {
+        const loadingElement = document.getElementById("loading");
+        loadingElement.textContent = attempt > 0 ? 
+            `Processing... (Attempt ${attempt + 1} of ${maxRetries + 1})` : 
+            "Processing...";
+    };
+
+    // Error handling function
+    const handleError = (error, attempt) => {
+        console.error(`Attempt ${attempt + 1} failed:`, error);
+        if (attempt === maxRetries) {
+            document.getElementById("loading").style.display = "none";
+            let errorMessage = "An error occurred while processing your request. ";
+            
+            if (error.status === 429) {
+                errorMessage += "The service is currently experiencing high demand. Please try again in a few moments.";
+            } else if (error.status === 401) {
+                errorMessage += "Authentication failed. Please check your API key.";
+            } else if (error.status >= 500) {
+                errorMessage += "The service is currently unavailable. Please try again later.";
+            } else {
+                errorMessage += "Please try again or contact support if the problem persists.";
+            }
+            
+            alert(errorMessage);
+            throw error;
+        }
+    };
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            updateLoadingMessage(attempt);
+            
+            if (attempt > 0) {
+                // Calculate delay with exponential backoff and jitter
+                const backoffDelay = baseDelay * Math.pow(2, attempt - 1);
+                const jitter = Math.random() * 1000;
+                await delay(backoffDelay + jitter);
+            }
+
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -348,27 +395,37 @@ Use a name-value pair for the data within contextual_analysis, classification, s
                 body: JSON.stringify(requestData),
             });
 
-            const data = await response.json();
-            if (data.choices && data.choices[0]) {
-                const result = JSON.parse(data.choices[0].message.content);
-
-                // Clear the previous results
-                const resultContainer = document.getElementById("result");
-                resultContainer.innerHTML = "<h3>Analysis Results</h3>"; // Reset header
-
-                // Dynamically generate result sections
-                createResultSection("Contextual Analysis", result.contextual_analysis);
-                createResultSection("Classification", result.classification);
-                createResultSection("Strategic Response", result.strategic_response);
-
-                document.getElementById("loading").style.display = "none";
-                resultContainer.style.display = "block";
-            } else {
-                alert("Error: No valid response from API.");
-                document.getElementById("loading").style.display = "none";
+            if (!response.ok) {
+                throw { status: response.status, statusText: response.statusText };
             }
-        });
 
+            const data = await response.json();
+            if (!data.choices?.[0]?.message?.content) {
+                throw new Error("Invalid API response format");
+            }
+
+            const result = JSON.parse(data.choices[0].message.content);
+
+            // Clear the previous results
+            const resultContainer = document.getElementById("result");
+            resultContainer.innerHTML = "<h3>Analysis Results</h3>"; // Reset header
+
+            // Dynamically generate result sections
+            createResultSection("Contextual Analysis", result.contextual_analysis);
+            createResultSection("Classification", result.classification);
+            createResultSection("Strategic Response", result.strategic_response);
+
+            document.getElementById("loading").style.display = "none";
+            resultContainer.style.display = "block";
+            
+            // Success - exit retry loop
+            break;
+
+        } catch (error) {
+            await handleError(error, attempt);
+        }
+    }
+});
 
 
         function createResultSection(title, content) {
