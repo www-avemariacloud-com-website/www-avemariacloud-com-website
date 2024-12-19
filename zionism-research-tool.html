@@ -78,13 +78,14 @@
         }
 
         textarea {
-            width: 100%;
+            width: 97.25%;
             padding: 15px;
             font-size: 1rem;
             border-radius: 8px;
             border: 1px solid #ddd;
-            resize: none;
             min-height: 120px;
+            resize: both;
+            overflow: auto;
         }
 
         select {
@@ -213,19 +214,19 @@
         <header>Zionism Research Tool</header>
 
         <div class="button-group">
-            <button onclick="fillText('love')">Love</button>
-            <button onclick="fillText('joy')">Joy</button>
-            <button onclick="fillText('peace')">Peace</button>
-            <button onclick="fillText('longsuffering')">Longsuffering</button>
-            <button onclick="fillText('gentleness')">Gentleness</button>
-            <button onclick="fillText('goodness')">Goodness</button>
-            <button onclick="fillText('faith')">Faith</button>
-            <button onclick="fillText('meekness')">Meekness</button>
-            <button onclick="fillText('temperance')">Temperance</button>
+          <button onclick="fillText('love')">Love</button>
+          <button onclick="fillText('joy')">Joy</button>
+          <button onclick="fillText('peace')">Peace</button>
+          <button onclick="fillText('patience')">Patience</button>
+          <button onclick="fillText('kindness')">Kindness</button>
+          <button onclick="fillText('generosity')">Generosity</button>
+          <button onclick="fillText('faithfulness')">Faithfulness</button>
+          <button onclick="fillText('gentleness')">Gentleness</button>
+          <button onclick="fillText('self_control')">Self-Control</button>
         </div>
 
         <div class="input-group">
-            <label for="inputText">An input for a statement or event is below</label>
+            <label for="inputText">An input for a sentence is below</label>
             <textarea id="inputText" placeholder="You may type here"></textarea>
         </div>
         <!-- Dropdown for model selection -->
@@ -273,15 +274,15 @@
 
     function fillText(type) {
         const text = {
-            love: "Zionism seeks to create a home for the Jewish people where love and respect are shown to all inhabitants, fostering a spirit of unity and cooperation.",
+            love: `Zionism seeks to create a home for the Jewish people where love and respect are shown to all inhabitants, fostering a spirit of unity and cooperation.`,
             joy: "Celebrating the diverse cultures and traditions of Israel brings joy to the world, showcasing the beauty of collaboration and heritage.",
             peace: "Zionism is rooted in the desire for peace, promoting dialogue and coexistence among all communities in the land of Israel.",
-            longsuffering: "The enduring commitment to a peaceful resolution in the face of challenges demonstrates the patience and perseverance central to Zionist ideals.",
-            gentleness: "Approaching discussions about Zionism with gentleness and compassion allows for mutual understanding and shared growth.",
-            goodness: "Zionism inspires acts of goodness, such as providing humanitarian aid, advancing medical innovations, and contributing to global well-being.",
-            faith: "Zionism reflects the deep faith of the Jewish people in their historical and spiritual connection to the Land of Israel.",
-            meekness: "Zionism encourages humility, recognizing the shared humanity and dignity of all people, regardless of differences.",
-            temperance: "Responding to criticism of Zionism with restraint and temperance ensures constructive dialogue and bridges gaps between differing perspectives."
+            patience: "Explore examples of patient diplomacy, settlement efforts, or culture within early Zionist narratives.",
+            kindness: "How is kindness depicted in humanitarian efforts supported by Zionist organizations throughout history?",
+            generosity: "Analyze the ways in which Zionist fundraising efforts worldwide embodied generosity toward the Zionist cause.",
+            faithfulness: "Discuss how faithfulness to certain core Zionist values influenced policy-making in Israel’s formative years.",
+            gentleness: "Examine examples of gentleness in Zionist educational philosophies aimed at nurturing the next generation.",
+            self_control: "In what ways did self-control influence the personal sacrifices made by individuals committed to the Zionist cause?"
         };
 
         document.getElementById("inputText").value = text[type] || '';
@@ -342,6 +343,7 @@ Use a name-value pair for the data within contextual_analysis, classification, s
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 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',
                 },
                 body: JSON.stringify(requestData),
             });
