@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antisemitism Identifier & Combat Strategy Tool</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Make the application full screen with no margins or padding */
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+
+        /* Center container to fill screen */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header section styling */
+        .header {
+            background-color: #004080;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+        }
+
+        /* Main content styling to take full width */
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .content h5 {
+            color: #333;
+        }
+
+        .btn-primary {
+            background-color: #004080;
+            border: none;
+        }
+
+        /* Loading and result sections */
+        .loading, .result {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .result {
+            display: none;
+        }
+
+        /* Footer text */
+        .footer {
+            background-color: #e0e0e0;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8em;
+            color: #555;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- Header Section -->
+    <div class="header">
+        <h2>Antisemitism Identifier & Combat Strategy Tool v4</h2>
+        <p>Using the <a href="https://www.holocaustremembrance.com/resources/working-definitions-charters/working-definition-antisemitism" target="_blank" rel="noopener noreferrer" style="color: #b0d4ff;">IHRA Definition of Antisemitism</a></p>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="content">
+        <form id="antisemitismForm" style="width: 100%;"><center>
+            <h5>Describe the Event or Statement:</h5>
+            <textarea class="form-control" id="userInput" rows="5" placeholder="Enter event or statement here..." required></textarea>
+            <button type="submit" class="btn btn-primary btn-block mt-3">Analyze</button>
+          </center>
+        </form>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p>Analyzing...</p>
+        </div>
+
+        <!-- Result Display -->
+        <div id="result" class="result">
+            <h5>Analysis Result</h5>
+            <div class="alert alert-info">
+                <strong>Identification:</strong>
+                <div id="identification-content"></div>
+            </div>
+            <div class="alert alert-success">
+                <strong>Combat Strategy:</strong>
+                <div id="strategy-content"></div>
+            </div>
+            <p>For further support, visit the <a href="https://holocaustremembrance.com/" target="_blank" rel="noopener noreferrer">International Holocaust Remembrance Alliance</a>.</p>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.
+        <BR>
+        &copy; 2024 Ave Maria Cloud | Internet Services LLC <br>
+        <a href="ihra-tool-privacy-policy.txt" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+    </div>
+
+</div>
+
+<!-- Bootstrap and jQuery JavaScript for Modal and Button functionality -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.getElementById('antisemitismForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userInput = document.getElementById('userInput').value;
+
+        // Show loading indicator
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('result').style.display = 'none';
+
+        fetch("https://api.avemariacloud.com/ai-api.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "llama-3.1-70b-versatile",
+                messages: [
+                    {
+                        role: "system",
+                        content: "You are an advanced language model analyzing events, statements, or behaviors for potential antisemitism. Follow the International Holocaust Remembrance Alliance (IHRA) guidelines to evaluate the input. Responses must be JSON with fixed keys as follows: {\"identification\": \"[Describe if and how the event aligns with the IHRA definition of antisemitism in clear terms.]\",\"strategy\": \"[Provide specific actions to counter this in alignment with IHRA recommendations.]\"}"
+                    },
+                    {
+                        role: "user",
+                        content: userInput
+                    }
+                ],
+                response_format: {
+                    type: "json_object"
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const aiResponse = JSON.parse(data.choices[0].message.content);
+
+            document.getElementById('identification-content').innerHTML = aiResponse.identification;
+            document.getElementById('strategy-content').innerHTML = aiResponse.strategy;
+
+            // Hide loading indicator, show result
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('loading').style.display = 'none';
+            alert("There was an error processing your request. Please try again.");
+        });
+    });
+</script>
+
+</body>
+</html>
