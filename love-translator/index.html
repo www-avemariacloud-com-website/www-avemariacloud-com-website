@@ -317,13 +317,13 @@
     var love_translator_of_your_own_idea_v1_0 = [
                     {
                         role: "system",
-                        content: `Given an input sentence that contains a statement, rephrase it into a more positive, loving, and compassionate form while ensuring the original meaning and facts remain intact. The result should emphasize kindness, understanding, and appreciation, turning any neutral or negative sentiment into a nurturing or constructive message.`
+                        content: `Given an input sentence that contains a statement, rephrase it into a more positive, loving, and compassionate form while ensuring the original meaning and facts remain intact. The result should emphasize kindness, understanding, and appreciation, turning any neutral or negative sentiment into a nurturing or constructive message.
+                        
+Respond in JSON.`
                     },
                     {
                         role: "user",
-                        content: `"${inputText}"
-                        
-Respond in JSON.`
+                        content: `"${inputText}"`
                     }
                 ];
 
@@ -331,9 +331,9 @@ Respond in JSON.`
     var love_translator_of_someone_elses_idea_v1_0 = [
                     {
                         role: "system",
-                        content: "Given an input sentence that contains a statement from someone else, rephrase it into a more positive, loving, and compassionate form while retaining the original meaning and facts. The result should reflect kindness, understanding, and care. Additionally, provide a gentle, constructive response that can help the original speaker use a more loving and positive form of expression in the future.
+                        content: `Given an input sentence that contains a statement from someone else, rephrase it into a more positive, loving, and compassionate form while retaining the original meaning and facts. The result should reflect kindness, understanding, and care. Additionally, provide a gentle, constructive response that can help the original speaker use a more loving and positive form of expression in the future.
 
-Respond in JSON."
+Respond in JSON.`
                     },
                     {
                         role: "user",
