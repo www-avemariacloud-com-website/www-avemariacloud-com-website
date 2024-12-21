@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v2</title>
+    <title>Love Translator v3</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,19 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v2</header>
-
-        <div class="button-group">
-          <button onclick="fillText('love')">Love</button>
-          <button onclick="fillText('joy')">Joy</button>
-          <button onclick="fillText('peace')">Peace</button>
-          <button onclick="fillText('patience')">Patience</button>
-          <button onclick="fillText('kindness')">Kindness</button>
-          <button onclick="fillText('generosity')">Generosity</button>
-          <button onclick="fillText('faithfulness')">Faithfulness</button>
-          <button onclick="fillText('gentleness')">Gentleness</button>
-          <button onclick="fillText('self_control')">Self-Control</button>
-        </div>
+        <header>Love Translator v3</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -268,15 +256,17 @@
 <BR><BR>
             <div class="disclaimer" style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 30px; font-size: 1rem; color: #333; text-align: center; border: 1px solid #ddd;">
     <strong>Disclaimer</strong> <br><br>
-    This "Zionism Research Tool" is designed to assist users in analyzing both sociopolitical <strong>statements</strong> and significant <strong>events</strong> related to Zionism. I encourage thoughtful reflection and respectful discussion when engaging with the content, as Zionism is a deeply meaningful and sensitive topic to many, encompassing a broad range of perspectives. <br><br>
+    The tool you are using is designed to help translate statements into more loving, compassionate, and constructive versions, with the goal of promoting positive communication, understanding, and personal growth.
 
-    Whether analyzing a statement or an event, in part my goal is to foster understanding and constructive dialogue.<br><br>
+While this tool aims to offer loving rephrasings of your ideas or those from others, it is important to note the following:
 
-    Please approach the information with an open heart and a spirit of respect for differing views, knowing that this tool is one of many resources available for learning and discussion. I hope it serves as a starting point for thoughtful inquiry and respectful engagement. May we all seek peace, understanding, and compassion in our conversations and actions. <br><br>
+Context Matters: The translations provided are based on the input text and are intended to enhance the tone of communication. However, context, tone, and personal relationships may influence how these translations are perceived in real-life situations. Always consider the full context before applying any rephrased content.
 
-    For those seeking a deeper understanding of Zionism, its history, and its values, I recommend consulting resources such as the <a href="https://www.jewishagency.org" target="_blank">Jewish Agency for Israel</a> and the <a href="https://www.wzo.org.il" target="_blank">World Zionist Organization</a>. These organizations provide valuable information and support for those interested in learning more about the Zionist movement and Israel's place in the world.
-    
-    <BR><BR>I also suggest reviewing the <a href="https://holocaustremembrance.com/resources/working-definition-antisemitism">IHRA’s non-legally binding working definition of antisemitism.</a>
+Encouragement of Constructive Communication: The tool may include suggestions to encourage users to adopt more positive forms of expression, but it is important to recognize that communication is a personal choice. The responses are designed to guide toward a more compassionate approach but may not be suitable for every situation.
+
+Limitations of AI: While the tool strives to offer meaningful and loving translations, it may not always perfectly capture the nuances of human emotion or intent. Users are encouraged to use their judgment when applying the translations to ensure that the message is appropriately conveyed.
+
+By using this tool, maybe you should acknowledge that it is a supportive resource designed to help foster understanding and kindness in communication. It may be beneficial for users to take ownership and be mindful of their messages and communications, as we care about the impact of their words and want to empower them to make informed choices.
 </div>
 
 
@@ -285,22 +275,6 @@
 
     <script>
 
-
-    function fillText(type) {
-        const text = {
-            love: "Zionism seeks to create a home for the Jewish people where love and respect are shown to all inhabitants, fostering a spirit of unity and cooperation.",
-            joy: "Celebrating the diverse cultures and traditions of Israel brings joy to the world, showcasing the beauty of collaboration and heritage.",
-            peace: "Zionism is rooted in the desire for peace, promoting dialogue and coexistence among all communities in the land of Israel.",
-            patience: "The role patience has played in the Zionist movement’s approach to long-term political and social goals.",
-            kindness: "Kindness in community-building initiatives within early Zionist settlements in Palestine.",
-            generosity: "Analyze how Zionist fundraising efforts worldwide embodied generosity toward the Zionist cause.",
-            faithfulness: "How faithfulness expressed loyalty to the land of Israel as depicted in Zionist literature and speeches.",
-            gentleness: "Gentleness in Zionist educational philosophies nurtures the next generation.",
-            self_control: "In what ways did self-control influence the personal sacrifices made by individuals committed to the Zionist cause?"
-        };
-
-        document.getElementById("inputText").value = text[type] || '';
-    }
 
 
         document.getElementById("submitBtn").addEventListener("click", async function () {
