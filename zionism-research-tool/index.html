@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v15</title>
+    <title>Zionism Research Tool v20</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v15</header>
+        <header>Zionism Research Tool v20</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -237,6 +237,16 @@
                 <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
             </select>
         </div>
+
+        <!-- Dropdown for model selection -->
+        <div class="input-group">
+            <label for="aiPrompt">A prompt can be selected below</label>
+            <select id="aiPrompt">
+                <option value="zionismResearchPrompt1_0" selected>Zionism Research 1.0</option>
+                <option value="IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0">Antisemitism Identifier and Combat Strategy (Inspired by IHRA) 1.0</option>
+            </select>
+        </div>
+      
         <button id="submitBtn">Analyze</button>
         <div id="loading" class="loading">Analyzing with Artificial Intelligence...</div>
 
@@ -249,8 +259,8 @@
         <footer>
             <p>By using this tool, maybe you should read and agree to this <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I desire that these things will benefit you.</p>
               <strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.
-            <BR>
-              <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.
+            <BR><BR>
+              <strong>Gemma:</strong> This Plugin utilizes Gemma, a machine learning model by Google LLC. By using this Plugin, you agree to comply with the <a href="https://ai.google.dev/gemma/terms" target="_blank">Gemma Terms of Use</a>. Google LLC disclaims all warranties; use of this Plugin is at your own risk.
             </ul>
 
 <BR><BR>
@@ -260,9 +270,11 @@
 
     Whether analyzing a statement or an event, in part my goal is to foster understanding and constructive dialogue.<br><br>
 
-    Please approach the information with an open heart and a spirit of respect for differing views, knowing that this tool is one of many resources available for learning and discussion. I hope it serves as a starting point for thoughtful inquiry and respectful engagement, not as an endpoint. May we all seek peace, understanding, and compassion in our conversations and actions. <br><br>
+    Please approach the information with an open heart and a spirit of respect for differing views, knowing that this tool is one of many resources available for learning and discussion. I hope it serves as a starting point for thoughtful inquiry and respectful engagement. May we all seek peace, understanding, and compassion in our conversations and actions. <br><br>
 
     For those seeking a deeper understanding of Zionism, its history, and its values, I recommend consulting resources such as the <a href="https://www.jewishagency.org" target="_blank">Jewish Agency for Israel</a> and the <a href="https://www.wzo.org.il" target="_blank">World Zionist Organization</a>. These organizations provide valuable information and support for those interested in learning more about the Zionist movement and Israel's place in the world.
+    
+    <BR><BR>I also suggest reviewing the <a href="https://holocaustremembrance.com/resources/working-definition-antisemitism">IHRA’s non-legally binding working definition of antisemitism</a>
 </div>
 
 
@@ -299,11 +311,8 @@
 
     document.getElementById("loading").style.display = "block";
     document.getElementById("result").style.display = "none";
-
-    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
-    const requestData = {
-                model: selectedModel,
-                messages: [
+  
+    var zionismResearchPrompt1_0 = [
                     {
                         role: "system",
                         content: `You are an expert in analyzing sociopolitical statements and events with a focus on Zionism. Your role is to analyze a given input, determine its alignment with Zionist principles, opposition, or neutrality, and provide a strategic response. Follow this structure in your analysis:
@@ -333,7 +342,35 @@ Respond in JSON with the following name-value pairs: contextual_analysis, classi
 
 Use a name-value pair for the data within contextual_analysis, classification, strategic_response`
                     }
-                ],
+                ];
+
+
+    var IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0 = [
+                    {
+                        role: "system",
+                        content: "You are an advanced language model analyzing events, statements, or behaviors for potential antisemitism. Follow the International Holocaust Remembrance Alliance (IHRA) guidelines to evaluate the input. Responses must be JSON with fixed keys as follows: {\"identification\": \"[Describe if and how the event aligns with the IHRA definition of antisemitism in clear terms.]\",\"strategy\": \"[Provide specific actions to counter this in alignment with IHRA recommendations.]\"}"
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+    
+    const selectedPrompt = document.getElementById("aiPrompt").value;
+
+    var aiPrompt;
+          
+    if (selectedPrompt == "zionismResearchPrompt1_0") {
+      aiPrompt = zionismResearchPrompt1_0;
+    }
+
+    if (selectedPrompt == "IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0") {
+      aiPrompt = IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0;
+    }
+    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+    const requestData = {
+                model: selectedModel,
+                messages: aiPrompt,
                 response_format: {
                     type: "json_object"
                 }
@@ -411,9 +448,7 @@ Use a name-value pair for the data within contextual_analysis, classification, s
             resultContainer.innerHTML = "<h3>Analysis Results</h3>"; // Reset header
 
             // Dynamically generate result sections
-            createResultSection("Contextual Analysis", result.contextual_analysis);
-            createResultSection("Classification", result.classification);
-            createResultSection("Strategic Response", result.strategic_response);
+            createResultSection("Contextual Analysis", result);
 
             document.getElementById("loading").style.display = "none";
             resultContainer.style.display = "block";
