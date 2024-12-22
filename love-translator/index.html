@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v6</title>
+    <title>Love Translator v7</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v6</header>
+        <header>Love Translator v7</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -407,7 +407,7 @@ Respond in JSON.`
             resultContainer.innerHTML = "<h3>Analysis Results</h3>"; // Reset header
 
             // Dynamically generate result sections
-            createResultSection("Contextual Analysis", result);
+            createResultSection("", result);
 
             document.getElementById("loading").style.display = "none";
             resultContainer.style.display = "block";
