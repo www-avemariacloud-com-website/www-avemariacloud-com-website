@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v11</title>
+    <title>Love Translator v12</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v11</header>
+        <header>Love Translator v12</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -576,7 +576,7 @@ function createKeyValuePairs(obj) {
         messageHistory.push({ role: "user", content: userMessage });
 
         const body = {
-            model: "llama-3.2-90b-vision-preview",
+            model: document.getElementById("aiModel").value,
             messages: messageHistory
         };
 
