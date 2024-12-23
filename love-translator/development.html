@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v9</title>
+    <title>Love Translator v10</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v9</header>
+        <header>Love Translator v10</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -527,12 +527,39 @@ function createKeyValuePairs(obj) {
 
     </script>
 
-<script>
+	<script>
     const apiKey = "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";
     const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
     var messageHistory = [
         { role: "system", content: "You are a chatbot designed to help with users with an application called Love Translator" }
     ];
+
+    // Add CSS styles for messages
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+        .message {
+            white-space: pre-wrap;       /* Preserves line breaks and spaces */
+            word-wrap: break-word;       /* Breaks long words */
+            max-width: 80%;             /* Prevents messages from stretching too wide */
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .message.user {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+        }
+        .message.bot {
+            background-color: #f8d7da;
+            align-self: flex-start;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            align-self: flex-start;
+            color: red;
+        }
+    `;
+    document.head.appendChild(styleSheet);
 
     async function sendMessage() {
         const userInput = document.getElementById("user-input");
@@ -553,10 +580,14 @@ function createKeyValuePairs(obj) {
             messages: messageHistory
         };
 
+        // Create user message element
         const userMessageElement = document.createElement("div");
         userMessageElement.className = "message user";
-        userMessageElement.textContent = userMessage;
-        userMessageElement.style = "background-color: #d1e7dd; padding: 10px; margin: 5px 0; border-radius: 8px; align-self: flex-end;";
+        
+        // Create a text node to properly handle special characters
+        const userTextNode = document.createTextNode(userMessage);
+        userMessageElement.appendChild(userTextNode);
+        
         chatBox.appendChild(userMessageElement);
 
         try {
@@ -574,18 +605,22 @@ function createKeyValuePairs(obj) {
             const botReply = data.choices[0].message.content;
             messageHistory.push({ role: "assistant", content: botReply });
 
+            // Create bot message element
             const botMessageElement = document.createElement("div");
             botMessageElement.className = "message bot";
-            botMessageElement.textContent = botReply;
-            botMessageElement.style = "background-color: #f8d7da; padding: 10px; margin: 5px 0; border-radius: 8px; align-self: flex-start;";
+            
+            // Create a text node for bot reply
+            const botTextNode = document.createTextNode(botReply);
+            botMessageElement.appendChild(botTextNode);
+            
             chatBox.appendChild(botMessageElement);
         } catch (error) {
             console.error("Failed to get a response:", error);
 
             const errorElement = document.createElement("div");
             errorElement.className = "message error";
-            errorElement.textContent = "Sorry, I encountered an error while processing your request.";
-            errorElement.style = "background-color: #f8d7da; padding: 10px; margin: 5px 0; border-radius: 8px; align-self: flex-start; color: red;";
+            const errorText = document.createTextNode("Sorry, I encountered an error while processing your request.");
+            errorElement.appendChild(errorText);
             chatBox.appendChild(errorElement);
         }
 
@@ -593,6 +628,7 @@ function createKeyValuePairs(obj) {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 </script>
+	
 </body>
 
 </html>
