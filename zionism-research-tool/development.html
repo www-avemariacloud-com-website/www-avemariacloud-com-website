@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v25</title>
+    <title>Zionism Research Tool v26</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v25</header>
+        <header>Zionism Research Tool v26</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -369,6 +369,9 @@ Use a name-value pair for the data within contextual_analysis, classification, s
     if (selectedPrompt == "IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0") {
       aiPrompt = IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0;
     }
+
+     messageHistory.push(aiPrompt[1]);
+            
     const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
     const requestData = {
                 model: selectedModel,
@@ -439,6 +442,10 @@ Use a name-value pair for the data within contextual_analysis, classification, s
             }
 
             const data = await response.json();
+
+            const botReply = data.choices[0].message.content;
+            messageHistory.push({ role: "assistant", content: botReply });
+            
             if (!data.choices?.[0]?.message?.content) {
                 throw new Error("Invalid API response format");
             }
@@ -454,6 +461,16 @@ Use a name-value pair for the data within contextual_analysis, classification, s
 
             document.getElementById("loading").style.display = "none";
             resultContainer.style.display = "block";
+
+
+            resultContainer.innerHTML = resultContainer.innerHTML + `
+        <BR>
+            <h3>Research Assistant</h3>
+    <div id="chat-box" style="width: 100%; height: 400px; border: 1px solid #ccc; border-radius: 8px; overflow-y: auto; padding: 10px; background: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column;"></div>
+    <div style="width: 100%; margin-top: 10px; display: flex; gap: 5px;">
+        <input type="text" id="user-input" placeholder="Type your message here..." required style="flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+        <button type="button" id="send-button" style="padding: 10px 15px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer;" onclick="sendMessage()">Send</button>
+    </div>
             
             // Success - exit retry loop
             break;
@@ -537,6 +554,111 @@ function createKeyValuePairs(obj) {
 
 
     </script>
+
+
+    <script>
+    const apiKey = "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";
+    const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+    var messageHistory = [
+        { role: "system", content: "You are a chatbot designed to help with users with an application called Love Translator" }
+    ];
+
+    // Add CSS styles for messages
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+        .message {
+            white-space: pre-wrap;       /* Preserves line breaks and spaces */
+            word-wrap: break-word;       /* Breaks long words */
+            max-width: 80%;             /* Prevents messages from stretching too wide */
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .message.user {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+        }
+        .message.bot {
+            background-color: #f8d7da;
+            align-self: flex-start;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            align-self: flex-start;
+            color: red;
+        }
+    `;
+    document.head.appendChild(styleSheet);
+
+    async function sendMessage() {
+        const userInput = document.getElementById("user-input");
+        const chatBox = document.getElementById("chat-box");
+
+        const userMessage = userInput.value.trim();
+        if (!userMessage) return;
+
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+        };
+
+        messageHistory.push({ role: "user", content: userMessage });
+
+        const body = {
+            model: "llama-3.2-90b-vision-preview",
+            messages: messageHistory
+        };
+
+        // Create user message element
+        const userMessageElement = document.createElement("div");
+        userMessageElement.className = "message user";
+        
+        // Create a text node to properly handle special characters
+        const userTextNode = document.createTextNode(userMessage);
+        userMessageElement.appendChild(userTextNode);
+        
+        chatBox.appendChild(userMessageElement);
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const botReply = data.choices[0].message.content;
+            messageHistory.push({ role: "assistant", content: botReply });
+
+            // Create bot message element
+            const botMessageElement = document.createElement("div");
+            botMessageElement.className = "message bot";
+            
+            // Create a text node for bot reply
+            const botTextNode = document.createTextNode(botReply);
+            botMessageElement.appendChild(botTextNode);
+            
+            chatBox.appendChild(botMessageElement);
+        } catch (error) {
+            console.error("Failed to get a response:", error);
+
+            const errorElement = document.createElement("div");
+            errorElement.className = "message error";
+            const errorText = document.createTextNode("Sorry, I encountered an error while processing your request.");
+            errorElement.appendChild(errorText);
+            chatBox.appendChild(errorElement);
+        }
+
+        userInput.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+
+    
 </body>
 
 </html>
