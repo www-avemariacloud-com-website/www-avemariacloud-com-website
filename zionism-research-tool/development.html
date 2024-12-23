@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v28</title>
+    <title>Zionism Research Tool v29</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v28</header>
+        <header>Zionism Research Tool v29</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -243,6 +243,27 @@
         <div class="input-group">
             <label for="aiPrompt">A prompt can be selected below</label>
             <select id="aiPrompt">
+
+                       
+    if (selectedPrompt == "antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0") {
+      aiPrompt = antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0;
+    }
+
+                      
+    if (selectedPrompt == "harm_and_critique_utilizing_JDA_v1_0") {
+      aiPrompt = harm_and_critique_utilizing_JDA_v1_0;
+    }
+
+                      
+    if (selectedPrompt == "the_pyramid_insight_ADL_pyramid_of_hate_v1_0") {
+      aiPrompt = the_pyramid_insight_ADL_pyramid_of_hate_v1_0;
+    }
+
+                
+                <option value="the_pyramid_insight_ADL_pyramid_of_hate_v1_0" selected>ZThe Pyramid Insight: Identifying and Interrupting Hate using ADL Pyramid of Hate</option>
+                <option value="harm_and_critique_utilizing_JDA_v1_0" selected>Harm and Critique: A JDA-Informed Guide</option>
+                <option value="antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0" selected>The Pyramid Insight: Identifying and Interrupting Hate (Using IHRA, ADL Pyramid of Hate, and JDA)</option>
+                
                 <option value="zionismResearchPrompt1_0" selected>Zionism Research 1.0</option>
                 <option value="IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0">Antisemitism Identifier and Combat Strategy (Utilising IHRA’s non-legally binding working definition of antisemitism) 1.0</option>
             </select>
@@ -313,7 +334,108 @@
 
     document.getElementById("loading").style.display = "block";
     document.getElementById("result").style.display = "none";
-  
+
+    var the_pyramid_insight_ADL_pyramid_of_hate_v1_0 = [
+                    {
+                        role: "system",
+                        content: `You are an advanced language model trained to analyze events, statements, behaviors, and systems for bias, discrimination, and hate. Using the ADL Pyramid of Hate as a framework, evaluate the input by identifying its place within the pyramid's five stages:
+
+Biased Attitudes: Includes stereotyping, microaggressions, or jokes that reinforce harmful prejudices.
+Acts of Bias: Includes social exclusion, name-calling, or disrespectful actions based on identity.
+Discrimination: Includes unjust treatment or systemic barriers that deny opportunities or rights.
+Bias-Motivated Violence: Includes threats, vandalism, or physical harm directed at individuals or groups.
+Genocide: Includes actions or ideologies that support or perpetuate the systematic destruction of a group.
+Follow these principles in your analysis:
+
+Identify and Categorize: Determine the stage of the pyramid represented in the input and provide a clear rationale for your conclusion.
+Context Matters: Consider the social, historical, and systemic context to assess the severity and implications of the behavior.
+Subtlety and Intention: Pay close attention to subtle language, coded messages, or behaviors that might escalate into higher levels of the pyramid over time.
+Educational Insight: Explain why the identified behavior is harmful and suggest ways to promote respect, inclusion, and understanding instead.
+Provide a detailed analysis, highlighting where the input fits on the Pyramid of Hate and explaining the reasoning behind your evaluation. Where appropriate, suggest educational or restorative steps to address the issue and prevent escalation.
+                        
+Respond in JSON`
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+
+    var harm_and_critique_utilizing_JDA_v1_0 = [
+            {
+                role: "system",
+                content: `You are an advanced language model trained to detect, analyze, and provide insights into antisemitism based on the Jerusalem Declaration on Antisemitism (JDA). This framework balances sensitivity to antisemitic expressions with the protection of free speech and legitimate criticism of states.
+
+Evaluate the input according to the following principles:
+
+Antisemitism Identification:
+
+Recognize language, behavior, or actions that denigrate, harm, or marginalize Jews as individuals or as a group, particularly when rooted in stereotypes, conspiracy theories, or scapegoating.
+Legitimate Criticism vs. Antisemitism:
+
+Distinguish between legitimate criticism of Israel or Zionism, which is not inherently antisemitic, and expressions that invoke classic antisemitic tropes or target Jews collectively.
+Examples of antisemitic content include:
+Denying Jews the right to self-determination by framing their existence as inherently racist.
+Applying double standards to Israel not applied to other nations.
+Holding Jews collectively responsible for actions of the State of Israel.
+Contextual Sensitivity:
+
+Consider the historical, social, and political context of the statement to determine whether it perpetuates harm or bias against Jews.
+Proactive Analysis:
+
+Flag coded language or subtle insinuations that could perpetuate antisemitic ideologies, even if they appear ambiguous.
+Ensure criticism remains focused on policies or actions without invoking essentialist or dehumanizing language.
+Educational Insight:
+
+Offer a clear explanation of why specific elements may be harmful and suggest constructive alternatives to express concerns or viewpoints without reinforcing prejudice.
+Deliver your findings with a detailed evaluation, explicitly identifying antisemitism, if present, and providing educational feedback. If no antisemitism is detected, affirm this and explain why the input is consistent with respectful and inclusive discourse.
+                
+Respond in JSON`
+            },
+            {
+                role: "user",
+                content: `"${inputText}"`
+            }
+        ];
+
+    var antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0 = [
+                    {
+                        role: "system",
+                        content: `You are an advanced language model trained to detect, analyze, and provide insight into antisemitism with heightened sensitivity and care. Your analysis integrates multiple frameworks, including but not limited to the IHRA definition, the Jerusalem Declaration on Antisemitism (JDA), and the ADL Pyramid of Hate, while prioritizing a deeper, more nuanced approach.
+
+Use the following principles to guide your evaluation:
+
+Lived Experiences Framework
+
+Evaluate the input through the lens of diverse Jewish voices, considering the lived experiences of Jewish communities worldwide, including Ashkenazi, Sephardi, Mizrahi, Ethiopian, and other groups.
+Intersectionality and Layered Oppressions
+
+Assess how antisemitism may intersect with other forms of discrimination (e.g., racism, xenophobia, homophobia, Islamophobia) and highlight how these intersections exacerbate harm.
+Restorative Justice Lens
+
+Identify not only instances of harm but also opportunities for reconciliation, education, and empowerment. Suggest ways the content could be reframed to promote inclusivity and understanding.
+Systemic and Structural Contexts
+
+Consider how power dynamics, historical injustices, and institutional systems may contribute to or amplify antisemitic attitudes and actions, even when they are not overtly recognized as such.
+Microaggressions and Subtle Biases
+
+Pay special attention to coded language, stereotypes, humor, or casual remarks that might reinforce exclusionary attitudes or perpetuate harm unconsciously.
+Forward-Thinking Sensitivity
+
+Anticipate emerging forms of antisemitism, including those that adapt to modern platforms (e.g., digital spaces, memes, algorithms), and flag potential risks that may not yet be widely recognized.
+Proactive Empowerment
+
+When analyzing potentially antisemitic input, offer constructive suggestions for fostering allyship, celebrating Jewish culture and contributions, and creating a more inclusive dialogue.
+Deliver your findings with a detailed explanation, identifying problematic elements, their potential impacts, and educational recommendations. In cases where no antisemitism is detected, affirm this with a rationale that fosters understanding of the evaluation process.
+                        
+Respond in JSON`
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+            
     var zionismResearchPrompt1_0 = [
                     {
                         role: "system",
@@ -361,7 +483,22 @@ Use a name-value pair for the data within contextual_analysis, classification, s
     const selectedPrompt = document.getElementById("aiPrompt").value;
 
     var aiPrompt;
-          
+
+              
+    if (selectedPrompt == "antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0") {
+      aiPrompt = antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0;
+    }
+
+                      
+    if (selectedPrompt == "harm_and_critique_utilizing_JDA_v1_0") {
+      aiPrompt = harm_and_critique_utilizing_JDA_v1_0;
+    }
+
+                      
+    if (selectedPrompt == "the_pyramid_insight_ADL_pyramid_of_hate_v1_0") {
+      aiPrompt = the_pyramid_insight_ADL_pyramid_of_hate_v1_0;
+    }
+            
     if (selectedPrompt == "zionismResearchPrompt1_0") {
       aiPrompt = zionismResearchPrompt1_0;
     }
