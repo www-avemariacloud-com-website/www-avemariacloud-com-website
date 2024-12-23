@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v10</title>
+    <title>Love Translator v11</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v10</header>
+        <header>Love Translator v11</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -397,14 +397,29 @@ Respond in JSON.`
                 await delay(backoffDelay + jitter);
             }
 
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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',
-                },
-                body: JSON.stringify(requestData),
-            });
+            const timeout = 5000; // 5 seconds timeout
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+try {
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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',
+        },
+        body: JSON.stringify(requestData),
+        signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    // Process response here
+} catch (error) {
+    if (error.name === 'AbortError') {
+        throw new Error('Request timed out');
+    }
+    throw error;
+}
+		
 
             if (!response.ok) {
                 throw { status: response.status, statusText: response.statusText };
