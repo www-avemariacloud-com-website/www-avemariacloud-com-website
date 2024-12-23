@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v27</title>
+    <title>Zionism Research Tool v28</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v27</header>
+        <header>Zionism Research Tool v28</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -605,7 +605,7 @@ function createKeyValuePairs(obj) {
         messageHistory.push({ role: "user", content: userMessage });
 
         const body = {
-            model: "llama-3.2-90b-vision-preview",
+            model: document.getElementById("aiModel").value,
             messages: messageHistory
         };
 
