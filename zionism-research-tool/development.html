@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v31</title>
+    <title>Zionism Research Tool v33</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -211,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v31</header>
+        <header>Zionism Research Tool v33</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -244,28 +244,15 @@
             <label for="aiPrompt">A prompt can be selected below</label>
             <select id="aiPrompt">
 
-                       
-    if (selectedPrompt == "antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0") {
-      aiPrompt = antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0;
-    }
-
-                      
-    if (selectedPrompt == "harm_and_critique_utilizing_JDA_v1_0") {
-      aiPrompt = harm_and_critique_utilizing_JDA_v1_0;
-    }
-
-                      
-    if (selectedPrompt == "the_pyramid_insight_ADL_pyramid_of_hate_v1_0") {
-      aiPrompt = the_pyramid_insight_ADL_pyramid_of_hate_v1_0;
-    }
+              
 
                 
-                <option value="the_pyramid_insight_ADL_pyramid_of_hate_v1_0" selected>The Pyramid Insight: Identifying and Interrupting Hate using ADL Pyramid of Hate v1.0</option>
-                <option value="harm_and_critique_utilizing_JDA_v1_0" selected>Harm and Critique: A JDA-Informed Guide v1.0</option>
-                <option value="antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0" selected>Antisemitism Sentinel: A Comprehensive Analysis Framework (Using IHRA, ADL Pyramid of Hate, and JDA) v1.0</option>
-                
-                <option value="zionismResearchPrompt1_0" selected>Zionism Research v1.0</option>
-                <option value="IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0">Antisemitism Identifier and Combat Strategy (Utilising IHRA’s non-legally binding working definition of antisemitism) v1.0</option>
+                <option value="zionism_research_v1_0">Zionism Research v1.0</option>
+                <option value="the_pyramid_insight_ADL_pyramid_of_hate_v1_0">The Pyramid Insight: Identifying and Interrupting Hate using ADL Pyramid of Hate v1.0</option>
+                <option value="harm_and_critique_utilizing_JDA_v1_0">Harm and Critique: A JDA-Informed Guide v1.0</option>
+                <option value="antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0">Antisemitism Sentinel: A Comprehensive Analysis Framework (Using IHRA, ADL Pyramid of Hate, and JDA) v1.0</option>
+                <option value="antizionism_identifier_and_responder_v1_0">Zionism Identifier and Responder v1.0</option>
+                <option value="IHRA_Antisemitism_Identifier_And_Combat_Strategy_v1_0">Antisemitism Identifier and Combat Strategy (Utilising IHRA’s non-legally binding working definition of antisemitism) v1.0</option>
             </select>
         </div>
       
@@ -335,6 +322,23 @@
     document.getElementById("loading").style.display = "block";
     document.getElementById("result").style.display = "none";
 
+
+            
+
+       var zionism_research_v1_0 = [
+                    {
+                        role: "system",
+                        content: `Analyze the following text for its historical, political, and cultural implications concerning Zionism. Provide context about key figures, events, or ideologies mentioned. If applicable, include counterarguments or opposing perspectives.               
+
+Respond in JSON`
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+
+            
     var the_pyramid_insight_ADL_pyramid_of_hate_v1_0 = [
                     {
                         role: "system",
@@ -436,7 +440,7 @@ Respond in JSON`
                     }
                 ];
             
-    var zionismResearchPrompt1_0 = [
+    var antizionism_identifier_and_responder_v1_0 = [
                     {
                         role: "system",
                         content: `You are an expert in analyzing sociopolitical statements and events with a focus on Zionism. Your role is to analyze a given input, determine its alignment with Zionist principles, opposition, or neutrality, and provide a strategic response. Follow this structure in your analysis:
@@ -469,7 +473,7 @@ Use a name-value pair for the data within contextual_analysis, classification, s
                 ];
 
 
-    var IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0 = [
+    var IHRA_Antisemitism_Identifier_And_Combat_Strategy_v1_0 = [
                     {
                         role: "system",
                         content: "You are an advanced language model analyzing events, statements, or behaviors for potential antisemitism. Follow the International Holocaust Remembrance Alliance (IHRA) guidelines to evaluate the input. Responses must be JSON with fixed keys as follows: {\"identification\": \"[Describe if and how the event aligns with the IHRA definition of antisemitism in clear terms.]\",\"strategy\": \"[Provide specific actions to counter this in alignment with IHRA recommendations.]\"}"
@@ -484,7 +488,11 @@ Use a name-value pair for the data within contextual_analysis, classification, s
 
     var aiPrompt;
 
-              
+            
+    if (selectedPrompt == "zionism_research_v1_0") {
+      aiPrompt = zionism_research_v1_0;
+    }
+            
     if (selectedPrompt == "antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0") {
       aiPrompt = antisemitism_sentinel_a_comprehensive_analysis_framework_v1_0;
     }
@@ -499,12 +507,12 @@ Use a name-value pair for the data within contextual_analysis, classification, s
       aiPrompt = the_pyramid_insight_ADL_pyramid_of_hate_v1_0;
     }
             
-    if (selectedPrompt == "zionismResearchPrompt1_0") {
-      aiPrompt = zionismResearchPrompt1_0;
+    if (selectedPrompt == "antizionism_identifier_and_responder_v1_0") {
+      aiPrompt = antizionism_identifier_and_responder_v1_0;
     }
 
-    if (selectedPrompt == "IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0") {
-      aiPrompt = IHRA_Antisemitism_Identifier_And_Combat_Strategy1_0;
+    if (selectedPrompt == "IHRA_Antisemitism_Identifier_And_Combat_Strategy_v1_0") {
+      aiPrompt = IHRA_Antisemitism_Identifier_And_Combat_Strategy_v1_0;
     }
 
      messageHistory.push(aiPrompt[1]);
