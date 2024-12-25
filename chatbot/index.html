@@ -13,7 +13,7 @@
             overflow: hidden;
         }
         .chat-container {
-            height: calc(100vh - 200px);
+            height: calc(100vh - 320px);
             overflow-y: auto;
         }
         .message {
@@ -41,7 +41,7 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="flex flex-col h-screen p-4 max-w-6xl mx-auto">
+    <div class="flex flex-col h-screen p-4">
         <!-- Header -->
         <div class="bg-white rounded-lg shadow-md p-4 mb-4">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -52,6 +52,17 @@
                     <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
                 </select>
             </div>
+        </div>
+
+        <!-- Legal Notice -->
+        <div class="bg-white rounded-lg shadow-md p-4 mb-4 text-sm text-gray-600">
+            <p class="mb-4">By using this tool, maybe you should read and agree to this Terms of Service and this Privacy Policy. I desire that these things will benefit you.</p>
+            
+            <p class="mb-2"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
+            
+            <p class="mb-2"><strong>Gemma:</strong> This Plugin utilizes Gemma, a machine learning model by Google LLC. By using this Plugin, you agree to comply with the Gemma Terms of Use. Google LLC disclaims all warranties; use of this Plugin is at your own risk.</p>
+            
+            <p class="mb-2"><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the Apache 2.0 license.</p>
         </div>
 
         <!-- Chat Container -->
@@ -152,8 +163,8 @@
             }
         }
 
-        chatForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        function handleMessageSubmit(e) {
+            if (e) e.preventDefault();
             const message = userInput.value.trim();
             if (!message) return;
 
@@ -161,7 +172,18 @@
             conversationHistory.push({ role: "user", content: message });
             userInput.value = '';
             addLoadingIndicator();
-            await sendMessage(message);
+            sendMessage(message);
+        }
+
+        // Handle form submission
+        chatForm.addEventListener('submit', handleMessageSubmit);
+
+        // Handle Enter key
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+            }
         });
 
         // Auto-focus the input field
