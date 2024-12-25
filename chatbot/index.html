@@ -112,7 +112,99 @@
 
     <!-- Script remains unchanged -->
     <script>
-        // Your existing JavaScript code...
+const apiKey = "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";
+        const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+        const chatMessages = document.getElementById('chatMessages');
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const aiModel = document.getElementById('aiModel');
+
+        let conversationHistory = [
+            { role: "system", content: "You are a helpful AI assistant." },
+            { role: "assistant", content: "Hello! How can I assist you today?" }
+        ];
+
+        function addMessage(content, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addLoadingIndicator() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg loader';
+            loadingDiv.id = 'loadingIndicator';
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+        }
+
+        async function sendMessage(message) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: aiModel.value,
+                        messages: conversationHistory,
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+                
+                conversationHistory.push({ role: "assistant", content: aiResponse });
+                removeLoadingIndicator();
+                addMessage(aiResponse, 'assistant');
+            } catch (error) {
+                console.error('Error:', error);
+                removeLoadingIndicator();
+                addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
+            }
+        }
+
+        function handleMessageSubmit(e) {
+            if (e) e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            conversationHistory.push({ role: "user", content: message });
+            userInput.value = '';
+            addLoadingIndicator();
+            sendMessage(message);
+        }
+
+        // Handle form submission
+        chatForm.addEventListener('submit', handleMessageSubmit);
+
+        // Handle Enter key
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+            }
+        });
+
+        // Auto-focus the input field
+        userInput.focus();
     </script>
 </body>
 </html>
