@@ -11,13 +11,13 @@
             box-sizing: border-box;
         }
 
-        body {
+        body, html {
+            height: 100%;
             font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            background-color: #f7f7f7;
             margin: 0;
         }
 
@@ -25,9 +25,8 @@
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
-            height: 80vh;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -123,6 +122,8 @@
         const apiKey = "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";
         const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
 
+        let messageHistory = [];
+
         function sendMessage() {
             const messageInput = document.getElementById('chatInput');
             const model = document.getElementById('aiModel').value;
@@ -130,14 +131,21 @@
 
             if (message === "") return;
 
+            // Display user's message
             displayMessage(message, "user");
+
+            // Add user's message to history
+            messageHistory.push({ role: "user", content: message });
+
             messageInput.value = "";
 
+            // Create the body for the API request including the message history
             const body = {
                 model: model,
-                messages: [{ role: "user", content: message }]
+                messages: messageHistory
             };
 
+            // Make API request
             fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -149,7 +157,12 @@
             .then(response => response.json())
             .then(data => {
                 const botMessage = data.choices[0].message.content;
+
+                // Display bot's response
                 displayMessage(botMessage, "bot");
+
+                // Add bot's message to history
+                messageHistory.push({ role: "assistant", content: botMessage });
             })
             .catch(error => {
                 console.error("Error:", error);
