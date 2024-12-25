@@ -6,8 +6,15 @@
     <title>AI Chat Interface</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
         .chat-container {
-            height: calc(100vh - 180px);
+            height: calc(100vh - 200px);
+            overflow-y: auto;
         }
         .message {
             max-width: 80%;
@@ -48,9 +55,9 @@
         </div>
 
         <!-- Chat Container -->
-        <div class="flex-1 bg-white rounded-lg shadow-md p-4 mb-4">
-            <div id="chatMessages" class="chat-container overflow-y-auto space-y-4 mb-4">
-                <div class="message ml-auto bg-blue-500 text-white p-3 rounded-lg">
+        <div class="flex-1 bg-white rounded-lg shadow-md p-4 mb-4 overflow-hidden">
+            <div id="chatMessages" class="chat-container space-y-4">
+                <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">
                     Hello! How can I assist you today?
                 </div>
             </div>
