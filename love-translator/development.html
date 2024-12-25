@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v15</title>
+    <title>Love Translator v16</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -212,7 +212,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v15</header>
+        <header>Love Translator v16</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -232,8 +232,9 @@
         <div class="input-group">
             <label for="aiPrompt">A prompt can be selected below</label>
             <select id="aiPrompt">
-                <option value="loving_translation_of_a_statement_v1_0" selected>Loving Translation of a Statement</option>
-                <option value="loving_translation_of_anothers_statement_v1_0">Loving Translation of Another's Statement</option>
+                <option value="loving_translation_of_a_statement_v1_0" selected>Loving Translation of a Statement v1.0</option>
+                <option value="loving_translation_of_anothers_statement_v1_0">Loving Translation of Another's Statement v1.0</option>
+                <option value="loving_translation_of_a_statement_casual_v1_0">Loving Translation of a Statement (Casual) v1.0</option>
             </select>
         </div>
       
@@ -288,7 +289,19 @@ This tool can be a supportive resource to foster understanding and kindness in c
 
     document.getElementById("loading").style.display = "block";
     document.getElementById("result").style.display = "none";
-
+	var loving_translation_of_a_statement_casual_v1_0 = [
+	                    {
+	                        role: "system",
+	                        content: `Rephrase the input sentence into a more positive, loving, and casual form suitable for a text message. Keep it simple, friendly, and heartfelt, while maintaining the original meaning and facts. Aim for a tone that feels warm, approachable, and easygoing.
+	                        
+Respond in JSON.`
+	                    },
+	                    {
+	                        role: "user",
+	                        content: `"${inputText}"`
+	                    }
+	                ];
+			
     var loving_translation_of_a_statement_v1_0 = [
                     {
                         role: "system",
@@ -319,7 +332,13 @@ Respond in JSON.`
     const selectedPrompt = document.getElementById("aiPrompt").value;
 
     var aiPrompt;
-          
+
+		
+
+    if (selectedPrompt == "loving_translation_of_a_statement_casual_v1_0") {
+      aiPrompt = loving_translation_of_a_statement_casual_v1_0;
+    }
+		
     if (selectedPrompt == "loving_translation_of_a_statement_v1_0") {
       aiPrompt = loving_translation_of_a_statement_v1_0;
     }
