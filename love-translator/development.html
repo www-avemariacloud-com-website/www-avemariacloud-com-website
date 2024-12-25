@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v18</title>
+    <title>Love Translator v19</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -212,7 +212,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v18</header>
+        <header>Love Translator v19</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -235,6 +235,7 @@
                 <option value="loving_translation_of_a_statement_v1_0" selected>Loving Translation of a Statement v1.0</option>
                 <option value="loving_translation_of_anothers_statement_v1_0">Loving Translation of Another's Statement v1.0</option>
                 <option value="loving_translation_of_a_statement_casual_v1_1">Loving Translation of a Statement (Casual) v1.1</option>
+                <option value="loving_translation_of_a_statement_cautious_and_open_ended_v1_0>Loving Translation of a Statement (Cautious and Open Ended) v1.0</option>
             </select>
         </div>
       
@@ -289,6 +290,21 @@ This tool can be a supportive resource to foster understanding and kindness in c
 
     document.getElementById("loading").style.display = "block";
     document.getElementById("result").style.display = "none";
+
+		
+var loving_translation_of_a_statement_cautious_and_open_ended_v1_0 = [
+	                    {
+	                        role: "system",
+	                        content: `Rephrase the input sentence into a more positive, loving, and casual form suitable for a text message. Ensure the tone is warm and friendly, with flexibility to suit either a playful or platonic context. Keep it simple and heartfelt, while preserving the original meaning and facts.
+	                        
+Respond in JSON.`
+	                    },
+	                    {
+	                        role: "user",
+	                        content: `"${inputText}"`
+	                    }
+	                ];
+		
 	var loving_translation_of_a_statement_casual_v1_1 = [
 	                    {
 	                        role: "system",
@@ -335,8 +351,13 @@ Respond in JSON.`
 
 		
 
-    if (selectedPrompt == "loving_translation_of_a_statement_casual_v1_0") {
-      aiPrompt = loving_translation_of_a_statement_casual_v1_0;
+
+    if (selectedPrompt == "loving_translation_of_a_statement_cautious_and_open_ended_v1_0") {
+      aiPrompt = loving_translation_of_a_statement_cautious_and_open_ended_v1_0;
+    }
+		
+    if (selectedPrompt == "loving_translation_of_a_statement_casual_v1_1") {
+      aiPrompt = loving_translation_of_a_statement_casual_v1_1;
     }
 		
     if (selectedPrompt == "loving_translation_of_a_statement_v1_0") {
