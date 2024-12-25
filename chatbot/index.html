@@ -13,7 +13,7 @@
             overflow: hidden;
         }
         .chat-container {
-            height: calc(100vh - 380px);
+            height: calc(100vh - 300px);
             overflow-y: auto;
         }
         .message {
@@ -46,39 +46,18 @@
         <div class="bg-white rounded-lg shadow-md p-4 mb-4">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <h1 class="text-2xl font-bold text-gray-800">AI Chat Interface</h1>
-                <div class="flex flex-col items-end gap-2">
+                <div class="flex flex-row items-center gap-4">
+                    <div class="text-sm text-gray-600 max-w-md">
+                        <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
+                        <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
+                    </div>
                     <select id="aiModel" class="p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="gemma2-9b-it">gemma2-9b-it</option>
                         <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
                         <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
                     </select>
-                    <div class="text-sm text-gray-600 text-right">
-                        Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.
-                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Model Information -->
-        <div class="bg-blue-50 rounded-lg shadow-md p-4 mb-4 text-sm text-gray-700">
-            <h2 class="font-bold mb-2">About the Available Models:</h2>
-            <ul class="space-y-2">
-                <li><strong>Llama 3:</strong> Meta's latest language model, offering advanced reasoning and comprehensive responses.</li>
-                <li><strong>Gemma:</strong> Google's efficient model, well-suited for focused, precise answers and technical discussions.</li>
-                <li><strong>Mixtral-8x7B:</strong> A versatile open-source model known for balanced performance across various tasks.</li>
-            </ul>
-            <p class="mt-2 text-xs text-gray-600">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
-        </div>
-
-        <!-- Legal Notice -->
-        <div class="bg-white rounded-lg shadow-md p-4 mb-4 text-sm text-gray-600">
-            <p class="mb-4">By using this tool, maybe you should read and agree to this Terms of Service and this Privacy Policy. I desire that these things will benefit you.</p>
-            
-            <p class="mb-2"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
-            
-            <p class="mb-2"><strong>Gemma:</strong> This Plugin utilizes Gemma, a machine learning model by Google LLC. By using this Plugin, you agree to comply with the Gemma Terms of Use. Google LLC disclaims all warranties; use of this Plugin is at your own risk.</p>
-            
-            <p class="mb-2"><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the Apache 2.0 license.</p>
         </div>
 
         <!-- Chat Container -->
@@ -91,7 +70,7 @@
         </div>
 
         <!-- Input Area -->
-        <div class="bg-white rounded-lg shadow-md p-4">
+        <div class="bg-white rounded-lg shadow-md p-4 mb-4">
             <form id="chatForm" class="flex gap-4">
                 <input
                     type="text"
@@ -107,6 +86,17 @@
                     Send
                 </button>
             </form>
+        </div>
+
+        <!-- Legal Notice -->
+        <div class="bg-white rounded-lg shadow-md p-4 text-sm text-gray-600">
+            <p class="mb-4">By using this tool, maybe you should read and agree to this Terms of Service and this Privacy Policy. I desire that these things will benefit you.</p>
+            
+            <p class="mb-2"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
+            
+            <p class="mb-2"><strong>Gemma:</strong> This Plugin utilizes Gemma, a machine learning model by Google LLC. By using this Plugin, you agree to comply with the Gemma Terms of Use. Google LLC disclaims all warranties; use of this Plugin is at your own risk.</p>
+            
+            <p class="mb-2"><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the Apache 2.0 license.</p>
         </div>
     </div>
 
