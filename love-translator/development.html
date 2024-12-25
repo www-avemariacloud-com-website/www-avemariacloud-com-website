@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v20</title>
+    <title>Love Translator v21</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -212,7 +212,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v20</header>
+        <header>Love Translator v21</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -234,7 +234,7 @@
             <select id="aiPrompt">
                 <option value="loving_translation_of_a_statement_v1_0" selected>Loving Translation of a Statement v1.0</option>
                 <option value="loving_translation_of_anothers_statement_v1_0">Loving Translation of Another's Statement v1.0</option>
-                <option value="loving_translation_of_a_statement_casual_v1_1">Loving Translation of a Statement (Casual) v1.1</option>
+                <option value="loving_translation_of_a_statement_casual_v1_2">Loving Translation of a Statement (Casual) v1.2</option>
                 <option value="loving_translation_of_a_statement_cautious_and_open_ended_v1_0">Loving Translation of a Statement (Cautious and Open Ended) v1.0</option>
             </select>
         </div>
@@ -305,10 +305,10 @@ Respond in JSON.`
 	                    }
 	                ];
 		
-	var loving_translation_of_a_statement_casual_v1_1 = [
+	var loving_translation_of_a_statement_casual_v1_2 = [
 	                    {
 	                        role: "system",
-	                        content: `Rephrase the input sentence into a more positive, loving, and casual form suitable for a text message. Ensure the tone is warm and friendly, with flexibility to suit either a playful or platonic context. Keep it simple and heartfelt, while preserving the original meaning and facts.
+	                        content: `Rephrase the input sentence into a simpler, more loving, and casual form. Ensure the result maintains the original meaning and expresses warmth and affection in a natural, uncomplicated way.
 	                        
 Respond in JSON.`
 	                    },
@@ -356,8 +356,8 @@ Respond in JSON.`
       aiPrompt = loving_translation_of_a_statement_cautious_and_open_ended_v1_0;
     }
 		
-    if (selectedPrompt == "loving_translation_of_a_statement_casual_v1_1") {
-      aiPrompt = loving_translation_of_a_statement_casual_v1_1;
+    if (selectedPrompt == "loving_translation_of_a_statement_casual_v1_2") {
+      aiPrompt = loving_translation_of_a_statement_casual_v1_2;
     }
 		
     if (selectedPrompt == "loving_translation_of_a_statement_v1_0") {
