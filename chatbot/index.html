@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!-- This looks good and is functional. Some links may be missing.  !--->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -93,6 +92,11 @@
             flex-grow: 1;
             overflow-y: auto;
         }
+
+        textarea#userInput {
+            resize: none; /* Prevent manual resizing */
+            overflow: hidden; /* Prevent scrollbars */
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -125,13 +129,13 @@
         <!-- Input Area -->
         <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
             <form id="chatForm" class="flex gap-2 sm:gap-4">
-                <input
-                    type="text"
+                <textarea
                     id="userInput"
                     class="flex-1 p-2 sm:p-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Type your message..."
+                    rows="1"
                     required
-                >
+                ></textarea>
                 <button
                     type="submit"
                     class="bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
@@ -143,12 +147,7 @@
 
         <!-- Legal Notice -->
         <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 text-xs sm:text-sm">
-            <p>By using this tool, maybe you should read and agree to this <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
-              <BR><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.
-            <BR>
-              <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.
-            <BR>
-            <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.
+            <p>By using this tool, you agree to our <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>.</p>
         </div>
     </div>
 
@@ -167,23 +166,8 @@
 
         function scrollToBottom() {
             const chatContainer = document.querySelector('.chat-container');
-            const chatMessages = document.getElementById('chatMessages');
-            
-            // Calculate the total scroll height
             const scrollHeight = chatMessages.scrollHeight;
-            
-            // Smooth scroll to bottom
-            chatContainer.scrollTo({
-                top: scrollHeight,
-                behavior: 'smooth'
-            });
-            
-            // Fallback scroll check to ensure we reach bottom
-            setTimeout(() => {
-                if (chatContainer.scrollTop + chatContainer.clientHeight < scrollHeight) {
-                    chatContainer.scrollTop = scrollHeight;
-                }
-            }, 100);
+            chatContainer.scrollTo({ top: scrollHeight, behavior: 'smooth' });
         }
 
         function addMessage(content, role) {
@@ -253,19 +237,17 @@
             addMessage(message, 'user');
             conversationHistory.push({ role: "user", content: message });
             userInput.value = '';
+            autoResizeTextarea();
             addLoadingIndicator();
             sendMessage(message);
         }
 
-        chatForm.addEventListener('submit', handleMessageSubmit);
-
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleMessageSubmit();
-            }
+        userInput.addEventListener('input', () => {
+            userInput.style.height = 'auto';
+            userInput.style.height = `${userInput.scrollHeight}px`;
         });
 
+        chatForm.addEventListener('submit', handleMessageSubmit);
         userInput.focus();
     </script>
 </body>
