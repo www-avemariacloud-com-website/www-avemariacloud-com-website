@@ -43,7 +43,7 @@
             background-color: #4B5563;
             border-radius: 50%;
             opacity: 0.4;
-            animation: typingAnimation 1.4s infinite ease-in-out;
+            animation: pulseAnimation 1.4s infinite ease-in-out;
         }
         
         .typing-dot:nth-child(1) {
@@ -58,13 +58,11 @@
             animation-delay: 0.4s;
         }
         
-        @keyframes typingAnimation {
+        @keyframes pulseAnimation {
             0%, 100% {
-                transform: translateY(0);
                 opacity: 0.4;
             }
             50% {
-                transform: translateY(-4px);
                 opacity: 1;
             }
         }
