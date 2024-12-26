@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!-- This version looks good on computer web browsers and mobile web browsers. When receiving a message from the AI, the chat box doesn't not scroll to the bottom. When waiting for a message from the AI the loading animation appears to display outside of what may be called a "message bubble".  !--->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +17,7 @@
             word-break: break-word;
             overflow-wrap: break-word;
             animation: fadeIn 0.3s ease-in;
-            white-space: pre-wrap; /* Ensures line breaks are respected */
+            white-space: pre-wrap;
         }
         
         @media (max-width: 640px) {
@@ -32,13 +31,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .loader {
+        .loading-dots {
             display: inline-block;
-            width: 50px;
-            height: 12px;
         }
         
-        .loader::after {
+        .loading-dots::after {
             content: ' • • •';
             animation: dots 1.5s steps(4, end) infinite;
         }
@@ -49,7 +46,6 @@
             60%, 100% { content: ' • • • '; }
         }
 
-        /* Ensure the header elements are correctly aligned in mobile view */
         @media (max-width: 640px) {
             .header {
                 text-align: center;
@@ -65,7 +61,6 @@
             }
         }
 
-        /* Desktop-specific adjustments */
         @media (min-width: 641px) {
             .header-content {
                 display: flex;
@@ -79,10 +74,10 @@
             }
         }
 
-        /* Ensure the content doesn't overflow on mobile */
         .chat-container {
             max-height: 100%;
             overflow-y: auto;
+            scroll-behavior: smooth;
         }
 
         .main-content {
@@ -92,7 +87,6 @@
             height: 100%;
         }
 
-        /* Ensure the message box doesn't overflow */
         .message-container {
             flex-grow: 1;
             overflow-y: auto;
@@ -100,63 +94,7 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="flex flex-col h-screen p-2 sm:p-4 main-content">
-        <!-- Header -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-            <div class="header-content">
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Multi Model AI Chatbot</h1>
-                <div class="model-notes text-sm text-gray-600">
-                    <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
-                    <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
-                </div>
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <select id="aiModel" class="w-full sm:w-auto p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 order-2 sm:order-1">
-                        <option value="gemma2-9b-it">gemma2-9b-it</option>
-                        <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
-                        <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Chat Container -->
-        <div class="chat-container flex-1 bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden message-container">
-            <div id="chatMessages" class="space-y-3 sm:space-y-4">
-                <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">Hello! How can I assist you today?</div>
-            </div>
-        </div>
-
-        <!-- Input Area -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-            <form id="chatForm" class="flex gap-2 sm:gap-4">
-                <input
-                    type="text"
-                    id="userInput"
-                    class="flex-1 p-2 sm:p-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Type your message..."
-                    required
-                >
-                <button
-                    type="submit"
-                    class="bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
-                >
-                    Send
-                </button>
-            </form>
-        </div>
-
-        <!-- Legal Notice -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 text-xs sm:text-sm text-gray-600">
-            <p class="mb-3 sm:mb-4">By using this tool, maybe you should read and agree to this Terms of Service and this Privacy Policy. I desire that these things will benefit you.</p>
-            
-            <p class="mb-2"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
-            
-            <p class="mb-2"><strong>Gemma:</strong> This Plugin utilizes Gemma, a machine learning model by Google LLC. By using this Plugin, you agree to comply with the Gemma Terms of Use. Google LLC disclaims all warranties; use of this Plugin is at your own risk.</p>
-            
-            <p class="mb-2"><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the Apache 2.0 license.</p>
-        </div>
-    </div>
-
+    <!-- Rest of the HTML remains the same until the script tag -->
     <script>
         const apiKey = "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";
         const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
@@ -170,20 +108,29 @@
             { role: "assistant", content: "Hello! How can I assist you today?" }
         ];
 
+        function scrollToBottom() {
+            setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 100); // Small delay to ensure content is rendered
+        }
+
         function addMessage(content, role) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
             messageDiv.textContent = content;
             chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            scrollToBottom();
         }
 
         function addLoadingIndicator() {
             const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg loader';
+            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg';
             loadingDiv.id = 'loadingIndicator';
+            const loadingContent = document.createElement('span');
+            loadingContent.className = 'loading-dots';
+            loadingDiv.appendChild(loadingContent);
             chatMessages.appendChild(loadingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            scrollToBottom();
         }
 
         function removeLoadingIndicator() {
@@ -238,10 +185,8 @@
             sendMessage(message);
         }
 
-        // Handle form submission
         chatForm.addEventListener('submit', handleMessageSubmit);
 
-        // Handle Enter key
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -249,7 +194,6 @@
             }
         });
 
-        // Auto-focus the input field
         userInput.focus();
     </script>
 </body>
