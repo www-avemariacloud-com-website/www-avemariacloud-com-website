@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .message {
             max-width: 85%;
             word-break: break-word;
@@ -20,27 +20,27 @@
             animation: fadeIn 0.3s ease-in;
             white-space: pre-wrap;
         }
-        
+
         @media (max-width: 640px) {
             .message {
                 max-width: 90%;
             }
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .loading-dots {
             display: inline-block;
         }
-        
+
         .loading-dots::after {
             content: ' • • •';
             animation: dots 1.5s steps(4, end) infinite;
         }
-        
+
         @keyframes dots {
             0%, 20% { content: ' • '; }
             40% { content: ' • • '; }
@@ -94,7 +94,8 @@
         }
 
         textarea#userInput {
-            resize: none; /* Prevent manual resizing */
+            height: calc(3rem * 3); /* Fixed height for three lines */
+            resize: none; /* Prevent resizing */
             overflow: hidden; /* Prevent scrollbars */
         }
     </style>
@@ -133,7 +134,6 @@
                     id="userInput"
                     class="flex-1 p-2 sm:p-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Type your message..."
-                    rows="1"
                     required
                 ></textarea>
                 <button
@@ -147,7 +147,12 @@
 
         <!-- Legal Notice -->
         <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 text-xs sm:text-sm">
-            <p>By using this tool, you agree to our <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>.</p>
+            <p>By using this tool, maybe you should read and agree to this <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
+              <BR><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.
+            <BR>
+              <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.
+            <BR>
+            <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.
         </div>
     </div>
 
@@ -166,8 +171,23 @@
 
         function scrollToBottom() {
             const chatContainer = document.querySelector('.chat-container');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Calculate the total scroll height
             const scrollHeight = chatMessages.scrollHeight;
-            chatContainer.scrollTo({ top: scrollHeight, behavior: 'smooth' });
+            
+            // Smooth scroll to bottom
+            chatContainer.scrollTo({
+                top: scrollHeight,
+                behavior: 'smooth'
+            });
+            
+            // Fallback scroll check to ensure we reach bottom
+            setTimeout(() => {
+                if (chatContainer.scrollTop + chatContainer.clientHeight < scrollHeight) {
+                    chatContainer.scrollTop = scrollHeight;
+                }
+            }, 100);
         }
 
         function addMessage(content, role) {
@@ -237,17 +257,19 @@
             addMessage(message, 'user');
             conversationHistory.push({ role: "user", content: message });
             userInput.value = '';
-            autoResizeTextarea();
             addLoadingIndicator();
             sendMessage(message);
         }
 
-        userInput.addEventListener('input', () => {
-            userInput.style.height = 'auto';
-            userInput.style.height = `${userInput.scrollHeight}px`;
+        chatForm.addEventListener('submit', handleMessageSubmit);
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+            }
         });
 
-        chatForm.addEventListener('submit', handleMessageSubmit);
         userInput.focus();
     </script>
 </body>
