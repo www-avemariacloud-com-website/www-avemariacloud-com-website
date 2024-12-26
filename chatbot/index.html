@@ -70,26 +70,41 @@
                 opacity: 1;
             }
         }
+
+        .flex-col.sm\:flex-row.sm\:items-start.sm\:justify-between {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        /* Adjust model selector to grow and use more space */
+        #aiModel {
+            flex-grow: 1;
+            width: 100%; /* Ensure it spans full width when needed */
+            min-width: 200px; /* Set a reasonable minimum width */
+        }
+                
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="flex flex-col h-screen p-2 sm:p-4">
         <!-- Modified Header -->
         <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-800 sm:w-1/4">Multi Model AI Chatbot</h1>
-                <div class="flex flex-col sm:flex-row items-start gap-4 sm:w-3/4">
-                    <select id="aiModel" class="w-full sm:w-48 p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shrink-0">
-                        <option value="gemma2-9b-it">gemma2-9b-it</option>
-                        <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
-                        <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
-                    </select>
-                    <div class="text-sm text-gray-600 flex-1">
-                        <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
-                        <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
-                    </div>
-                </div>
-            </div>
+            <div class="flex flex-wrap gap-4">
+    <h1 class="text-xl sm:text-2xl font-bold text-gray-800 w-full sm:w-auto">Multi Model AI Chatbot</h1>
+    <div class="flex flex-col flex-1 items-start gap-4">
+        <select id="aiModel" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="gemma2-9b-it">gemma2-9b-it</option>
+            <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
+            <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+        </select>
+        <div class="text-sm text-gray-600">
+            <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
+            <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
+        </div>
+    </div>
+</div>
+
         </div>
 
         <!-- Chat Container -->
