@@ -12,13 +12,29 @@
             padding: 0;
         }
 
-        /* Ensure the main container uses full screen height */
-        .app-container {
+        /* Set flexbox for the entire body to ensure content adjusts correctly */
+        .flex-container {
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100%;
         }
 
+        /* Header Flex Layout */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* Adjust the message box width */
         .message {
             max-width: 85%;
             word-break: break-word;
@@ -30,19 +46,20 @@
             .message {
                 max-width: 90%;
             }
-            
-            /* Adjust the height of the app to fit the mobile screen */
-            .app-container {
-                height: 100vh;  /* Ensures full height on mobile devices */
-                overflow: hidden; /* Prevents scrolling */
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
 
+        /* Fade-in Animation */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Loader animation */
         .loader {
             display: inline-block;
             width: 50px;
@@ -59,28 +76,37 @@
             40% { content: ' • • '; }
             60%, 100% { content: ' • • • '; }
         }
+
+        /* Set the input area to the screen height */
+        .flex-1 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="app-container p-2 sm:p-4">
+    <div class="flex-container">
         <!-- Header -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-            <div class="flex flex-col sm:flex-row items-center gap-4">
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-800 text-center sm:text-left flex-1">Multi Model AI Chatbot</h1>
-                <select id="aiModel" class="w-full sm:w-auto p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <div class="header bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Multi Model AI Chatbot</h1>
+            <div class="flex sm:gap-4 gap-2 items-start sm:items-center">
+                <div class="text-sm text-gray-600 sm:order-1 order-2 sm:w-auto w-full">
+                    <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
+                    <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
+                </div>
+                <select id="aiModel" class="sm:w-auto w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:order-2 order-1">
                     <option value="gemma2-9b-it">gemma2-9b-it</option>
                     <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
                     <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
                 </select>
             </div>
-            <div class="text-sm text-gray-600 mt-2">
-                <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
-                <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
-            </div>
         </div>
 
         <!-- Chat Container -->
-        <div class="flex-1 bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden flex flex-col">
+        <div class="chat-container bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden flex flex-col">
             <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 sm:space-y-4">
                 <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">
                     Hello! How can I assist you today?
