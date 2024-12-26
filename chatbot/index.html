@@ -76,13 +76,13 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        
-        /* Adjust model selector to grow and use more space */
-        #aiModel {
-            flex-grow: 1;
-            width: 100%; /* Ensure it spans full width when needed */
-            min-width: 200px; /* Set a reasonable minimum width */
-        }
+        /* Ensure the select element and text align properly */
+#aiModel {
+    flex-shrink: 0; /* Prevent shrinking of the select box */
+    min-width: 200px; /* Set a reasonable minimum width */
+    max-width: 300px; /* Optional: Limit maximum width */
+}
+
                 
     </style>
 </head>
