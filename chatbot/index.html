@@ -124,16 +124,70 @@
         const chatForm = document.getElementById('chatForm');
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
+        const aiModelSelector = document.getElementById('aiModel');
 
+        // Track selected model
+        let selectedModel = aiModelSelector.value;
+
+        // Update selected model on change
+        aiModelSelector.addEventListener('change', (e) => {
+            selectedModel = e.target.value;
+            addSystemMessage(`Model switched to: ${selectedModel}`);
+        });
+
+        // Handle message sending
         chatForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const userMessage = userInput.value.trim();
             if (userMessage) {
-                chatMessages.innerHTML += `<div class="message ml-auto bg-blue-500 text-white p-3 rounded-lg">${userMessage}</div>`;
+                addUserMessage(userMessage);
+                simulateTyping(() => {
+                    addBotMessage(`You said: "${userMessage}" using ${selectedModel}.`);
+                });
                 userInput.value = '';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         });
+
+        // Add user message to chat
+        function addUserMessage(message) {
+            chatMessages.innerHTML += `<div class="message ml-auto bg-blue-500 text-white p-3 rounded-lg">${message}</div>`;
+            scrollToBottom();
+        }
+
+        // Add bot message to chat
+        function addBotMessage(message) {
+            chatMessages.innerHTML += `<div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">${message}</div>`;
+            scrollToBottom();
+        }
+
+        // Add system message to chat
+        function addSystemMessage(message) {
+            chatMessages.innerHTML += `<div class="message mr-auto bg-yellow-100 text-gray-800 italic p-3 rounded-lg">${message}</div>`;
+            scrollToBottom();
+        }
+
+        // Simulate typing dots
+        function simulateTyping(callback) {
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'typing mr-auto';
+            typingIndicator.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatMessages.appendChild(typingIndicator);
+            scrollToBottom();
+
+            setTimeout(() => {
+                chatMessages.removeChild(typingIndicator);
+                callback();
+            }, 1500);
+        }
+
+        // Scroll to the bottom of the chat
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     </script>
 </body>
 </html>
