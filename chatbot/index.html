@@ -16,19 +16,9 @@
             height: calc(100vh - 300px);
             overflow-y: auto;
         }
-        @media (max-width: 640px) {
-            .chat-container {
-                height: calc(100vh - 380px);
-            }
-        }
         .message {
-            max-width: 85%;
+            max-width: 80%;
             animation: fadeIn 0.3s ease-in;
-        }
-        @media (max-width: 640px) {
-            .message {
-                max-width: 90%;
-            }
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -51,28 +41,28 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="flex flex-col h-screen p-2 sm:p-4">
+    <div class="flex flex-col h-screen p-4">
         <!-- Header -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-            <div class="flex flex-col gap-4">
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-800 text-center sm:text-left">Multi Model AI Chatbot</h1>
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <select id="aiModel" class="w-full sm:w-auto p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 order-2 sm:order-1">
+        <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <h1 class="text-2xl font-bold text-gray-800">Multi Model AI Chatbot</h1>
+                <div class="flex flex-row items-center gap-4">
+                    <div class="text-sm text-gray-600 max-w-4xl">
+                        <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
+                        <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
+                    </div>
+                    <select id="aiModel" class="p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="gemma2-9b-it">gemma2-9b-it</option>
                         <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
                         <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
                     </select>
-                    <div class="text-sm text-gray-600 order-1 sm:order-2">
-                        <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
-                        <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
-                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Chat Container -->
-        <div class="flex-1 bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden">
-            <div id="chatMessages" class="chat-container space-y-3 sm:space-y-4">
+        <div class="flex-1 bg-white rounded-lg shadow-md p-4 mb-4 overflow-hidden">
+            <div id="chatMessages" class="chat-container space-y-4">
                 <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">
                     Hello! How can I assist you today?
                 </div>
@@ -80,18 +70,18 @@
         </div>
 
         <!-- Input Area -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-            <form id="chatForm" class="flex gap-2 sm:gap-4">
+        <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+            <form id="chatForm" class="flex gap-4">
                 <input
                     type="text"
                     id="userInput"
-                    class="flex-1 p-2 sm:p-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Type your message..."
+                    class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Type your message and press Enter to send..."
                     required
                 >
                 <button
                     type="submit"
-                    class="bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
+                    class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors"
                 >
                     Send
                 </button>
@@ -99,8 +89,8 @@
         </div>
 
         <!-- Legal Notice -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 text-xs sm:text-sm text-gray-600">
-            <p class="mb-3 sm:mb-4">By using this tool, maybe you should read and agree to this Terms of Service and this Privacy Policy. I desire that these things will benefit you.</p>
+        <div class="bg-white rounded-lg shadow-md p-4 text-sm text-gray-600">
+            <p class="mb-4">By using this tool, maybe you should read and agree to this Terms of Service and this Privacy Policy. I desire that these things will benefit you.</p>
             
             <p class="mb-2"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
             
@@ -110,9 +100,100 @@
         </div>
     </div>
 
-    <!-- Script remains unchanged -->
     <script>
-        // Your existing JavaScript code...
+        const apiKey = "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";
+        const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+        const chatMessages = document.getElementById('chatMessages');
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const aiModel = document.getElementById('aiModel');
+
+        let conversationHistory = [
+            { role: "system", content: "You are a helpful AI assistant." },
+            { role: "assistant", content: "Hello! How can I assist you today?" }
+        ];
+
+        function addMessage(content, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addLoadingIndicator() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg loader';
+            loadingDiv.id = 'loadingIndicator';
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+        }
+
+        async function sendMessage(message) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: aiModel.value,
+                        messages: conversationHistory,
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+                
+                conversationHistory.push({ role: "assistant", content: aiResponse });
+                removeLoadingIndicator();
+                addMessage(aiResponse, 'assistant');
+            } catch (error) {
+                console.error('Error:', error);
+                removeLoadingIndicator();
+                addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
+            }
+        }
+
+        function handleMessageSubmit(e) {
+            if (e) e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            conversationHistory.push({ role: "user", content: message });
+            userInput.value = '';
+            addLoadingIndicator();
+            sendMessage(message);
+        }
+
+        // Handle form submission
+        chatForm.addEventListener('submit', handleMessageSubmit);
+
+        // Handle Enter key
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+            }
+        });
+
+        // Auto-focus the input field
+        userInput.focus();
     </script>
 </body>
 </html>
