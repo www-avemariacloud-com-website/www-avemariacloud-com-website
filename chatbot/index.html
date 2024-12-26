@@ -12,26 +12,27 @@
             margin: 0;
             padding: 0;
         }
-
         .message {
             max-width: 85%;
             word-break: break-word;
             overflow-wrap: break-word;
             animation: fadeIn 0.3s ease-in;
         }
-
+        @media (max-width: 640px) {
+            .message {
+                max-width: 90%;
+            }
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .typing {
             display: flex;
             align-items: center;
             gap: 4px;
             padding: 12px 16px;
         }
-
         .typing-dot {
             width: 8px;
             height: 8px;
@@ -40,44 +41,36 @@
             opacity: 0.4;
             animation: pulseAnimation 1.4s infinite ease-in-out;
         }
-
-        .typing-dot:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes pulseAnimation {
-            0%, 100% {
-                opacity: 0.4;
-            }
-            50% {
-                opacity: 1;
-            }
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="flex flex-col h-screen p-2 sm:p-4">
-        <!-- Modified Header -->
+        <!-- Header Section -->
         <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
             <div class="flex flex-wrap items-start gap-4 sm:flex-nowrap">
-                <h1 class="text-lg sm:text-xl font-bold text-gray-800 flex-shrink-0">Multi Model AI Chatbot</h1>
-                <div class="flex-1 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <!-- Title -->
+                <h1 class="text-lg sm:text-xl font-bold text-gray-800 flex-shrink-0 w-full sm:w-auto">Multi Model AI Chatbot</h1>
+                
+                <!-- Model Selector and Description -->
+                <div class="flex flex-col w-full sm:flex-row sm:items-center sm:justify-end gap-4">
+                    <!-- Dropdown -->
                     <select id="aiModel" class="p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-auto">
                         <option value="gemma2-9b-it">gemma2-9b-it</option>
                         <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
                         <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
                     </select>
-                    <div class="text-sm text-gray-600">
-                        <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
-                        <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
+                    
+                    <!-- Description -->
+                    <div class="text-sm text-gray-600 w-full">
+                        <p class="mb-1">Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
+                        <p class="text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
                     </div>
                 </div>
             </div>
@@ -114,80 +107,101 @@
         <!-- Legal Notice -->
         <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 text-xs sm:text-sm text-gray-600">
             <p class="mb-3 sm:mb-4">By using this tool, you agree to the Terms of Service and Privacy Policy.</p>
-            <p class="mb-2"><strong>Built with Meta Llama 3:</strong> Licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
-            <p class="mb-2"><strong>Gemma:</strong> Uses Gemma by Google LLC. Use indicates agreement to the Gemma Terms of Use.</p>
+            <p class="mb-2"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc.</p>
+            <p class="mb-2"><strong>Gemma:</strong> This Plugin utilizes Gemma, a machine learning model by Google LLC. By using this Plugin, you agree to comply with the Gemma Terms of Use.</p>
             <p class="mb-2"><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the Apache 2.0 license.</p>
         </div>
     </div>
 
     <script>
-        const chatForm = document.getElementById('chatForm');
+        const apiKey = "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";
+        const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
         const chatMessages = document.getElementById('chatMessages');
+        const chatForm = document.getElementById('chatForm');
         const userInput = document.getElementById('userInput');
-        const aiModelSelector = document.getElementById('aiModel');
+        const aiModel = document.getElementById('aiModel');
 
-        // Track selected model
-        let selectedModel = aiModelSelector.value;
+        let conversationHistory = [
+            { role: "system", content: "You are a helpful AI assistant." },
+            { role: "assistant", content: "Hello! How can I assist you today?" }
+        ];
 
-        // Update selected model on change
-        aiModelSelector.addEventListener('change', (e) => {
-            selectedModel = e.target.value;
-            addSystemMessage(`Model switched to: ${selectedModel}`);
-        });
-
-        // Handle message sending
-        chatForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const userMessage = userInput.value.trim();
-            if (userMessage) {
-                addUserMessage(userMessage);
-                simulateTyping(() => {
-                    addBotMessage(`You said: "${userMessage}" using ${selectedModel}.`);
-                });
-                userInput.value = '';
-            }
-        });
-
-        // Add user message to chat
-        function addUserMessage(message) {
-            chatMessages.innerHTML += `<div class="message ml-auto bg-blue-500 text-white p-3 rounded-lg">${message}</div>`;
-            scrollToBottom();
-        }
-
-        // Add bot message to chat
-        function addBotMessage(message) {
-            chatMessages.innerHTML += `<div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">${message}</div>`;
-            scrollToBottom();
-        }
-
-        // Add system message to chat
-        function addSystemMessage(message) {
-            chatMessages.innerHTML += `<div class="message mr-auto bg-yellow-100 text-gray-800 italic p-3 rounded-lg">${message}</div>`;
-            scrollToBottom();
-        }
-
-        // Simulate typing dots
-        function simulateTyping(callback) {
-            const typingIndicator = document.createElement('div');
-            typingIndicator.className = 'typing mr-auto';
-            typingIndicator.innerHTML = `
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-            `;
-            chatMessages.appendChild(typingIndicator);
-            scrollToBottom();
-
-            setTimeout(() => {
-                chatMessages.removeChild(typingIndicator);
-                callback();
-            }, 1500);
-        }
-
-        // Scroll to the bottom of the chat
-        function scrollToBottom() {
+        function addMessage(content, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
+
+        function addLoadingIndicator() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 rounded-lg';
+            loadingDiv.id = 'loadingIndicator';
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing';
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'typing-dot';
+                typingDiv.appendChild(dot);
+            }
+            loadingDiv.appendChild(typingDiv);
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) loadingIndicator.remove();
+        }
+
+        async function sendMessage(message) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: aiModel.value,
+                        messages: conversationHistory,
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    })
+                });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+                conversationHistory.push({ role: "assistant", content: aiResponse });
+                removeLoadingIndicator();
+                addMessage(aiResponse, 'assistant');
+            } catch (error) {
+                console.error('Error:', error);
+                removeLoadingIndicator();
+                addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
+            }
+        }
+
+        function handleMessageSubmit(e) {
+            if (e) e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+            addMessage(message, 'user');
+            conversationHistory.push({ role: "user", content: message });
+            userInput.value = '';
+            addLoadingIndicator();
+            sendMessage(message);
+        }
+
+        chatForm.addEventListener('submit', handleMessageSubmit);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+            }
+        });
+        userInput.focus();
     </script>
 </body>
 </html>
