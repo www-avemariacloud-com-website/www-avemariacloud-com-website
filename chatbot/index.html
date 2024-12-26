@@ -1,80 +1,207 @@
-import React, { useRef, useEffect } from 'react';
-
-const ChatInterface = () => {
-  const chatMessagesRef = useRef(null);
-  
-  useEffect(() => {
-    // Auto-focus the input field on component mount
-    const input = document.getElementById('userInput');
-    if (input) input.focus();
-  }, []);
-
-  return (
-    <div className="flex flex-col h-screen p-2 sm:p-4 bg-gray-100">
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-        <div className="flex flex-col gap-4">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 text-center sm:text-left">
-            Multi Model AI Chatbot
-          </h1>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <select 
-              id="aiModel"
-              className="w-full sm:w-auto p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 order-2 sm:order-1"
-            >
-              <option value="gemma2-9b-it">gemma2-9b-it</option>
-              <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
-              <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
-            </select>
-            <div className="text-sm text-gray-600 order-1 sm:order-2">
-              <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
-              <p className="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi Model AI Chatbot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .message {
+            max-width: 85%;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @media (max-width: 640px) {
+            .message {
+                max-width: 90%;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loader {
+            display: inline-block;
+            width: 50px;
+            height: 12px;
+        }
+        
+        .loader::after {
+            content: ' • • •';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: ' • '; }
+            40% { content: ' • • '; }
+            60%, 100% { content: ' • • • '; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex flex-col h-screen p-2 sm:p-4">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
+            <div class="flex flex-col gap-4">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800 text-center sm:text-left">Multi Model AI Chatbot</h1>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <select id="aiModel" class="w-full sm:w-auto p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 order-2 sm:order-1">
+                        <option value="gemma2-9b-it">gemma2-9b-it</option>
+                        <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
+                        <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+                    </select>
+                    <div class="text-sm text-gray-600 order-1 sm:order-2">
+                        <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
+                        <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
 
-      {/* Chat Container */}
-      <div className="flex-1 bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden flex flex-col">
-        <div 
-          id="chatMessages"
-          ref={chatMessagesRef}
-          className="flex-1 overflow-y-auto space-y-3 sm:space-y-4"
-        >
-          <div className="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg break-words">
-            Hello! How can I assist you today?
-          </div>
+        <!-- Chat Container -->
+        <div class="flex-1 bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden flex flex-col">
+            <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 sm:space-y-4">
+                <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">
+                    Hello! How can I assist you today?
+                </div>
+            </div>
         </div>
-      </div>
 
-      {/* Input Area */}
-      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-        <form id="chatForm" className="flex gap-2 sm:gap-4">
-          <input
-            type="text"
-            id="userInput"
-            className="flex-1 p-2 sm:p-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Type your message..."
-            required
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
-          >
-            Send
-          </button>
-        </form>
-      </div>
+        <!-- Input Area -->
+        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
+            <form id="chatForm" class="flex gap-2 sm:gap-4">
+                <input
+                    type="text"
+                    id="userInput"
+                    class="flex-1 p-2 sm:p-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Type your message..."
+                    required
+                >
+                <button
+                    type="submit"
+                    class="bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
+                >
+                    Send
+                </button>
+            </form>
+        </div>
 
-      {/* Legal Notice */}
-      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 text-xs sm:text-sm text-gray-600">
-        <p className="mb-3 sm:mb-4">By using this tool, maybe you should read and agree to this Terms of Service and this Privacy Policy. I desire that these things will benefit you.</p>
-        <p className="mb-2"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
-        <p className="mb-2"><strong>Gemma:</strong> This Plugin utilizes Gemma, a machine learning model by Google LLC. By using this Plugin, you agree to comply with the Gemma Terms of Use. Google LLC disclaims all warranties; use of this Plugin is at your own risk.</p>
-        <p className="mb-2"><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the Apache 2.0 license.</p>
-      </div>
+        <!-- Legal Notice -->
+        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 text-xs sm:text-sm text-gray-600">
+            <p class="mb-3 sm:mb-4">By using this tool, maybe you should read and agree to this Terms of Service and this Privacy Policy. I desire that these things will benefit you.</p>
+            
+            <p class="mb-2"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the Meta Llama 3 Community License. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
+            
+            <p class="mb-2"><strong>Gemma:</strong> This Plugin utilizes Gemma, a machine learning model by Google LLC. By using this Plugin, you agree to comply with the Gemma Terms of Use. Google LLC disclaims all warranties; use of this Plugin is at your own risk.</p>
+            
+            <p class="mb-2"><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the Apache 2.0 license.</p>
+        </div>
     </div>
-  );
-};
 
-export default ChatInterface;
+    <script>
+        const apiKey = "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";
+        const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+        const chatMessages = document.getElementById('chatMessages');
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const aiModel = document.getElementById('aiModel');
+
+        let conversationHistory = [
+            { role: "system", content: "You are a helpful AI assistant." },
+            { role: "assistant", content: "Hello! How can I assist you today?" }
+        ];
+
+        function addMessage(content, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addLoadingIndicator() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg loader';
+            loadingDiv.id = 'loadingIndicator';
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+        }
+
+        async function sendMessage(message) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: aiModel.value,
+                        messages: conversationHistory,
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+                
+                conversationHistory.push({ role: "assistant", content: aiResponse });
+                removeLoadingIndicator();
+                addMessage(aiResponse, 'assistant');
+            } catch (error) {
+                console.error('Error:', error);
+                removeLoadingIndicator();
+                addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
+            }
+        }
+
+        function handleMessageSubmit(e) {
+            if (e) e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            conversationHistory.push({ role: "user", content: message });
+            userInput.value = '';
+            addLoadingIndicator();
+            sendMessage(message);
+        }
+
+        // Handle form submission
+        chatForm.addEventListener('submit', handleMessageSubmit);
+
+        // Handle Enter key
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+            }
+        });
+
+        // Auto-focus the input field
+        userInput.focus();
+    </script>
+</body>
+</html>
