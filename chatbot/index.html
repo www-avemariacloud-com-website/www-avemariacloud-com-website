@@ -264,8 +264,12 @@
 
         chatForm.addEventListener('submit', handleMessageSubmit);
 
+        function isMobileDevice() {
+            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+        }
+
         userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (!isMobileDevice() && e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleMessageSubmit();
             }
