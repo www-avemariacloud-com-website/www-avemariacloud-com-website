@@ -166,9 +166,24 @@
         ];
 
         function scrollToBottom() {
+            const chatContainer = document.querySelector('.chat-container');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Calculate the total scroll height
+            const scrollHeight = chatMessages.scrollHeight;
+            
+            // Smooth scroll to bottom
+            chatContainer.scrollTo({
+                top: scrollHeight,
+                behavior: 'smooth'
+            });
+            
+            // Fallback scroll check to ensure we reach bottom
             setTimeout(() => {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 100); // Small delay to ensure content is rendered
+                if (chatContainer.scrollTop + chatContainer.clientHeight < scrollHeight) {
+                    chatContainer.scrollTop = scrollHeight;
+                }
+            }, 100);
         }
 
         function addMessage(content, role) {
