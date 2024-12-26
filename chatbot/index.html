@@ -11,104 +11,54 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .message {
             max-width: 85%;
             word-break: break-word;
             overflow-wrap: break-word;
             animation: fadeIn 0.3s ease-in;
-            white-space: pre-wrap; /* Ensures line breaks are respected */
         }
-        
+
         @media (max-width: 640px) {
             .message {
                 max-width: 90%;
             }
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .loader {
             display: inline-block;
             width: 50px;
             height: 12px;
         }
-        
+
         .loader::after {
             content: ' • • •';
             animation: dots 1.5s steps(4, end) infinite;
         }
-        
+
         @keyframes dots {
             0%, 20% { content: ' • '; }
             40% { content: ' • • '; }
             60%, 100% { content: ' • • • '; }
         }
-
-        /* Ensure the header elements are correctly aligned in mobile view */
-        @media (max-width: 640px) {
-            .header {
-                text-align: center;
-            }
-            .header-content {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
-            }
-            .model-notes {
-                text-align: center;
-            }
-        }
-
-        /* Desktop-specific adjustments */
-        @media (min-width: 641px) {
-            .header-content {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-            .model-notes {
-                text-align: left;
-                max-width: 50%;
-            }
-        }
-
-        /* Ensure the content doesn't overflow on mobile */
-        .chat-container {
-            max-height: 100%;
-            overflow-y: auto;
-        }
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-
-        /* Ensure the message box doesn't overflow */
-        .message-container {
-            flex-grow: 1;
-            overflow-y: auto;
-        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="flex flex-col h-screen p-2 sm:p-4 main-content">
+    <div class="flex flex-col h-screen p-2 sm:p-4">
         <!-- Header -->
         <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-            <div class="header-content">
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Multi Model AI Chatbot</h1>
-                <div class="model-notes text-sm text-gray-600">
-                    <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
-                    <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
-                </div>
+            <div class="flex flex-col gap-4">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800 text-center sm:text-left">Multi Model AI Chatbot</h1>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="text-sm text-gray-600 order-1 sm:order-2">
+                        <p>Select an AI model above to customize your chat experience. Each model has different capabilities and response styles.</p>
+                        <p class="mt-1 text-xs">Note: You can switch models at any time during your conversation. Each new message will be processed by your selected model.</p>
+                    </div>
                     <select id="aiModel" class="w-full sm:w-auto p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 order-2 sm:order-1">
                         <option value="gemma2-9b-it">gemma2-9b-it</option>
                         <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
@@ -119,9 +69,11 @@
         </div>
 
         <!-- Chat Container -->
-        <div class="chat-container flex-1 bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden message-container">
-            <div id="chatMessages" class="space-y-3 sm:space-y-4">
-                <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">Hello! How can I assist you today?</div>
+        <div class="flex-1 bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden flex flex-col">
+            <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 sm:space-y-4">
+                <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">
+                    Hello! How can I assist you today?
+                </div>
             </div>
         </div>
 
@@ -174,7 +126,7 @@
             messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
             messageDiv.textContent = content;
             chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatMessages.scrollTop = chatMessages.scrollHeight;  // Ensure scroll goes to the bottom
         }
 
         function addLoadingIndicator() {
@@ -182,7 +134,7 @@
             loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg loader';
             loadingDiv.id = 'loadingIndicator';
             chatMessages.appendChild(loadingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatMessages.scrollTop = chatMessages.scrollHeight;  // Ensure scroll goes to the bottom
         }
 
         function removeLoadingIndicator() {
