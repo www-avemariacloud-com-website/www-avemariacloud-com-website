@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v13</title>
+    <title>Love Translator v25</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -79,15 +79,17 @@
         }
 
         textarea {
-            width: 97.25%;
-            padding: 15px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            min-height: 120px;
-            resize: both;
-            overflow: auto;
+            width: 100%; /* Full width of the container */
+	    padding: 15px;
+	    font-size: 1rem;
+	    border-radius: 8px;
+	    border: 1px solid #ddd;
+	    box-sizing: border-box; /* Include padding and border in the width */
+	    margin-top: 10px;
+	    resize: vertical; /* Allow resizing only vertically */
+	    height: 8em; /* Increase height */
         }
+
 
         select {
             width: 100%;
@@ -212,7 +214,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v13</header>
+        <header>Love Translator v25</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -232,8 +234,10 @@
         <div class="input-group">
             <label for="aiPrompt">A prompt can be selected below</label>
             <select id="aiPrompt">
-                <option value="loving_translation_of_a_statement_v1_0" selected>Loving Translation of a Statement</option>
-                <option value="loving_translation_of_anothers_statement_v1_0">Loving Translation of Another's Statement</option>
+                <option value="loving_translation_of_a_statement_v1_1" selected>Loving Translation of a Statement v1.1</option>
+                <option value="loving_translation_of_anothers_statement_v1_1">Loving Translation of Another's Statement v1.1</option>
+                <option value="loving_translation_of_a_statement_casual_v1_3">Loving Translation of a Statement (Casual) v1.3</option>
+                <option value="loving_translation_of_a_statement_cautious_and_open_ended_v1_1">Loving Translation of a Statement (Cautious and Open Ended) v1.1</option>
             </select>
         </div>
       
@@ -256,18 +260,18 @@
 
 <BR><BR>
             <div class="disclaimer" style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 30px; font-size: 1rem; color: #333; text-align: center; border: 1px solid #ddd;">
-    <strong>Disclaimer</strong> <br><br>
-    This tool was designed in part to help translate statements into more loving, compassionate, and constructive versions, with the goal of promoting positive communication, understanding, and personal growth.
+    <strong>Additional Information</strong> <br><br>
+    This tool was designed in part to help translate statements into more loving, compassionate, and constructive versions, with a goal of promoting positive communication, understanding, and personal growth.
 <BR><BR>
-While this tool aims to offer loving rephrasings of your ideas or those from others, it is important to note the following:
+While this tool can offer loving rephrasings of your ideas and those from others, it may be important to note the following:
 <BR><BR>
-Context Matters: The translations provided are based on the input text and are intended to enhance the tone of communication. However, context, tone, and personal relationships may influence how these translations are perceived in real-life situations. Always consider the full context before applying any rephrased content.
+Context Matters: The analsysis provided is based on the input text and can enhance communication. However, context, tone, and personal relationships may influence how this analysis is perceived. You may want to consider the full context before using any data from this tool.
 <BR><BR>
-Encouragement of Constructive Communication: The tool may include suggestions to encourage users to adopt more positive forms of expression, but it is important to recognize that communication is a personal choice. The responses are designed to guide toward a more compassionate approach but may not be suitable for every situation.
+Encouragement of Constructive Communication: The tool may include suggestions to adopt more positive forms of expression, but it may be important to recognize that communication can be a personal choice. These responses can guide toward more compassion.
 <BR><BR>
-Limitations of AI: While the tool strives to offer meaningful and loving translations, it may not always perfectly capture the nuances of human emotion or intent. Users are encouraged to use their judgment when applying the translations to ensure that the message is appropriately conveyed.
+Going beyond AI: While this tool can offer meaningful and loving translations, you may benefit even further from integrating your own human emotion or intent. Discretion may be beneficial when using data from this tool.
 <BR><BR>
-By using this tool, maybe you should acknowledge that it is a supportive resource designed to help foster understanding and kindness in communication. It may be beneficial for users to take ownership and be mindful of their messages and communications, as we care about the impact of their words and want to empower them to make informed choices.
+This tool can be a supportive resource to foster understanding and kindness in communication. It may be beneficial to be mindful of messages and communications. I care about the impact of words and I want to empower them.
 </div>
 
 
@@ -289,10 +293,37 @@ By using this tool, maybe you should acknowledge that it is a supportive resourc
     document.getElementById("loading").style.display = "block";
     document.getElementById("result").style.display = "none";
 
-    var loving_translation_of_a_statement_v1_0 = [
+		
+var loving_translation_of_a_statement_cautious_and_open_ended_v1_1 = [
+	                    {
+	                        role: "system",
+	                        content: `Given an input that may contain a statement, I would like you to rephrase the message to convey a sense of caution and open-mindedness while maintaining the original meaning and facts. I would like you to emphasize the importance of careful consideration, nuanced thinking, and exploration of different perspectives. I would like you to use qualified statements and careful consideration. I would like you to promote a thoughtful and inquiring approach.
+
+Respond in JSON.`
+	                    },
+	                    {
+	                        role: "user",
+	                        content: `"${inputText}"`
+	                    }
+	                ];
+		
+	var loving_translation_of_a_statement_casual_v1_3 = [
+	                    {
+	                        role: "system",
+	                        content: `Given an input that may contain a statement, I would like you to rephrase it into a more positive, loving, and compassionate form, written in a friendly and casual tone while ensuring the original meaning and facts remain intact. I would like the result to emphasize kindness, understanding, and appreciation, turning any sentiment into a loving, nurturing, and constructive message that feels like it's coming from a caring friend or mentor. Respond in a down-to-earth and approachable style, avoiding jargon or overly formal language.
+
+Respond in JSON.`
+	                    },
+	                    {
+	                        role: "user",
+	                        content: `"${inputText}"`
+	                    }
+	                ];
+			
+    var loving_translation_of_a_statement_v1_1 = [
                     {
                         role: "system",
-                        content: `Given an input sentence that contains a statement, rephrase it into a more positive, loving, and compassionate form while ensuring the original meaning and facts remain intact. The result should emphasize kindness, understanding, and appreciation, turning any neutral or negative sentiment into a nurturing or constructive message.
+                        content: `Given an input that may contain a statement, I would like you to rephrase it into a more positive, loving, and compassionate form while ensuring the original meaning and facts remain intact. I would like the result to emphasize kindness, understanding, and appreciation, turning any sentiment into a loving, nurturing, and constructive message.
                         
 Respond in JSON.`
                     },
@@ -303,10 +334,10 @@ Respond in JSON.`
                 ];
 
 
-    var loving_translation_of_anothers_statement_v1_0 = [
+    var loving_translation_of_anothers_statement_v1_1 = [
                     {
                         role: "system",
-                        content: `Given an input sentence that contains a statement from someone else, rephrase it into a more positive, loving, and compassionate form while retaining the original meaning and facts. The result should reflect kindness, understanding, and care. Additionally, provide a gentle, constructive response that can help the original speaker use a more loving and positive form of expression in the future.
+                        content: `Given an input that may contain a statement from another person, I would like you to rephrase it into a more positive, loving, and compassionate form while retaining the original meaning and facts. I would like the result to reflect kindness, understanding, and care. Additionally, I would like you to provide a gentle, constructive response that may help the original speaker use a more loving and positive form of expression in the future.
 
 Respond in JSON.`
                     },
@@ -319,13 +350,24 @@ Respond in JSON.`
     const selectedPrompt = document.getElementById("aiPrompt").value;
 
     var aiPrompt;
-          
-    if (selectedPrompt == "loving_translation_of_a_statement_v1_0") {
-      aiPrompt = loving_translation_of_a_statement_v1_0;
+
+		
+
+
+    if (selectedPrompt == "loving_translation_of_a_statement_cautious_and_open_ended_v1_1") {
+      aiPrompt = loving_translation_of_a_statement_cautious_and_open_ended_v1_1;
+    }
+		
+    if (selectedPrompt == "loving_translation_of_a_statement_casual_v1_3") {
+      aiPrompt = loving_translation_of_a_statement_casual_v1_3;
+    }
+		
+    if (selectedPrompt == "loving_translation_of_a_statement_v1_1") {
+      aiPrompt = loving_translation_of_a_statement_v1_1;
     }
 
-    if (selectedPrompt == "loving_translation_of_anothers_statement_v1_0") {
-      aiPrompt = loving_translation_of_anothers_statement_v1_0;
+    if (selectedPrompt == "loving_translation_of_anothers_statement_v1_1") {
+      aiPrompt = loving_translation_of_anothers_statement_v1_1;
     }
 
     console.log(aiPrompt[0]['content']);
