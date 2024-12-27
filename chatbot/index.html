@@ -181,10 +181,14 @@
     function trimConversationHistory() {
         let totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
 
+        console.log("total tokens, untrimmed:" + totalTokens);
+        
         // Trim messages from the beginning if the total token count exceeds the limit
         while (totalTokens > TOKEN_LIMIT) {
             conversationHistory.shift();
             totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
+            
+            console.log("total tokens, trimmed:" + totalTokens);
         }
     }
 
