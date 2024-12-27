@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!--- I am interested in making it so that API requests stay within 7000 tokens. I would also like this to be a configurable variable. I propose the following idea: only send a limited number of most recent messages to the API relating to the number of tokens. I am testing that now. !--->
+<!--- Token tracking and logging have been added. The token limit is set to 700 !--->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Multi Model AI Chatbot</title>
@@ -165,9 +165,9 @@
     const userInput = document.getElementById('userInput');
     const aiModel = document.getElementById('aiModel');
 
-    const TOKEN_LIMIT = 7000; // Set your token limit here
+    const TOKEN_LIMIT = 700; // Set your token limit here
     let conversationHistory = [
-        { role: "system", content: "You are a helpful AI assistant." },
+        { role: "system", content: "You are a helpful AI assistant for a Christian website." },
         { role: "assistant", content: "Hello! How can I assist you today?" }
     ];
 
