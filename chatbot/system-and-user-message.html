@@ -81,6 +81,16 @@
             background-color: #0056b3;
         }
 
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+        }
+
         .output-container {
             background: #f9f9f9;
             border: 1px solid #ddd;
@@ -135,6 +145,10 @@
                     <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
                 </select>
             </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="json-response" name="json-response">
+                <label for="json-response">Request Response in JSON</label>
+            </div>
             <button id="submit-button">Submit</button>
             <div class="output-container" id="output">
                 <strong>Response:</strong>
@@ -151,24 +165,33 @@
             const systemMessage = document.getElementById('system-message').value;
             const userMessage = document.getElementById('user-message').value;
             const selectedModel = document.getElementById('model-selector').value;
+            const requestJson = document.getElementById('json-response').checked;
 
             const responseText = document.getElementById('response-text');
             responseText.textContent = "Loading...";
 
             try {
+                const requestBody = {
+                    model: selectedModel,
+                    messages: [
+                        { role: 'system', content: systemMessage },
+                        { role: 'user', content: userMessage }
+                    ]
+                };
+
+                if (requestJson) {
+                    requestBody.response_format = {
+                        type: "json_object"
+                    };
+                }
+
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${apiKey}`
                     },
-                    body: JSON.stringify({
-                        model: selectedModel,
-                        messages: [
-                            { role: 'system', content: systemMessage },
-                            { role: 'user', content: userMessage }
-                        ]
-                    })
+                    body: JSON.stringify(requestBody)
                 });
 
                 if (!response.ok) {
@@ -176,7 +199,19 @@
                 }
 
                 const data = await response.json();
-                responseText.textContent = data.choices[0]?.message?.content || "No response received.";
+                const content = data.choices[0]?.message?.content || "No response received.";
+                
+                // If JSON response, format it nicely
+                if (requestJson) {
+                    try {
+                        const jsonContent = JSON.parse(content);
+                        responseText.textContent = JSON.stringify(jsonContent, null, 2);
+                    } catch (e) {
+                        responseText.textContent = content;
+                    }
+                } else {
+                    responseText.textContent = content;
+                }
             } catch (error) {
                 responseText.textContent = `Error: ${error.message}`;
             }
