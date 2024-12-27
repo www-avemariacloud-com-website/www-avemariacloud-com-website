@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v24</title>
+    <title>Love Translator v25</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -79,15 +79,17 @@
         }
 
         textarea {
-            width: 97.25%;
-            padding: 15px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            min-height: 120px;
-            resize: both;
-            overflow: auto;
+            width: 100%; /* Full width of the container */
+	    padding: 15px;
+	    font-size: 1rem;
+	    border-radius: 8px;
+	    border: 1px solid #ddd;
+	    box-sizing: border-box; /* Include padding and border in the width */
+	    margin-top: 10px;
+	    resize: vertical; /* Allow resizing only vertically */
+	    height: 8em; /* Increase height */
         }
+
 
         select {
             width: 100%;
@@ -212,7 +214,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v24</header>
+        <header>Love Translator v25</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
