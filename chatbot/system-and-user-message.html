@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Application - System and User Message</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .app-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input, select, textarea, button {
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .output pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h1>AI Chat Application</h1>
+        <label for="system-message">System Message</label>
+        <textarea id="system-message" placeholder="Enter the system message..."></textarea>
+
+        <label for="user-message">User Message</label>
+        <textarea id="user-message" placeholder="Enter the user message..."></textarea>
+
+        <label for="model-selector">Select Model</label>
+        <select id="model-selector">
+            <option value="gemma2-9b-it">gemma2-9b-it</option>
+            <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
+            <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+        </select>
+
+        <button id="submit-button">Submit</button>
+
+        <div class="output" id="output">
+            <strong>Response:</strong>
+            <pre id="response-text">Waiting for input...</pre>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = "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";
+        const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+
+        document.getElementById('submit-button').addEventListener('click', async () => {
+            const systemMessage = document.getElementById('system-message').value;
+            const userMessage = document.getElementById('user-message').value;
+            const selectedModel = document.getElementById('model-selector').value;
+
+            const responseText = document.getElementById('response-text');
+            responseText.textContent = "Loading...";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: selectedModel,
+                        messages: [
+                            { role: 'system', content: systemMessage },
+                            { role: 'user', content: userMessage }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                responseText.textContent = data.choices[0]?.message?.content || "No response received.";
+            } catch (error) {
+                responseText.textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
