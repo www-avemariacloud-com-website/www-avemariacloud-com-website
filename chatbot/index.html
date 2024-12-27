@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!--- This looks good on computer web browsers and mobile web browsers. The text area for the message input is scrollable. I am interested in making it so that the page doesn't scroll when on mobile, and that only the text area scrolls when the keyboard is open. !--->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Multi Model AI Chatbot</title>
@@ -11,7 +12,6 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevent page scrolling */
         }
 
         .message {
@@ -98,20 +98,6 @@
             height: 6em; /* Fixed height for three lines */
             resize: none; /* Prevent resizing */
             overflow-y: auto; /* Enable vertical scrolling */
-            max-height: 12em; /* Optional: Limit the maximum height of the textarea */
-        }
-
-        /* When the keyboard is open on mobile, allow only the textarea to scroll */
-        body.keyboard-open {
-            overflow: hidden; /* Prevent body scroll */
-        }
-
-        body.keyboard-open #userInput {
-            overflow-y: auto; /* Allow textarea to scroll */
-        }
-
-        body.keyboard-open .chat-container {
-            overflow: hidden; /* Prevent chat container from scrolling */
         }
     </style>
 </head>
@@ -290,21 +276,6 @@
         });
 
         userInput.focus();
-
-        // Detecting when the mobile keyboard opens or closes
-        function handleKeyboardVisibility() {
-            if (window.innerHeight < 600) {
-                document.body.classList.add('keyboard-open');
-            } else {
-                document.body.classList.remove('keyboard-open');
-            }
-        }
-
-        // Add event listeners to detect changes in the window size
-        window.addEventListener('resize', handleKeyboardVisibility);
-
-        // Initial check when the page loads
-        handleKeyboardVisibility();
     </script>
 </body>
 </html>
