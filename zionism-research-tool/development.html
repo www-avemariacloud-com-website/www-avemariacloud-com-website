@@ -6,7 +6,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v48</title>
+    <title>Zionism Research Tool v49</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -79,14 +79,13 @@
         }
 
         textarea {
-            width: 100%;
-            padding: 15px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            min-height: 120px;
-            resize: both;
-            overflow: auto;
+            width: 100%; /* Full width of the container */
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* Include padding and border in the width */
+    margin-top: 10px;
         }
 
         select {
@@ -212,7 +211,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v48</header>
+        <header>Zionism Research Tool v49</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -230,6 +229,7 @@
             <label for="inputText">An input for a sentence is below</label>
             <textarea id="inputText" placeholder="You may type here"></textarea>
         </div>
+
         <!-- Dropdown for model selection -->
         <div class="input-group">
             <label for="aiModel">An AI model can be selected below</label>
