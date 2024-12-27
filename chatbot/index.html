@@ -166,9 +166,10 @@
     const aiModel = document.getElementById('aiModel');
 
     const TOKEN_LIMIT = 2000; // Set your token limit here
+        
     let conversationHistory = [
-        { role: "system", content: "You are a helpful AI assistant." },
-        { role: "assistant", content: "Hello! How can I assist you today?" }
+        { role: "system", content: "You are a helpful assistant that provides guidance and support, grounded in Christian values." },
+        { role: "assistant", content: "Hello! How can I assist you today? I’m here to help with kindness and respect, guided by faith." }
     ];
 
     // Function to estimate token usage for a message
