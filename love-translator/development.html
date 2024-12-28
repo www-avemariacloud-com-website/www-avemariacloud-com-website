@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v32</title>
+    <title>Love Translator v33</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -214,7 +214,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v32</header>
+        <header>Love Translator v33</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -311,7 +311,20 @@ Respond in JSON.`
 	var loving_translation_of_a_statement_casual_v1_4 = [
 	                    {
 	                        role: "system",
-	                        content: `Rephrase the input statement into a warm and encouraging form, maintaining the original meaning and facts, as guided by the teachings of Galatians 6:2, 'Carry each other's burdens, and in this way you will fulfill the law of Christ.' and Ephesians 4:32, 'Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.' Emphasize kindness, understanding, and appreciation, using a friendly and casual tone, and avoiding jargon or overly formal language. Ensure the rephrased statement feels like it's coming from a caring friend or mentor, offering constructive guidance and support. Reflect the wisdom of Proverbs 16:24, 'Gracious words are a honeycomb, sweet to the soul and healing to the bones,' and aim to create a sense of connection and community. Write in a down-to-earth and approachable style, using everyday language that's relatable and easy to understand.
+	                        content: `Given an input statement, rephrase it to convey a sense of caution and open-mindedness, while maintaining the original meaning and facts. As the Bible advises, 'Do not be quick with your mouth, do not be hasty in your heart to utter anything before God. God is in heaven and you are on earth, so let your words be few' (Ecclesiastes 5:2, NIV).
+
+Reframe the input statement to emphasize the importance of careful consideration, nuanced thinking, and exploration of different perspectives. Use qualified statements and careful language to promote a thoughtful and inquiring approach. As the apostle Paul wrote, 'Test everything; hold fast what is good, and abstain from every form of evil' (1 Thessalonians 5:21-22, ESV).
+
+Output a rephrased statement that embodies the spirit of cautious consideration, acknowledging the complexity of issues and the value of diverse viewpoints. As Jesus taught, 'Go and learn what this means: "I desire mercy, not sacrifice"' (Matthew 9:13, NIV), highlighting the importance of thoughtful reflection and humble inquiry.
+
+When reframing the statement, consider the following principles:
+
+1. Use phrases that convey caution, such as 'It appears that,' 'It seems likely that,' or 'It's possible that.'
+2. Emphasize the importance of further exploration and consideration, using phrases like 'More research is needed to,' 'Additional investigation is required to,' or 'Further study is necessary to.'
+3. Highlight the value of diverse perspectives, using phrases like 'Different viewpoints suggest that,' 'Some experts argue that,' or 'Various opinions exist on this topic.'
+4. Avoid making absolute statements or claims, instead opting for more nuanced language that acknowledges the complexity of the issue.
+
+By following these principles, output a rephrased statement that promotes a thoughtful and inquiring approach, acknowledging the importance of careful consideration and open-mindedness.
 
 Respond in JSON.`
 	                    },
@@ -350,7 +363,7 @@ Respond in JSON.`
                     }
                 ];
 
-		var loving_translation_of_a_statement_humorous_v1_0 = [
+		var loving_translation_of_a_statement_humorous_v1_1 = [
                     {
                         role: "system",
                         content: `Using the original text as a guide, create a rewritten version that not only adds a dash of humor and wit but also conveys love, kindness, and compassion. Ensure that the essential meaning and facts remain intact, while the tone is lightened, entertaining, and endearing. As the Bible says, 'Love is patient, love is kind' (1 Corinthians 13:4). Let the rewritten text reflect the love and care that we are called to share with one another.
@@ -370,8 +383,8 @@ Respond in JSON.`
 		
 
 
-	if (selectedPrompt == "loving_translation_of_a_statement_humorous_v1_0") {
-      aiPrompt = loving_translation_of_a_statement_humorous_v1_0;
+	if (selectedPrompt == "loving_translation_of_a_statement_humorous_v1_1") {
+      aiPrompt = loving_translation_of_a_statement_humorous_v1_1;
     }
 		
     if (selectedPrompt == "loving_translation_of_a_statement_cautious_and_open_ended_v1_2") {
