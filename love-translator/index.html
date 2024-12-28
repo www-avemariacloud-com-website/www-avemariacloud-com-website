@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v26</title>
+    <title>Love Translator v33</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -214,7 +214,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v26</header>
+        <header>Love Translator v33</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -234,10 +234,11 @@
         <div class="input-group">
             <label for="aiPrompt">A prompt can be selected below</label>
             <select id="aiPrompt">
-                <option value="loving_translation_of_a_statement_v1_1" selected>Loving Translation of a Statement v1.1</option>
-                <option value="loving_translation_of_anothers_statement_v1_1">Loving Translation of Another's Statement v1.1</option>
-                <option value="loving_translation_of_a_statement_casual_v1_3">Loving Translation of a Statement (Casual) v1.3</option>
-                <option value="loving_translation_of_a_statement_cautious_and_open_ended_v1_1">Loving Translation of a Statement (Cautious and Open Ended) v1.1</option>
+                <option value="loving_translation_of_a_statement_v1_2" selected>Loving Translation of a Statement v1.2</option>
+                <option value="loving_translation_of_anothers_statement_v1_2">Loving Translation of Another's Statement v1.2</option>
+                <option value="loving_translation_of_a_statement_casual_v1_4">Loving Translation of a Statement (Casual) v1.4</option>
+                <option value="loving_translation_of_a_statement_cautious_and_open_ended_v1_2">Loving Translation of a Statement (Cautious and Open Ended) v1.2</option>
+                <option value="loving_translation_of_a_statement_humorous_v1_1">Loving Translation of a Statement (Humorous) v1.1</option>
             </select>
         </div>
       
@@ -294,10 +295,10 @@ This tool can be a supportive resource to foster understanding and kindness in c
     document.getElementById("result").style.display = "none";
 
 		
-var loving_translation_of_a_statement_cautious_and_open_ended_v1_1 = [
+var loving_translation_of_a_statement_cautious_and_open_ended_v1_2 = [
 	                    {
 	                        role: "system",
-	                        content: `Given an input that may contain a statement, I would like you to rephrase the message to convey a sense of caution and open-mindedness while maintaining the original meaning and facts. I would like you to emphasize the importance of careful consideration, nuanced thinking, and exploration of different perspectives. I would like you to use qualified statements and careful consideration. I would like you to promote a thoughtful and inquiring approach.
+	                        content: `Rephrase the input statement to convey a sense of caution and open-mindedness, maintaining the original meaning and facts, as guided by the wisdom of Proverbs 18:13, 'To answer before listening—that is folly and shame.' and Matthew 7:7-8, 'Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.' Emphasize the importance of careful consideration, nuanced thinking, and exploration of different perspectives, reflecting the principles of 1 Thessalonians 5:21, 'Test everything. Hold on to the good.' Ensure the rephrased statement promotes a thoughtful and inquiring approach, using qualified statements and careful consideration, aligning with the wisdom of James 1:19, 'Everyone should be quick to listen, slow to speak and slow to become angry.'
 
 Respond in JSON.`
 	                    },
@@ -307,10 +308,23 @@ Respond in JSON.`
 	                    }
 	                ];
 		
-	var loving_translation_of_a_statement_casual_v1_3 = [
+	var loving_translation_of_a_statement_casual_v1_4 = [
 	                    {
 	                        role: "system",
-	                        content: `Given an input that may contain a statement, I would like you to rephrase it into a more positive, loving, and compassionate form, written in a friendly and casual tone while ensuring the original meaning and facts remain intact. I would like the result to emphasize kindness, understanding, and appreciation, turning any sentiment into a loving, nurturing, and constructive message that feels like it's coming from a caring friend or mentor. Respond in a down-to-earth and approachable style, avoiding jargon or overly formal language.
+	                        content: `Given an input statement, rephrase it to convey a sense of caution and open-mindedness, while maintaining the original meaning and facts. As the Bible advises, 'Do not be quick with your mouth, do not be hasty in your heart to utter anything before God. God is in heaven and you are on earth, so let your words be few' (Ecclesiastes 5:2, NIV).
+
+Reframe the input statement to emphasize the importance of careful consideration, nuanced thinking, and exploration of different perspectives. Use qualified statements and careful language to promote a thoughtful and inquiring approach. As the apostle Paul wrote, 'Test everything; hold fast what is good, and abstain from every form of evil' (1 Thessalonians 5:21-22, ESV).
+
+Output a rephrased statement that embodies the spirit of cautious consideration, acknowledging the complexity of issues and the value of diverse viewpoints. As Jesus taught, 'Go and learn what this means: "I desire mercy, not sacrifice"' (Matthew 9:13, NIV), highlighting the importance of thoughtful reflection and humble inquiry.
+
+When reframing the statement, consider the following principles:
+
+1. Use phrases that convey caution, such as 'It appears that,' 'It seems likely that,' or 'It's possible that.'
+2. Emphasize the importance of further exploration and consideration, using phrases like 'More research is needed to,' 'Additional investigation is required to,' or 'Further study is necessary to.'
+3. Highlight the value of diverse perspectives, using phrases like 'Different viewpoints suggest that,' 'Some experts argue that,' or 'Various opinions exist on this topic.'
+4. Avoid making absolute statements or claims, instead opting for more nuanced language that acknowledges the complexity of the issue.
+
+By following these principles, output a rephrased statement that promotes a thoughtful and inquiring approach, acknowledging the importance of careful consideration and open-mindedness.
 
 Respond in JSON.`
 	                    },
@@ -320,10 +334,10 @@ Respond in JSON.`
 	                    }
 	                ];
 			
-    var loving_translation_of_a_statement_v1_1 = [
+    var loving_translation_of_a_statement_v1_2 = [
                     {
                         role: "system",
-                        content: `Given an input that may contain a statement, I would like you to rephrase it into a more positive, loving, and compassionate form while ensuring the original meaning and facts remain intact. I would like the result to emphasize kindness, understanding, and appreciation, turning any sentiment into a loving, nurturing, and constructive message.
+                        content: `Rephrase the input statement into a loving and compassionate form, maintaining the original meaning and facts, as guided by the principles of kindness, understanding, and appreciation, while reflecting the teachings of 1 Corinthians 13:4-7, 'Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It does not dishonor others, it is not self-seeking, it is not easily angered, it keeps no record of wrongs. Love does not delight in evil but rejoices with the truth. It always protects, always trusts, always hopes, always perseveres.' Ensure the rephrased statement is constructive and nurturing, aligning with Proverbs 15:1, 'A gentle answer turns away wrath, but a harsh word stirs up anger.'
                         
 Respond in JSON.`
                     },
@@ -334,10 +348,25 @@ Respond in JSON.`
                 ];
 
 
-    var loving_translation_of_anothers_statement_v1_1 = [
+    var loving_translation_of_anothers_statement_v1_2 = [
                     {
                         role: "system",
-                        content: `Given an input that may contain a statement from another person, I would like you to rephrase it into a more positive, loving, and compassionate form while retaining the original meaning and facts. I would like the result to reflect kindness, understanding, and care. Additionally, I would like you to provide a gentle, constructive response that may help the original speaker use a more loving and positive form of expression in the future.
+                        content: `Rephrase the input statement from the original speaker into a more positive, loving, and compassionate form, maintaining the original meaning and facts. Emphasize kindness, understanding, and care, as guided by the principles of 1 Corinthians 13:4-7, 'Love is patient, love is kind... It always protects, always trusts, always hopes, always perseveres.' and Matthew 22:39, 'Love your neighbor as yourself.' Ensure the rephrased statement reflects the original speaker's intent, but with a more loving and constructive tone.
+
+Additionally, provide a gentle and constructive response that may help the original speaker become more aware of the impact of their words and encourage them to use a more loving and positive form of expression in the future. Offer suggestions and guidance in a kind and non-judgmental manner, as if you were having a supportive conversation with a friend. Use phrases that acknowledge their feelings and concerns, while also encouraging them to consider the perspective of others. End the response with a positive note, highlighting the potential benefits of using more loving and compassionate language.
+
+Respond in JSON.`
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+
+		var loving_translation_of_a_statement_humorous_v1_1 = [
+                    {
+                        role: "system",
+                        content: `Using the original text as a guide, create a rewritten version that not only adds a dash of humor and wit but also conveys love, kindness, and compassion. Ensure that the essential meaning and facts remain intact, while the tone is lightened, entertaining, and endearing. As the Bible says, 'Love is patient, love is kind' (1 Corinthians 13:4). Let the rewritten text reflect the love and care that we are called to share with one another.
 
 Respond in JSON.`
                     },
@@ -354,20 +383,24 @@ Respond in JSON.`
 		
 
 
-    if (selectedPrompt == "loving_translation_of_a_statement_cautious_and_open_ended_v1_1") {
-      aiPrompt = loving_translation_of_a_statement_cautious_and_open_ended_v1_1;
+	if (selectedPrompt == "loving_translation_of_a_statement_humorous_v1_1") {
+      aiPrompt = loving_translation_of_a_statement_humorous_v1_1;
     }
 		
-    if (selectedPrompt == "loving_translation_of_a_statement_casual_v1_3") {
-      aiPrompt = loving_translation_of_a_statement_casual_v1_3;
+    if (selectedPrompt == "loving_translation_of_a_statement_cautious_and_open_ended_v1_2") {
+      aiPrompt = loving_translation_of_a_statement_cautious_and_open_ended_v1_2;
     }
 		
-    if (selectedPrompt == "loving_translation_of_a_statement_v1_1") {
-      aiPrompt = loving_translation_of_a_statement_v1_1;
+    if (selectedPrompt == "loving_translation_of_a_statement_casual_v1_4") {
+      aiPrompt = loving_translation_of_a_statement_casual_v1_4;
+    }
+		
+    if (selectedPrompt == "loving_translation_of_a_statement_v1_2") {
+      aiPrompt = loving_translation_of_a_statement_v1_2;
     }
 
-    if (selectedPrompt == "loving_translation_of_anothers_statement_v1_1") {
-      aiPrompt = loving_translation_of_anothers_statement_v1_1;
+    if (selectedPrompt == "loving_translation_of_anothers_statement_v1_2") {
+      aiPrompt = loving_translation_of_anothers_statement_v1_2;
     }
 
     console.log(aiPrompt[0]['content']);
