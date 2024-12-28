@@ -515,22 +515,6 @@ function downloadImage(imageUrl) {
             modal.style.display = 'none';
         }
 
-        // Update your existing displayImage function
-        function displayImage(imageUrl, positivePrompt, negativePrompt) {
-            const imageCard = document.createElement('div');
-            imageCard.className = 'image-card';
-            imageCard.innerHTML = `
-                <img src="${imageUrl}" alt="Generated Image">
-                <p><strong>Positive Prompt:</strong> ${positivePrompt}</p>
-                <p><strong>Negative Prompt:</strong> ${negativePrompt}</p>
-                <div class="image-actions">
-                    <button class="action-button" onclick="downloadImage('${imageUrl}')">Download Image</button>
-                    <button class="action-button" onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
-                </div>
-            `;
-            document.getElementById('generated-images').prepend(imageCard);
-        }
-
         // Close modal when pressing Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
