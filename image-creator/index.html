@@ -151,8 +151,8 @@
         <h1>AI Image Creator</h1>
 
         <div class="tab-container">
-            <button class="tab-button active" onclick="switchTab('description')">Generate from Description</button>
-            <button class="tab-button" onclick="switchTab('prompt')">Generate from Prompts</button>
+            <button class="tab-button active" onclick="switchTab('description')">Create from Description</button>
+            <button class="tab-button" onclick="switchTab('prompt')">Create from Prompt(s)</button>
         </div>
 
         <div id="error-message" class="error"></div>
@@ -166,7 +166,7 @@
                 <label for="num-images">Number of Images:</label>
                 <input type="number" id="num-images" min="1" max="10" value="1">
             </div>
-            <button onclick="generateFromDescription()" id="description-button">Generate Image(s)</button>
+            <button onclick="generateFromDescription()" id="description-button">Create Image(s)</button>
         </div>
 
         <div id="prompt-tab" class="tab-content">
@@ -175,10 +175,10 @@
                 <textarea id="positive-prompt" placeholder="Enter positive prompt..."></textarea>
             </div>
             <div class="form-group">
-                <label for="negative-prompt">Negative Prompt:</label>
-                <textarea id="negative-prompt" placeholder="Enter negative prompt..."></textarea>
+                <label for="negative-prompt">"Negative" Prompt:</label>
+                <textarea id="negative-prompt" placeholder="Enter "negative" prompt..."></textarea>
             </div>
-            <button onclick="generateFromPrompts()" id="prompt-button">Generate Image</button>
+            <button onclick="generateFromPrompts()" id="prompt-button">Create Image</button>
         </div>
 
         <div id="loading">Generating image, please wait...</div>
