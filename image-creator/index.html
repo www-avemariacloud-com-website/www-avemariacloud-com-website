@@ -10,6 +10,33 @@
     <style>
 
 
+        .model-selection {
+            margin-bottom: 20px;
+        }
+
+        .model-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+        }
+
+        .model-description {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #666;
+        }
+
+
+
+
+        
+
 
         .random-description-button {
             background-color: #28a745;
@@ -234,6 +261,15 @@
     <div class="container">
         <h1>AI Image Creator</h1>
 
+        <div class="model-selection">
+            <label for="model-select">Image Generation Model:</label>
+            <select id="model-select" class="model-select" onchange="updateModelDescription()">
+                <option value="flux">black-forest-labs/FLUX.1-dev</option>
+                <option value="sd35">stabilityai/stable-diffusion-3.5-large</option>
+            </select>
+            <div id="model-description" class="model-description"></div>
+        </div>
+
         <div class="tab-container">
             <button class="tab-button active" onclick="switchTab('description')">Create from Description</button>
             <button class="tab-button" onclick="switchTab('prompt')">Create from Prompt(s)</button>
@@ -279,7 +315,11 @@
             <p>By using this tool, maybe you should read and agree to these <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
               <strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.
             <BR><BR>
-          <strong>Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved
+          <strong><a href="stability-ai-notice.txt">Notice</a>: Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved. Stability AI 
+          <BR><BR>
+          <strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc.
+
+IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
           <BR><BR>
           <strong>Hugging Face API:</strong> This tool may use the Hugging Face API, and may be subject to their <a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.
           <BR><BR>
@@ -290,6 +330,40 @@
     </div>
 
     <script>
+
+
+
+
+        const MODEL_CONFIGS = {
+            flux: {
+                url: 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev',
+                description: 'May do well in modern, artistic interpretations with strong attention to detail and creative styling.',
+                requiresNegativePrompt: true
+            },
+            sd35: {
+                url: 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3.5-large',
+                description: 'May do well at creating highly realistic images with improved composition and coherence.',
+                requiresNegativePrompt: true
+            },
+            sd14: {
+                url: 'https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4',
+                description: 'May do well for general-purpose image generation with consistent results.',
+                requiresNegativePrompt: true
+            }
+        };
+
+
+        
+        // Call this on page load to set initial description
+        updateModelDescription();
+
+
+        function updateModelDescription() {
+            const modelSelect = document.getElementById('model-select');
+            const modelDescription = document.getElementById('model-description');
+            modelDescription.textContent = MODEL_CONFIGS[modelSelect.value].description;
+        }
+        
 
 
         async function generateRandomDescription() {
@@ -413,19 +487,28 @@ Respond in JSON with these keys: positive_prompt and negative_prompt.`
 
         async function generateImage(positivePrompt, negativePrompt) {
             try {
-                const response = await fetch('https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3.5-large', {
+                const modelSelect = document.getElementById('model-select');
+                const selectedModel = MODEL_CONFIGS[modelSelect.value];
+                
+                const requestBody = {
+                    inputs: positivePrompt,
+                    options: {
+                        wait_for_model: true
+                    }
+                };
+
+                // Only add negative prompt if the model supports it
+                if (selectedModel.requiresNegativePrompt && negativePrompt) {
+                    requestBody.options.negative_prompt = negativePrompt;
+                }
+
+                const response = await fetch(selectedModel.url, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${HF_API_KEY}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        inputs: positivePrompt,
-                        options: {
-                            wait_for_model: true,
-                            negative_prompt: negativePrompt
-                        }
-                    })
+                    body: JSON.stringify(requestBody)
                 });
 
                 if (!response.ok) {
@@ -435,7 +518,6 @@ Respond in JSON with these keys: positive_prompt and negative_prompt.`
 
                 const blob = await response.blob();
                 if (blob.type.startsWith('application/json')) {
-                    // If the response is JSON, it's probably an error
                     const errorText = await blob.text();
                     throw new Error(`API returned JSON instead of image: ${errorText}`);
                 }
@@ -447,12 +529,20 @@ Respond in JSON with these keys: positive_prompt and negative_prompt.`
         }
 
         function displayImage(imageUrl, positivePrompt, negativePrompt) {
+            const modelSelect = document.getElementById('model-select');
+            const selectedModelName = modelSelect.options[modelSelect.selectedIndex].text;
+            
             const imageCard = document.createElement('div');
             imageCard.className = 'image-card';
             imageCard.innerHTML = `
                 <img src="${imageUrl}" alt="Generated Image">
+                <p><strong>Model:</strong> ${selectedModelName}</p>
                 <p><strong>Positive Prompt:</strong> ${positivePrompt}</p>
                 <p><strong>Negative Prompt:</strong> ${negativePrompt}</p>
+                <div class="image-actions">
+                    <button class="action-button" onclick="downloadImage('${imageUrl}')">Download Image</button>
+                    <button class="action-button" onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
+                </div>
             `;
             document.getElementById('generated-images').prepend(imageCard);
         }
@@ -546,22 +636,6 @@ function downloadImage(imageUrl) {
         function closeModal() {
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
-        }
-
-        // Update your existing displayImage function
-        function displayImage(imageUrl, positivePrompt, negativePrompt) {
-            const imageCard = document.createElement('div');
-            imageCard.className = 'image-card';
-            imageCard.innerHTML = `
-                <img src="${imageUrl}" alt="Generated Image">
-                <p><strong>Positive Prompt:</strong> ${positivePrompt}</p>
-                <p><strong>Negative Prompt:</strong> ${negativePrompt}</p>
-                <div class="image-actions">
-                    <button class="action-button" onclick="downloadImage('${imageUrl}')">Download Image</button>
-                    <button class="action-button" onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
-                </div>
-            `;
-            document.getElementById('generated-images').prepend(imageCard);
         }
 
         // Close modal when pressing Escape key
