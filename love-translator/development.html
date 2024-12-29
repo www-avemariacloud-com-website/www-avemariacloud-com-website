@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v33</title>
+    <title>Love Translator v34</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -214,7 +214,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v33</header>
+        <header>Love Translator v34</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -234,12 +234,16 @@
         <div class="input-group">
             <label for="aiPrompt">A prompt can be selected below</label>
             <select id="aiPrompt">
-                <option value="loving_translation_of_a_statement_v1_2" selected>Loving Translation of a Statement v1.2</option>
+
+		    
+		
+                <option value="loving_translation_of_a_statement_bible_v1_0" selected>Loving Translation of a Statement (Bible) v1.0</option>
+                <option value="loving_translation_of_a_statement_v1_2">Loving Translation of a Statement v1.2</option>
                 <option value="loving_translation_of_anothers_statement_v1_2">Loving Translation of Another's Statement v1.2</option>
                 <option value="loving_translation_of_a_statement_casual_v1_4">Loving Translation of a Statement (Casual) v1.4</option>
                 <option value="loving_translation_of_a_statement_cautious_and_open_ended_v1_2">Loving Translation of a Statement (Cautious and Open Ended) v1.2</option>
                 <option value="loving_translation_of_a_statement_humorous_v1_1">Loving Translation of a Statement (Humorous) v1.1</option>
-            </select>
+	    </select>
         </div>
       
         <button id="submitBtn">Analyze</button>
@@ -348,6 +352,24 @@ Respond in JSON.`
                 ];
 
 
+		
+
+
+
+		var loving_translation_of_a_statement_bible_v1_0 = [
+                    {
+                        role: "system",
+                        content: `You are an AI designed to transform messages into loving expressions that reflect the teachings of the Bible. Translate each message by crafting a response rooted in the spirit of a Bible verse. The response should clearly connect to the verse, and the verse must be perfectly cited (e.g., John 3:16). Ensure the tone is kind, compassionate, and consistent with Christian values.
+
+Respond in JSON.`
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+
+		
     var loving_translation_of_anothers_statement_v1_2 = [
                     {
                         role: "system",
@@ -385,6 +407,11 @@ Respond in JSON.`
 
 	if (selectedPrompt == "loving_translation_of_a_statement_humorous_v1_1") {
       aiPrompt = loving_translation_of_a_statement_humorous_v1_1;
+    }
+
+
+		if (selectedPrompt == "loving_translation_of_a_statement_bible_v1_0") {
+      aiPrompt = loving_translation_of_a_statement_bible_v1_0;
     }
 		
     if (selectedPrompt == "loving_translation_of_a_statement_cautious_and_open_ended_v1_2") {
