@@ -387,11 +387,13 @@
                         messages: [
                             {
                                 role: "system",
-                                content: "Create a positive and negative prompt pair for stable-diffusion-3.5-large image generation. The image should be beautiful and loving."
+                                content: `I would like you to create a positive and negative prompt pair for stable-diffusion-3.5-large image generation. The image should be beautiful, loving, realistic, and perfect. The image should reflect the description that I provided in the user message.
+
+Respond in JSON with these keys: positive_prompt and negative_prompt.`
                             },
                             {
                                 role: "user",
-                                content: `Generate a prompt pair for this description: ${description}\n\nRespond in JSON with these keys: positive_prompt and negative_prompt.`
+                                content: `${description}`
                             }
                         ],
                         response_format: { type: "json_object" }
