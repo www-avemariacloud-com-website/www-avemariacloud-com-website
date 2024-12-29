@@ -347,17 +347,17 @@ The <a href="https://huggingface.co/spaces/CompVis/stable-diffusion-license">Cre
         const MODEL_CONFIGS = {
             flux: {
                 url: 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev',
-                description: 'FLUX.1 [dev] specializes in modern, artistic interpretations with strong attention to detail and creative styling.',
+                description: 'FLUX.1 [dev] may do well in modern, artistic interpretations with strong attention to detail and creative styling.',
                 requiresNegativePrompt: true
             },
             sd35: {
                 url: 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3.5-large',
-                description: 'Stable Diffusion 3.5 excels at creating highly realistic images with improved composition and coherence.',
+                description: 'Stable Diffusion 3.5 may do well at creating highly realistic images with improved composition and coherence.',
                 requiresNegativePrompt: true
             },
             sd14: {
                 url: 'https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4',
-                description: 'Stable Diffusion 1.4 is the classic model, good for general-purpose image generation with consistent results.',
+                description: 'Stable Diffusion 1.4 may do well for general-purpose image generation with consistent results.',
                 requiresNegativePrompt: true
             }
         };
@@ -646,22 +646,6 @@ function downloadImage(imageUrl) {
         function closeModal() {
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
-        }
-
-        // Update your existing displayImage function
-        function displayImage(imageUrl, positivePrompt, negativePrompt) {
-            const imageCard = document.createElement('div');
-            imageCard.className = 'image-card';
-            imageCard.innerHTML = `
-                <img src="${imageUrl}" alt="Generated Image">
-                <p><strong>Positive Prompt:</strong> ${positivePrompt}</p>
-                <p><strong>Negative Prompt:</strong> ${negativePrompt}</p>
-                <div class="image-actions">
-                    <button class="action-button" onclick="downloadImage('${imageUrl}')">Download Image</button>
-                    <button class="action-button" onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
-                </div>
-            `;
-            document.getElementById('generated-images').prepend(imageCard);
         }
 
         // Close modal when pressing Escape key
