@@ -8,6 +8,31 @@
 
 
     <style>
+
+
+
+        .random-description-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .random-description-button:hover {
+            background-color: #218838;
+        }
+
+        .random-description-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -218,6 +243,7 @@
 
         <div id="description-tab" class="tab-content active">
             <div class="form-group">
+                <button class="random-description-button" onclick="generateRandomDescription()" id="random-description-button">Generate Random Description</button>
                 <label for="description">Image Description:</label>
                 <textarea id="description" placeholder="Enter a description for your image..."></textarea>
             </div>
@@ -268,6 +294,55 @@
     </div>
 
     <script>
+
+
+        async function generateRandomDescription() {
+            const randomDescButton = document.getElementById('random-description-button');
+            const descriptionTextarea = document.getElementById('description');
+            
+            randomDescButton.disabled = true;
+            
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.2-90b-vision-preview",
+                        messages: [
+                            {
+                                role: "system",
+                                content: "You are a creative assistant that generates random, detailed, and imaginative image descriptions. Focus on creating descriptions that would make interesting and visually appealing images. Include specific details about style, mood, lighting, and composition."
+                            },
+                            {
+                                role: "user",
+                                content: "Generate a random, creative image description that would work well for AI image generation. Make it detailed and specific, but keep it to 2-3 sentences. Return only the description with no additional text or formatting."
+                            }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Groq API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.choices || !data.choices[0].message.content) {
+                    throw new Error('Invalid response from Groq API');
+                }
+
+                descriptionTextarea.value = data.choices[0].message.content.trim();
+            } catch (error) {
+                console.error('Error:', error);
+                showError(`Failed to generate random description: ${error.message}`);
+            } finally {
+                randomDescButton.disabled = false;
+            }
+        }
+
+        
         // API Configuration
         const GROQ_API_KEY = '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';
         const HF_API_KEY = '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';
@@ -373,56 +448,16 @@
             }
         }
 
-
-
-
-
-
-
-
-// Function to save image data to localStorage
-function saveImageToLocalStorage(imageUrl, positivePrompt, negativePrompt) {
-    const images = JSON.parse(localStorage.getItem('generatedImages')) || [];
-    images.push({ imageUrl, positivePrompt, negativePrompt });
-    localStorage.setItem('generatedImages', JSON.stringify(images));
-}
-
-// Update the displayImage function to save images to localStorage
-function displayImage(imageUrl, positivePrompt, negativePrompt) {
-    const imageCard = document.createElement('div');
-    imageCard.className = 'image-card';
-    imageCard.innerHTML = `
-        <img src="${imageUrl}" alt="Generated Image">
-        <p><strong>Positive Prompt:</strong> ${positivePrompt}</p>
-        <p><strong>Negative Prompt:</strong> ${negativePrompt}</p>
-        <div class="image-actions">
-            <button class="action-button" onclick="downloadImage('${imageUrl}')">Download Image</button>
-            <button class="action-button" onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
-        </div>
-    `;
-    document.getElementById('generated-images').prepend(imageCard);
-
-    // Save image data to localStorage
-    saveImageToLocalStorage(imageUrl, positivePrompt, negativePrompt);
-}
-
-// Function to load images from localStorage on page load
-function loadImagesFromLocalStorage() {
-    const images = JSON.parse(localStorage.getItem('generatedImages')) || [];
-    images.forEach(({ imageUrl, positivePrompt, negativePrompt }) => {
-        displayImage(imageUrl, positivePrompt, negativePrompt);
-    });
-}
-
-// Load images on page load
-window.onload = loadImagesFromLocalStorage;
-
-
-
-
-
-
-      
+        function displayImage(imageUrl, positivePrompt, negativePrompt) {
+            const imageCard = document.createElement('div');
+            imageCard.className = 'image-card';
+            imageCard.innerHTML = `
+                <img src="${imageUrl}" alt="Generated Image">
+                <p><strong>Positive Prompt:</strong> ${positivePrompt}</p>
+                <p><strong>Negative Prompt:</strong> ${negativePrompt}</p>
+            `;
+            document.getElementById('generated-images').prepend(imageCard);
+        }
 
         async function generateFromDescription() {
             const description = document.getElementById('description').value;
@@ -513,6 +548,22 @@ function downloadImage(imageUrl) {
         function closeModal() {
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
+        }
+
+        // Update your existing displayImage function
+        function displayImage(imageUrl, positivePrompt, negativePrompt) {
+            const imageCard = document.createElement('div');
+            imageCard.className = 'image-card';
+            imageCard.innerHTML = `
+                <img src="${imageUrl}" alt="Generated Image">
+                <p><strong>Positive Prompt:</strong> ${positivePrompt}</p>
+                <p><strong>Negative Prompt:</strong> ${negativePrompt}</p>
+                <div class="image-actions">
+                    <button class="action-button" onclick="downloadImage('${imageUrl}')">Download Image</button>
+                    <button class="action-button" onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
+                </div>
+            `;
+            document.getElementById('generated-images').prepend(imageCard);
         }
 
         // Close modal when pressing Escape key
