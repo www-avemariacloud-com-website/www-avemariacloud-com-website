@@ -264,9 +264,9 @@
         <div class="model-selection">
             <label for="model-select">Image Generation Model:</label>
             <select id="model-select" class="model-select" onchange="updateModelDescription()">
-                <option value="flux">FLUX.1 [dev] - Modern Style</option>
-                <option value="sd35">Stable Diffusion 3.5 - Realistic Style</option>
-                <option value="sd14">Stable Diffusion 1.4 - Classic Style</option>
+                <option value="flux">black-forest-labs/FLUX.1-dev</option>
+                <option value="sd35">stabilityai/stable-diffusion-3.5-large</option>
+                <option value="sd14">CompVis/stable-diffusion-v1-4</option>
             </select>
             <div id="model-description" class="model-description"></div>
         </div>
@@ -347,17 +347,17 @@ The <a href="https://huggingface.co/spaces/CompVis/stable-diffusion-license">Cre
         const MODEL_CONFIGS = {
             flux: {
                 url: 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev',
-                description: 'FLUX.1 [dev] may do well in modern, artistic interpretations with strong attention to detail and creative styling.',
+                description: 'May do well in modern, artistic interpretations with strong attention to detail and creative styling.',
                 requiresNegativePrompt: true
             },
             sd35: {
                 url: 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3.5-large',
-                description: 'Stable Diffusion 3.5 may do well at creating highly realistic images with improved composition and coherence.',
+                description: 'May do well at creating highly realistic images with improved composition and coherence.',
                 requiresNegativePrompt: true
             },
             sd14: {
                 url: 'https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4',
-                description: 'Stable Diffusion 1.4 may do well for general-purpose image generation with consistent results.',
+                description: 'May do well for general-purpose image generation with consistent results.',
                 requiresNegativePrompt: true
             }
         };
