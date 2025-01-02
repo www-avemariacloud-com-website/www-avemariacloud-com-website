@@ -6,7 +6,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v54</title>
+    <title>Zionism Research Tool v55</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -213,7 +213,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v54</header>
+        <header>Zionism Research Tool v55</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -543,7 +543,7 @@ Use a name-value pair for the data within contextual_analysis, classification, s
 
      messageHistory.push(aiPrompt[1]);
             
-    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+    const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
     const requestData = {
                 model: selectedModel,
                 messages: aiPrompt,
@@ -603,7 +603,7 @@ Use a name-value pair for the data within contextual_analysis, classification, s
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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',
+                    'Authorization': 'Bearer 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',
                 },
                 body: JSON.stringify(requestData),
             });
@@ -728,8 +728,8 @@ function createKeyValuePairs(obj) {
 
 
     <script>
-    const apiKey = "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";
-    const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+    const apiKey = "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";
+    const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
     var messageHistory = [
         { role: "system", content: "You are a chatbot designed to help with users with an application called Zionism Research Tool" }
     ];
