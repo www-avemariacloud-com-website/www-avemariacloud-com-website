@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v33</title>
+    <title>Love Translator v34</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -214,7 +214,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v33</header>
+        <header>Love Translator v34</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -417,7 +417,7 @@ Respond in JSON.`
     //messageHistory.push(systemPromptConvertedtoUserMessage);
     messageHistory.push(aiPrompt[1]);
 
-    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+    const apiUrl = 'https://throbbing-rain-4d20.small-recipe-9582.workers.dev/';
     const requestData = {
                 model: selectedModel,
                 messages: aiPrompt,
@@ -477,7 +477,7 @@ Respond in JSON.`
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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',
+                    'Authorization': 'Bearer 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',
                 },
                 body: JSON.stringify(requestData),
             });
@@ -604,8 +604,8 @@ function createKeyValuePairs(obj) {
     </script>
 
 	<script>
-    const apiKey = "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";
-    const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+    const apiKey = "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";
+    const apiUrl = "https://throbbing-rain-4d20.small-recipe-9582.workers.dev/";
     var messageHistory = [
         { role: "system", content: "You are a chatbot designed to help with users with an application called Love Translator" }
     ];
