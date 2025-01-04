@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v36</title>
+    <title>Love Translator v36.0</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -49,7 +49,7 @@
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 100%;
             height: 100%;
             padding: 30px;
             box-sizing: border-box;
@@ -214,7 +214,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v36</header>
+        <header>Love Translator v36.0</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -234,16 +234,12 @@
         <div class="input-group">
             <label for="aiPrompt">A prompt can be selected below</label>
             <select id="aiPrompt">
-
-		    
-		
-                <option value="loving_translation_of_a_statement_bible_v1_2" selected>Loving Translation of a Statement (Bible) v1.2</option>
-                <option value="loving_translation_of_a_statement_v1_2">Loving Translation of a Statement v1.2</option>
+                <option value="loving_translation_of_a_statement_v1_2" selected>Loving Translation of a Statement v1.2</option>
                 <option value="loving_translation_of_anothers_statement_v1_2">Loving Translation of Another's Statement v1.2</option>
                 <option value="loving_translation_of_a_statement_casual_v1_4">Loving Translation of a Statement (Casual) v1.4</option>
                 <option value="loving_translation_of_a_statement_cautious_and_open_ended_v1_2">Loving Translation of a Statement (Cautious and Open Ended) v1.2</option>
                 <option value="loving_translation_of_a_statement_humorous_v1_1">Loving Translation of a Statement (Humorous) v1.1</option>
-	    </select>
+            </select>
         </div>
       
         <button id="submitBtn">Analyze</button>
@@ -315,7 +311,7 @@ Respond in JSON.`
 	var loving_translation_of_a_statement_casual_v1_4 = [
 	                    {
 	                        role: "system",
-	                        content: `Given an input text, I would like you to rephrase it to convey a sense of caution and open-mindedness, while maintaining the original meaning and facts. As the Bible advises, 'Do not be quick with your mouth, do not be hasty in your heart to utter anything before God. God is in heaven and you are on earth, so let your words be few' (Ecclesiastes 5:2, NIV).
+	                        content: `Given an input statement, rephrase it to convey a sense of caution and open-mindedness, while maintaining the original meaning and facts. As the Bible advises, 'Do not be quick with your mouth, do not be hasty in your heart to utter anything before God. God is in heaven and you are on earth, so let your words be few' (Ecclesiastes 5:2, NIV).
 
 Reframe the input statement to emphasize the importance of careful consideration, nuanced thinking, and exploration of different perspectives. Use qualified statements and careful language to promote a thoughtful and inquiring approach. As the apostle Paul wrote, 'Test everything; hold fast what is good, and abstain from every form of evil' (1 Thessalonians 5:21-22, ESV).
 
@@ -341,7 +337,7 @@ Respond in JSON.`
     var loving_translation_of_a_statement_v1_2 = [
                     {
                         role: "system",
-                        content: `Rephrase the input text into a loving and compassionate form, maintaining the original meaning and facts, as guided by the principles of kindness, understanding, and appreciation, while reflecting the teachings of 1 Corinthians 13:4-7, 'Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It does not dishonor others, it is not self-seeking, it is not easily angered, it keeps no record of wrongs. Love does not delight in evil but rejoices with the truth. It always protects, always trusts, always hopes, always perseveres.' Ensure the rephrased statement is constructive and nurturing, aligning with Proverbs 15:1, 'A gentle answer turns away wrath, but a harsh word stirs up anger.'
+                        content: `Rephrase the input statement into a loving and compassionate form, maintaining the original meaning and facts, as guided by the principles of kindness, understanding, and appreciation, while reflecting the teachings of 1 Corinthians 13:4-7, 'Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It does not dishonor others, it is not self-seeking, it is not easily angered, it keeps no record of wrongs. Love does not delight in evil but rejoices with the truth. It always protects, always trusts, always hopes, always perseveres.' Ensure the rephrased statement is constructive and nurturing, aligning with Proverbs 15:1, 'A gentle answer turns away wrath, but a harsh word stirs up anger.'
                         
 Respond in JSON.`
                     },
@@ -352,24 +348,6 @@ Respond in JSON.`
                 ];
 
 
-		
-
-
-
-		var loving_translation_of_a_statement_bible_v1_2 = [
-                    {
-                        role: "system",
-                        content: `I would like you to translate some text into a loving version that reflects the teachings of the Bible. I would like bible verses to be cited perfectly. I would like the translation to be loving, kind, compassionate, and consistent with Christian values. It is very important that any reference of bible verses are cited perfectly.
-
-Respond in JSON.`
-                    },
-                    {
-                        role: "user",
-                        content: `"${inputText}"`
-                    }
-                ];
-
-		
     var loving_translation_of_anothers_statement_v1_2 = [
                     {
                         role: "system",
@@ -408,11 +386,6 @@ Respond in JSON.`
 	if (selectedPrompt == "loving_translation_of_a_statement_humorous_v1_1") {
       aiPrompt = loving_translation_of_a_statement_humorous_v1_1;
     }
-
-
-		if (selectedPrompt == "loving_translation_of_a_statement_bible_v1_2") {
-      aiPrompt = loving_translation_of_a_statement_bible_v1_2;
-    }
 		
     if (selectedPrompt == "loving_translation_of_a_statement_cautious_and_open_ended_v1_2") {
       aiPrompt = loving_translation_of_a_statement_cautious_and_open_ended_v1_2;
@@ -444,7 +417,7 @@ Respond in JSON.`
     //messageHistory.push(systemPromptConvertedtoUserMessage);
     messageHistory.push(aiPrompt[1]);
 
-    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+    const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
     const requestData = {
                 model: selectedModel,
                 messages: aiPrompt,
@@ -504,7 +477,7 @@ Respond in JSON.`
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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',
+                    'Authorization': 'Bearer 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',
                 },
                 body: JSON.stringify(requestData),
             });
@@ -631,8 +604,8 @@ function createKeyValuePairs(obj) {
     </script>
 
 	<script>
-    const apiKey = "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";
-    const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+    const apiKey = "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";
+    const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
     var messageHistory = [
         { role: "system", content: "You are a chatbot designed to help with users with an application called Love Translator" }
     ];
