@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head content and styles remain the same until media queries -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Multi Model Chatbot v3.5</title>
+    <title>Multi Model Chatbot v3.7</title>
     
     <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Previous styles remain the same */
         html, body {
-            
+            height: 100vh;
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -19,165 +17,211 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
-        /* Base styles for the app container */
-.app-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow-y: auto;
-}
-
-/* Ensure header stays at top */
-.header-section {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: #f3f4f6;
-    padding: 0.5rem;
-}
-
-/* Make chat section flexible */
-.chat-section {
-    flex: 1;
-    min-height: 0;
-    position: relative;
-    padding: 0 0.5rem;
-    margin-bottom: 1rem;
-}
-
-/* Footer section to always show content */
-.footer-section {
-    position: relative;
-    width: 100%;
-    background: #f3f4f6;
-    padding: 1rem 0.5rem;
-}
-
-/* Mobile styles */
-@media (max-width: 640px) {
-    /* Portrait mode specific adjustments */
-    @media (orientation: portrait) {
-        .chat-section {
-            max-height: calc(100vh - 420px);
-        }
-    }
-
-    /* Landscape mode specific adjustments */
-    @media (orientation: landscape) {
         .app-container {
-            height: auto;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .header-section {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #f3f4f6;
+            padding: 0.5rem;
         }
 
         .chat-section {
-            max-height: calc(100vh - 380px);
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            padding: 0 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section {
+            position: relative;
+            width: 100%;
+            background: #f3f4f6;
+            padding: 1rem 0.5rem;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .message {
+            max-width: 85%;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            animation: fadeIn 0.3s ease-in;
+            white-space: pre-wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .chat-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f3f4f6;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .custom-button {
+            transition: all 0.2s ease;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+        }
+
+        .custom-select {
+            background-color: white;
+            transition: all 0.2s ease;
+            border: 1px solid #e5e7eb;
+            font-size: 0.875rem;
+            padding: 0.4rem;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.5rem;
+        }
+
+        textarea {
+            min-height: 45px;
+            max-height: 120px;
+            resize: none;
+        }
+
+        .compact-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem;
         }
 
         .legal-notice {
-            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 0.5rem;
         }
-    }
 
-    /* Common mobile styles */
-    .compact-header {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 0.75rem;
-    }
-    
-    .controls-container {
-        flex-direction: column;
-        width: 100%;
-        gap: 0.5rem;
-    }
+        .legal-notice a {
+            color: #2563eb;
+            text-decoration: none;
+        }
 
-    .button-group {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        width: 100%;
-    }
+        .legal-notice a:hover {
+            text-decoration: underline;
+        }
 
-    .custom-select {
-        width: 100% !important;
-    }
+        @media (max-width: 640px) {
+            @media (orientation: portrait) {
+                .chat-section {
+                    max-height: calc(100vh - 420px);
+                }
+            }
 
-    .legal-notice {
-        font-size: 0.75rem;
-        line-height: 1.5;
-        padding: 1rem !important;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 0.5rem;
-        margin-top: 1rem;
-    }
+            @media (orientation: landscape) {
+                .app-container {
+                    height: auto;
+                    min-height: 100vh;
+                }
 
-    .legal-notice p {
-        margin-bottom: 1rem !important;
-    }
-    
-    .legal-notice p:last-child {
-        margin-bottom: 0 !important;
-    }
+                .chat-section {
+                    max-height: calc(100vh - 380px);
+                }
 
-    .input-container {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
+                .legal-notice {
+                    margin-bottom: 2rem;
+                }
+            }
 
-    .input-container textarea {
-        width: 100%;
-    }
+            .compact-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.75rem;
+            }
+            
+            .controls-container {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+            }
 
-    .input-container button {
-        width: 100%;
-    }
+            .button-group {
+                display: flex;
+                justify-content: center;
+                gap: 0.5rem;
+                width: 100%;
+            }
 
-    /* Ensure content is scrollable when needed */
-    .chat-container {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+            .custom-select {
+                width: 100% !important;
+            }
 
-    /* Add padding to bottom of chat messages for better spacing */
-    #chatMessages {
-        padding-bottom: 1rem;
-    }
-}
+            .legal-notice {
+                font-size: 0.875rem;
+                line-height: 1.6;
+                padding: 1.5rem !important;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
 
-/* Additional safety measure for very short screens */
-@media (max-height: 500px) {
-    .app-container {
-        height: auto;
-        min-height: 100vh;
-    }
+            .input-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
 
-    .chat-section {
-        max-height: none;
-        flex: 0 1 auto;
-    }
+            .input-container textarea {
+                width: 100%;
+            }
 
-    .legal-notice {
-        margin-bottom: 2rem;
-    }
-}
+            .input-container button {
+                width: 100%;
+            }
+        }
 
-/* Ensure safe area for devices with notches or home indicators */
-@supports (padding: max(0px)) {
-    .footer-section {
-        padding-bottom: max(1rem, env(safe-area-inset-bottom));
-    }
-}
+        @media (max-height: 500px) {
+            .app-container {
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .chat-section {
+                max-height: none;
+                flex: 0 1 auto;
+            }
+
+            .legal-notice {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @supports (padding: max(0px)) {
+            .footer-section {
+                padding-bottom: max(1rem, env(safe-area-inset-bottom));
+            }
+        }
     </style>
 </head>
 <body>
     <div class="app-container bg-gradient-to-br from-blue-50 to-indigo-50">
-        <!-- Compact Header -->
         <div class="header-section">
             <div class="glass-effect rounded-lg shadow-sm">
                 <div class="compact-header">
                     <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent whitespace-nowrap">
-                        Multi Model Chatbot v3.5
+                        Multi Model Chatbot v3.7
                     </h1>
                     
                     <div class="flex gap-4 items-center controls-container">
@@ -197,7 +241,6 @@
             </div>
         </div>
 
-        <!-- Chat Section -->
         <div class="chat-section">
             <div class="glass-effect rounded-lg shadow-lg h-full">
                 <div class="chat-container" id="chatContainer">
@@ -208,10 +251,8 @@
             </div>
         </div>
 
-        <!-- Footer -->
         <div class="footer-section">
-            <!-- Input Area -->
-            <div class="glass-effect rounded-lg shadow-sm mb-2">
+            <div class="glass-effect rounded-lg shadow-sm mb-4">
                 <form id="chatForm" class="input-container">
                     <textarea
                         id="userInput"
@@ -228,12 +269,14 @@
                 </form>
             </div>
 
-            <!-- Full Legal Notice -->
-            <div class="glass-effect rounded-lg shadow-sm p-3 text-gray-600 legal-notice">
-                <p class="mb-2">By using this tool, maybe you should read and agree to this <a href="terms.html" target="_blank" class="text-blue-600 hover:underline">Terms of Service</a> and this <a href="privacy.html" target="_blank" class="text-blue-600 hover:underline">Privacy Policy</a>.</p>
-                <p class="mb-2"><strong>Built with Meta Llama 3:</strong> Licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank" class="text-blue-600 hover:underline">Meta Llama 3 Community License</a>.</p>
-                <p class="mb-2"><strong>Gemma:</strong> Subject to <a href="https://ai.google.dev/gemma/terms" class="text-blue-600 hover:underline">Gemma Terms of Use</a>.</p>
-                <p><strong>Mixtral-8x7B:</strong> Distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" class="text-blue-600 hover:underline">Apache 2.0 license</a>.</p>
+            <div class="glass-effect rounded-lg shadow-sm legal-notice">
+                <p class="mb-4">By using this tool, maybe you should read and agree to these <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
+                
+                <p class="mb-4"><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
+                
+                <p class="mb-4"><strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.</p>
+                
+                <p><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.</p>
             </div>
         </div>
     </div>
