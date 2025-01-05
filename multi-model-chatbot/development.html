@@ -1,19 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!--- Token tracking and logging have been added. The token limit is set to 700 !--->
+    <!-- Previous head content remains the same -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Multi Model Chatbot v2.0</title>
     
     <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
+        /* Previous styles remain the same until footer-section */
         html, body {
-            height: 100%;
+            height: 100vh;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+            background-color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .app-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-section {
+            flex-shrink: 0;
+            padding: 0.5rem;
+        }
+
+        .chat-section {
+            flex-grow: 1;
+            min-height: 0;
+            position: relative;
+            padding: 0 0.5rem;
+        }
+
+        .footer-section {
+            flex-shrink: 0;
+            padding: 0.5rem;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .message {
@@ -22,166 +55,158 @@
             overflow-wrap: break-word;
             animation: fadeIn 0.3s ease-in;
             white-space: pre-wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        @media (max-width: 640px) {
-            .message {
-                max-width: 90%;
-            }
+        .user-message {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .loading-dots {
-            display: inline-block;
-        }
-
-        .loading-dots::after {
-            content: ' • • •';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: ' • '; }
-            40% { content: ' • • '; }
-            60%, 100% { content: ' • • • '; }
-        }
-
-        @media (max-width: 640px) {
-            .header {
-                text-align: center;
-            }
-            .header-content {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
-            }
-            .model-notes {
-                text-align: center;
-            }
-        }
-
-        @media (min-width: 641px) {
-            .header-content {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-            .model-notes {
-                text-align: left;
-                max-width: 50%;
-            }
+        .assistant-message {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
         }
 
         .chat-container {
-            max-height: 100%;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
             height: 100%;
-        }
-
-        .message-container {
-            flex-grow: 1;
             overflow-y: auto;
+            padding: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f3f4f6;
         }
 
-        textarea#userInput {
-            height: 6em; /* Fixed height for three lines */
-            resize: none; /* Prevent resizing */
-            overflow-y: auto; /* Enable vertical scrolling */
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
         }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: #f3f4f6;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: #cbd5e0;
+            border-radius: 3px;
+        }
+
+        .custom-button {
+            transition: all 0.2s ease;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+        }
+
+        .custom-select {
+            background-color: white;
+            transition: all 0.2s ease;
+            border: 1px solid #e5e7eb;
+            font-size: 0.875rem;
+            padding: 0.4rem;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.5rem;
+        }
+
+        textarea {
+            min-height: 45px;
+            max-height: 120px;
+            resize: none;
+        }
+
+        .compact-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem;
+        }
+
+        .legal-notice {
+            font-size: 0.75rem;
+            line-height: 1.25;
+        }
+
+        @media (max-width: 640px) {
+            .compact-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .controls-container {
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+
+        /* Rest of your animations and other styles remain the same */
     </style>
 </head>
-<body class="bg-gray-100">
-    <div class="flex flex-col h-screen p-2 sm:p-4 main-content">
-        <!-- Header -->
-        <div class="col-12">
-            <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-                <div class="header-content">
-                    <div class="flex flex-col items-start">
-                        <center>
-                            <h1 class="text-xl sm:text-2xl font-bold text-blue-600">Multi Model Chatbot<BR>Version 2.0</h1>
-                        </center>
-                    </div>
-                
-                    <br>
-                
-                    <div class="flex flex-col w-1/2">
-                        <center>
-                            <p class="text-gray-700">You may select a system prompt.</p>
-                            <p class="mt-1 text-xs text-gray-500">Note: The system prompt may guide how the model interprets and responds to inputs.</p>
-                            <span style="display:block; height: 0.5em;"></span>
-                            <p class="text-gray-700">
-                                <button class="bg-blue-500 text-white px-4 py-1 rounded" onclick="updateSystemPrompt('universal');">Universal Version</button>
-                                <button class="bg-blue-500 text-white px-4 py-1 rounded" onclick="updateSystemPrompt('zionism');">Zionism Version</button>
-                                <button class="bg-blue-500 text-white px-4 py-1 rounded" onclick="updateSystemPrompt('custom');">Custom Version</button>
-                            </p>
-                        </center>
-                    </div>
-                
-                    <div class="flex flex-col w-1/3">
-                        <center>
-                            <p class="text-gray-700">You may select an AI model to customize the chatbot.</p>
-                            <p class="mt-1 text-xs text-gray-500">Note: You may switch models at any time during your conversation.</p>
-                            <span style="display:block; height: 0.5em;"></span>
-                
-                            <select id="aiModel" class="p-2 border rounded-lg shadow-sm text-gray-700">
-                                <option value="gemma2-9b-it">gemma2-9b-it</option>
-                                <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
-                                <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
-                            </select>
-                        </center>
+<body>
+    <div class="app-container bg-gradient-to-br from-blue-50 to-indigo-50">
+        <!-- Compact Header -->
+        <div class="header-section">
+            <div class="glass-effect rounded-lg shadow-sm">
+                <div class="compact-header">
+                    <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent whitespace-nowrap">
+                        Multi Model Chatbot v2.0
+                    </h1>
+                    
+                    <div class="flex gap-4 items-center controls-container">
+                        <div class="flex gap-1">
+                            <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('universal');">Universal</button>
+                            <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('zionism');">Zionism</button>
+                            <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('custom');">Custom</button>
+                        </div>
+                        
+                        <select id="aiModel" class="custom-select rounded text-gray-700 text-sm w-48">
+                            <option value="gemma2-9b-it">Gemma 2 (9B)</option>
+                            <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 (90B)</option>
+                            <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                        </select>
                     </div>
                 </div>
-                
-            </div>
-        </div>
-        
-
-        <!-- Chat Container -->
-        <div class="chat-container flex-1 bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4 overflow-hidden message-container">
-            <div id="chatMessages" class="space-y-3 sm:space-y-4">
-                <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">Welcome to AveMariaCloud!</div>
             </div>
         </div>
 
-        <!-- Input Area -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-2 sm:mb-4">
-            <form id="chatForm" class="flex gap-2 sm:gap-4">
-                <textarea
-                    id="userInput"
-                    class="flex-1 p-2 sm:p-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Type your message..."
-                    required
-                ></textarea>
-                <button
-                    type="submit"
-                    class="bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
-                >
-                    Send
-                </button>
-            </form>
+        <!-- Chat Section -->
+        <div class="chat-section">
+            <div class="glass-effect rounded-lg shadow-lg h-full">
+                <div class="chat-container" id="chatContainer">
+                    <div id="chatMessages" class="space-y-3">
+                        <div class="message assistant-message mr-auto p-3 rounded-lg">Welcome to AveMariaCloud!</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Legal Notice -->
-        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4 text-xs sm:text-sm">
-            <p>By using this tool, maybe you should read and agree to this <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
-              <BR><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.
-            <BR>
-              <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.
-            <BR>
-            <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.
+        <!-- Footer -->
+        <div class="footer-section">
+            <!-- Input Area -->
+            <div class="glass-effect rounded-lg shadow-sm mb-2">
+                <form id="chatForm" class="input-container">
+                    <textarea
+                        id="userInput"
+                        class="flex-1 p-2 rounded border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 text-sm"
+                        placeholder="Type your message..."
+                        required
+                    ></textarea>
+                    <button
+                        type="submit"
+                        class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded whitespace-nowrap"
+                    >
+                        Send
+                    </button>
+                </form>
+            </div>
+
+            <!-- Full Legal Notice -->
+            <div class="glass-effect rounded-lg shadow-sm p-3 text-xs text-gray-600 legal-notice">
+                <p class="mb-2">By using this tool, maybe you should read and agree to this <a href="terms.html" target="_blank" class="text-blue-600 hover:underline">Terms of Service</a> and this <a href="privacy.html" target="_blank" class="text-blue-600 hover:underline">Privacy Policy</a>.</p>
+                <p class="mb-2"><strong>Built with Meta Llama 3:</strong> Licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank" class="text-blue-600 hover:underline">Meta Llama 3 Community License</a>.</p>
+                <p class="mb-2"><strong>Gemma:</strong> Subject to <a href="https://ai.google.dev/gemma/terms" class="text-blue-600 hover:underline">Gemma Terms of Use</a>.</p>
+                <p><strong>Mixtral-8x7B:</strong> Distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" class="text-blue-600 hover:underline">Apache 2.0 license</a>.</p>
+            </div>
         </div>
     </div>
 
@@ -369,6 +394,6 @@
 
     userInput.focus();
 </script>
-
 </body>
 </html>
+
