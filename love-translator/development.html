@@ -5,7 +5,7 @@
   <link rel="icon" href="Interlaced_love_hearts.svg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Translator v37.3</title>
+    <title>Love Translator v37.4</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -214,7 +214,7 @@
 
 <body>
     <div class="container">
-        <header>Love Translator v37.3</header>
+        <header>Love Translator v37.4</header>
 
         <div class="input-group">
             <label for="inputText">An input for a sentence is below</label>
@@ -294,9 +294,79 @@ This tool can be a supportive resource to foster understanding and kindness in c
     document.getElementById("loading").style.display = "block";
     document.getElementById("result").style.display = "none";
 
+
+
+
+		var loving_translation_of_a_statement_cautious_and_open_ended = [
+	                    {
+	                        role: "system",
+	                        content: `If the user message is not empty, I am interested in rephrasing the content to convey a sense of caution and open-mindedness, while maintaining the original meaning and facts, as guided by the wisdom of Proverbs 18:13, 'To answer before listening—that is folly and shame.' and Matthew 7:7-8, 'Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.' I am interested in the importance of careful consideration, nuanced thinking, and exploration of different perspectives, reflecting the principles of 1 Thessalonians 5:21, 'Test everything. Hold on to the good.' I am interested in a thoughtful and inquiring approach, using qualified statements and careful consideration, aligning with the wisdom of James 1:19, 'Everyone should be quick to listen, slow to speak and slow to become angry.'
+
+Respond in JSON.`
+	                    },
+	                    {
+	                        role: "user",
+	                        content: `"${inputText}"`
+	                    }
+	                ];
 		
-If the user message is not empty, I am interested in rephrasing the content to
-    
+	var loving_translation_of_a_statement_casual = [
+	                    {
+	                        role: "system",
+	                        content: `If the user message is not empty, I am interested in rephrasing the content to a loving and casual version.
+
+Respond in JSON.`
+	                    },
+	                    {
+	                        role: "user",
+	                        content: `"${inputText}"`
+	                    }
+	                ];
+			
+    var loving_translation_of_a_statement = [
+                    {
+                        role: "system",
+                        content: `If the user message is not empty, I am interested in rephrasing the content to a loving and compassionate form, maintaining the original meaning and facts, as guided by the principles of kindness, understanding, and appreciation, while reflecting the teachings of 1 Corinthians 13:4-7, 'Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It does not dishonor others, it is not self-seeking, it is not easily angered, it keeps no record of wrongs. Love does not delight in evil but rejoices with the truth. It always protects, always trusts, always hopes, always perseveres.' I am interested in constructive and nurturing words, aligning with Proverbs 15:1, 'A gentle answer turns away wrath, but a harsh word stirs up anger.'
+                        
+Respond in JSON.`
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+
+
+    var loving_translation_of_anothers_statement = [
+                    {
+                        role: "system",
+                        content: `If the user message is not empty, I am interested in rephrasing the content to a more positive, loving, and compassionate form, maintaining the original meaning and facts. I am interested in kindness, understanding, and care, as guided by the principles of 1 Corinthians 13:4-7, 'Love is patient, love is kind... It always protects, always trusts, always hopes, always perseveres.' and Matthew 22:39, 'Love your neighbor as yourself.' I am interested in a rephrased statement reflecting the intent of the input content but with a more loving and constructive tone.
+
+Additionally, I am interested in a gentle and constructive response to the input content that could bring awareness to the impact of words and encourage them to use a more loving and positive form of expression in the future. I am interested in offering suggestions and guidance as kind and loving as if for a supportive conversation with a friend. I am interested in phrases that acknowledge feelings and concerns while encouraging the consideration of the perspective of others. I am interested in a response with a positive note, highlighting the potential benefits of using more loving and compassionate language.
+
+Respond in JSON.`
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+
+		var loving_translation_of_a_statement_humorous = [
+                    {
+                        role: "system",
+                        content: `If the user message is not empty, I am interested in rephrasing the content to add a dash of humor and wit but also convey love, kindness, and compassion. I am interested in retaining the essential meaning and facts, while the tone is lightened, entertaining, and endearing. As the Bible says, 'Love is patient, love is kind' (1 Corinthians 13:4). Let the rewritten text reflect love and care.
+
+Respond in JSON.`
+                    },
+                    {
+                        role: "user",
+                        content: `"${inputText}"`
+                    }
+                ];
+
+
+		
     const selectedPrompt = document.getElementById("aiPrompt").value;
 
     var aiPrompt;
