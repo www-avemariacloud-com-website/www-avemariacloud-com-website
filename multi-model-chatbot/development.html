@@ -106,60 +106,90 @@
             line-height: 1.25;
         }
 
-        /* Updated mobile styles */
         @media (max-width: 640px) {
-            .compact-header {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            
-            .controls-container {
-                flex-direction: column;
-                width: 100%;
-                gap: 0.5rem;
-            }
+    /* Improve header layout */
+    .compact-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+    
+    /* Adjust control container spacing */
+    .controls-container {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
 
-            .button-group {
-                display: flex;
-                justify-content: center;
-                gap: 0.5rem;
-                width: 100%;
-            }
+    /* Ensure button group is properly spaced */
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+    }
 
-            .custom-select {
-                width: 100% !important;
-            }
+    /* Make select full width */
+    .custom-select {
+        width: 100% !important;
+    }
 
-            .legal-notice {
-                font-size: 0.75rem;
-                line-height: 1.4;
-                padding: 0.75rem !important;
-            }
+    /* Improve legal notice readability */
+    .legal-notice {
+        font-size: 0.75rem;
+        line-height: 1.4;
+        padding: 1rem !important;
+        margin-bottom: 1rem;
+    }
 
-            .legal-notice p {
-                margin-bottom: 0.75rem !important;
-            }
+    /* Add proper spacing between legal notice paragraphs */
+    .legal-notice p {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .legal-notice p:last-child {
+        margin-bottom: 0 !important;
+    }
 
-            .legal-notice p:last-child {
-                margin-bottom: 0 !important;
-            }
+    /* Adjust chat section height to prevent overflow */
+    .chat-section {
+        max-height: calc(100vh - 380px);
+        overflow-y: auto;
+    }
 
-            .chat-section {
-                max-height: calc(100vh - 350px);
-            }
+    /* Ensure app container doesn't overflow */
+    .app-container {
+        height: 100%;
+        min-height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
 
-            .input-container {
-                flex-direction: column;
-            }
+    /* Adjust footer section to ensure visibility */
+    .footer-section {
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        background: #f3f4f6;
+        padding: 1rem 0.5rem;
+        margin-top: auto;
+    }
 
-            .input-container textarea {
-                width: 100%;
-            }
+    /* Improve input container layout */
+    .input-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
 
-            .input-container button {
-                width: 100%;
-            }
-        }
+    .input-container textarea {
+        width: 100%;
+    }
+
+    .input-container button {
+        width: 100%;
+    }
+}
     </style>
 </head>
 <body>
