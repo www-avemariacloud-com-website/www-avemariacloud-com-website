@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Previous head content and styles remain the same until media queries -->
 <head>
-    <!-- Previous head content remains the same -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Multi Model Chatbot v2.0</title>
@@ -9,7 +9,7 @@
     <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Previous styles remain the same until footer-section */
+        /* Previous styles remain the same */
         html, body {
             height: 100vh;
             margin: 0;
@@ -58,33 +58,12 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .user-message {
-            background: linear-gradient(135deg, #4f46e5, #3b82f6);
-        }
-
-        .assistant-message {
-            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-        }
-
         .chat-container {
             height: 100%;
             overflow-y: auto;
             padding: 1rem;
             scrollbar-width: thin;
             scrollbar-color: #cbd5e0 #f3f4f6;
-        }
-
-        .chat-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .chat-container::-webkit-scrollbar-track {
-            background: #f3f4f6;
-        }
-
-        .chat-container::-webkit-scrollbar-thumb {
-            background-color: #cbd5e0;
-            border-radius: 3px;
         }
 
         .custom-button {
@@ -127,6 +106,7 @@
             line-height: 1.25;
         }
 
+        /* Updated mobile styles */
         @media (max-width: 640px) {
             .compact-header {
                 flex-direction: column;
@@ -136,10 +116,50 @@
             .controls-container {
                 flex-direction: column;
                 width: 100%;
+                gap: 0.5rem;
+            }
+
+            .button-group {
+                display: flex;
+                justify-content: center;
+                gap: 0.5rem;
+                width: 100%;
+            }
+
+            .custom-select {
+                width: 100% !important;
+            }
+
+            .legal-notice {
+                font-size: 0.75rem;
+                line-height: 1.4;
+                padding: 0.75rem !important;
+            }
+
+            .legal-notice p {
+                margin-bottom: 0.75rem !important;
+            }
+
+            .legal-notice p:last-child {
+                margin-bottom: 0 !important;
+            }
+
+            .chat-section {
+                max-height: calc(100vh - 350px);
+            }
+
+            .input-container {
+                flex-direction: column;
+            }
+
+            .input-container textarea {
+                width: 100%;
+            }
+
+            .input-container button {
+                width: 100%;
             }
         }
-
-        /* Rest of your animations and other styles remain the same */
     </style>
 </head>
 <body>
@@ -153,7 +173,7 @@
                     </h1>
                     
                     <div class="flex gap-4 items-center controls-container">
-                        <div class="flex gap-1">
+                        <div class="button-group">
                             <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('universal');">Universal</button>
                             <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('zionism');">Zionism</button>
                             <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('custom');">Custom</button>
@@ -201,7 +221,7 @@
             </div>
 
             <!-- Full Legal Notice -->
-            <div class="glass-effect rounded-lg shadow-sm p-3 text-xs text-gray-600 legal-notice">
+            <div class="glass-effect rounded-lg shadow-sm p-3 text-gray-600 legal-notice">
                 <p class="mb-2">By using this tool, maybe you should read and agree to this <a href="terms.html" target="_blank" class="text-blue-600 hover:underline">Terms of Service</a> and this <a href="privacy.html" target="_blank" class="text-blue-600 hover:underline">Privacy Policy</a>.</p>
                 <p class="mb-2"><strong>Built with Meta Llama 3:</strong> Licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank" class="text-blue-600 hover:underline">Meta Llama 3 Community License</a>.</p>
                 <p class="mb-2"><strong>Gemma:</strong> Subject to <a href="https://ai.google.dev/gemma/terms" class="text-blue-600 hover:underline">Gemma Terms of Use</a>.</p>
@@ -212,188 +232,187 @@
 
     <script>
 
-    function updateSystemPrompt(prompt) {
-
-        if (prompt == "universal") {
-            resetChatHistory("Welcome to AveMariaCloud!");
-            conversationHistory = [
-                { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information." },
-                { role: "assistant", content: "Welcome to AveMariaCloud!" }
-            ];
+        function updateSystemPrompt(prompt) {
+    
+            if (prompt == "universal") {
+                resetChatHistory("Welcome to AveMariaCloud!");
+                conversationHistory = [
+                    { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information." },
+                    { role: "assistant", content: "Welcome to AveMariaCloud!" }
+                ];
+            }
+            if (prompt == "zionism") {
+                resetChatHistory("Shalom!");
+    
+                conversationHistory = [
+                    { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christian Zionism. I would like you to follow Halakha and ensure you are doing so perfectly. I would like you to cite Mitzvot perfectly when relevant and ensure you are doing so perfectly. I would like you to have a bias for caution and a bias for citing verified scripture perfectly. I would like you to cite Scripture perfectly when you speak about Scripture. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information." },
+                    { role: "assistant", content: "Shalom!" }
+                ];
+            }
+            if (prompt == "custom") {
+                var customPrompt = window.prompt("Please enter text for a system prompt");
+    
+                var systemPromptContent = "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information. I would like you to use this information for a system prompt that may have been provided by a user" + customPrompt;
+                
+                resetChatHistory("Hello!");
+    
+                conversationHistory = [
+                    { role: "system", content: systemPromptContent },
+                    { role: "assistant", content: "Hello!" }
+                ];
+    
+    
+            }
         }
-        if (prompt == "zionism") {
-            resetChatHistory("Shalom!");
-
-            conversationHistory = [
-                { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christian Zionism. I would like you to follow Halakha and ensure you are doing so perfectly. I would like you to cite Mitzvot perfectly when relevant and ensure you are doing so perfectly. I would like you to have a bias for caution and a bias for citing verified scripture perfectly. I would like you to cite Scripture perfectly when you speak about Scripture. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information." },
-                { role: "assistant", content: "Shalom!" }
-            ];
+    
+        function resetChatHistory(startingMessage) {
+            document.getElementById("chatMessages").innerHTML = `
+                    <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">` + startingMessage + `</div>
+                `;
         }
-        if (prompt == "custom") {
-            var customPrompt = window.prompt("Please enter text for a system prompt");
-
-            var systemPromptContent = "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information. I would like you to use this information for a system prompt that may have been provided by a user" + customPrompt;
-            
-            resetChatHistory("Hello!");
-
-            conversationHistory = [
-                { role: "system", content: systemPromptContent },
-                { role: "assistant", content: "Hello!" }
-            ];
-
-
-        }
-    }
-
-    function resetChatHistory(startingMessage) {
-        document.getElementById("chatMessages").innerHTML = `
-                <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">` + startingMessage + `</div>
-            `;
-    }
-    const apiKey = "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";
-    const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
-    const chatMessages = document.getElementById('chatMessages');
-    const chatForm = document.getElementById('chatForm');
-    const userInput = document.getElementById('userInput');
-    const aiModel = document.getElementById('aiModel');
-
-    const TOKEN_LIMIT = 700; // Set your token limit here
-    let conversationHistory = [
-        { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a Christian. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses." },
-        { role: "assistant", content: "Welcome to AveMariaCloud!" }
-    ];
-
-    // Function to estimate token usage for a message
-    function estimateTokens(message) {
-        const words = message.split(/\s+/).length;
-        return Math.ceil(words / 1.33); // Approximate 1.33 tokens per word
-    }
-
-    // Function to trim conversation history to stay within token limit
-    function trimConversationHistory() {
-        let totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
-
-        console.log("total tokens, untrimmed:" + totalTokens);
-        
-        // Trim messages from the beginning if the total token count exceeds the limit
-        while (totalTokens > TOKEN_LIMIT) {
-            conversationHistory.shift();
-            totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
-            
-            console.log("total tokens, trimmed:" + totalTokens);
-        }
-    }
-
-    function scrollToBottom() {
-        const chatContainer = document.querySelector('.chat-container');
+        const apiKey = "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";
+        const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
         const chatMessages = document.getElementById('chatMessages');
-        
-        // Calculate the total scroll height
-        const scrollHeight = chatMessages.scrollHeight;
-        
-        // Smooth scroll to bottom
-        chatContainer.scrollTo({
-            top: scrollHeight,
-            behavior: 'smooth'
-        });
-        
-        // Fallback scroll check to ensure we reach bottom
-        setTimeout(() => {
-            if (chatContainer.scrollTop + chatContainer.clientHeight < scrollHeight) {
-                chatContainer.scrollTop = scrollHeight;
-            }
-        }, 100);
-    }
-
-    function addMessage(content, role) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
-        messageDiv.textContent = content;
-        chatMessages.appendChild(messageDiv);
-        scrollToBottom();
-    }
-
-    function addLoadingIndicator() {
-        const loadingDiv = document.createElement('div');
-        loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg';
-        loadingDiv.id = 'loadingIndicator';
-        const loadingContent = document.createElement('span');
-        loadingContent.className = 'loading-dots';
-        loadingDiv.appendChild(loadingContent);
-        chatMessages.appendChild(loadingDiv);
-        scrollToBottom();
-    }
-
-    function removeLoadingIndicator() {
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        if (loadingIndicator) {
-            loadingIndicator.remove();
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const aiModel = document.getElementById('aiModel');
+    
+        const TOKEN_LIMIT = 700; // Set your token limit here
+        let conversationHistory = [
+            { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a Christian. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses." },
+            { role: "assistant", content: "Welcome to AveMariaCloud!" }
+        ];
+    
+        // Function to estimate token usage for a message
+        function estimateTokens(message) {
+            const words = message.split(/\s+/).length;
+            return Math.ceil(words / 1.33); // Approximate 1.33 tokens per word
         }
-    }
-
-    async function sendMessage(message) {
-        try {
-            // Trim conversation history to fit within the token limit
-            trimConversationHistory();
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    model: aiModel.value,
-                    messages: conversationHistory,
-                    temperature: 0.7,
-                    max_tokens: 1000
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            const aiResponse = data.choices[0].message.content;
+    
+        // Function to trim conversation history to stay within token limit
+        function trimConversationHistory() {
+            let totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
+    
+            console.log("total tokens, untrimmed:" + totalTokens);
             
-            conversationHistory.push({ role: "assistant", content: aiResponse });
-            removeLoadingIndicator();
-            addMessage(aiResponse, 'assistant');
-        } catch (error) {
-            console.error('Error:', error);
-            removeLoadingIndicator();
-            addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
+            // Trim messages from the beginning if the total token count exceeds the limit
+            while (totalTokens > TOKEN_LIMIT) {
+                conversationHistory.shift();
+                totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
+                
+                console.log("total tokens, trimmed:" + totalTokens);
+            }
         }
-    }
-
-    function handleMessageSubmit(e) {
-        if (e) e.preventDefault();
-        const message = userInput.value.trim();
-        if (!message) return;
-
-        addMessage(message, 'user');
-        conversationHistory.push({ role: "user", content: message });
-        userInput.value = '';
-        addLoadingIndicator();
-        sendMessage(message);
-    }
-
-    chatForm.addEventListener('submit', handleMessageSubmit);
-
-    function isMobileDevice() {
-        return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-    }
-
-    userInput.addEventListener('keypress', (e) => {
-        if (!isMobileDevice() && e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleMessageSubmit();
+    
+        function scrollToBottom() {
+            const chatContainer = document.querySelector('.chat-container');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Calculate the total scroll height
+            const scrollHeight = chatMessages.scrollHeight;
+            
+            // Smooth scroll to bottom
+            chatContainer.scrollTo({
+                top: scrollHeight,
+                behavior: 'smooth'
+            });
+            
+            // Fallback scroll check to ensure we reach bottom
+            setTimeout(() => {
+                if (chatContainer.scrollTop + chatContainer.clientHeight < scrollHeight) {
+                    chatContainer.scrollTop = scrollHeight;
+                }
+            }, 100);
         }
-    });
-
-    userInput.focus();
-</script>
+    
+        function addMessage(content, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+    
+        function addLoadingIndicator() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg';
+            loadingDiv.id = 'loadingIndicator';
+            const loadingContent = document.createElement('span');
+            loadingContent.className = 'loading-dots';
+            loadingDiv.appendChild(loadingContent);
+            chatMessages.appendChild(loadingDiv);
+            scrollToBottom();
+        }
+    
+        function removeLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+        }
+    
+        async function sendMessage(message) {
+            try {
+                // Trim conversation history to fit within the token limit
+                trimConversationHistory();
+    
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: aiModel.value,
+                        messages: conversationHistory,
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    })
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+                
+                conversationHistory.push({ role: "assistant", content: aiResponse });
+                removeLoadingIndicator();
+                addMessage(aiResponse, 'assistant');
+            } catch (error) {
+                console.error('Error:', error);
+                removeLoadingIndicator();
+                addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
+            }
+        }
+    
+        function handleMessageSubmit(e) {
+            if (e) e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+    
+            addMessage(message, 'user');
+            conversationHistory.push({ role: "user", content: message });
+            userInput.value = '';
+            addLoadingIndicator();
+            sendMessage(message);
+        }
+    
+        chatForm.addEventListener('submit', handleMessageSubmit);
+    
+        function isMobileDevice() {
+            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+        }
+    
+        userInput.addEventListener('keypress', (e) => {
+            if (!isMobileDevice() && e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+            }
+        });
+    
+        userInput.focus();
+    </script>
 </body>
 </html>
-
