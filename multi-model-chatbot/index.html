@@ -420,6 +420,7 @@
         function handleMessageSubmit(e) {
             if (e) e.preventDefault();
             const message = userInput.value;
+            console.log(message);
             if (!message) return;
     
             addMessage(message, 'user');
