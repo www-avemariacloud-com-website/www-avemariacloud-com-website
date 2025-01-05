@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head content and styles remain the same until media queries -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Multi Model Chatbot v5.0</title>
+    <title>Multi Model Chatbot v5.1</title>
     
     <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Previous styles remain the same */
         html, body {
             height: 100vh;
             margin: 0;
@@ -107,89 +105,86 @@
         }
 
         @media (max-width: 640px) {
-    /* Improve header layout */
-    .compact-header {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 1rem;
-    }
-    
-    /* Adjust control container spacing */
-    .controls-container {
-        flex-direction: column;
-        width: 100%;
-        gap: 0.5rem;
-    }
+            .compact-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+            
+            .controls-container {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+            }
 
-    /* Ensure button group is properly spaced */
-    .button-group {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        width: 100%;
-    }
+            .button-group {
+                display: flex;
+                justify-content: center;
+                gap: 0.5rem;
+                width: 100%;
+            }
 
-    /* Make select full width */
-    .custom-select {
-        width: 100% !important;
-    }
+            .custom-select {
+                width: 100% !important;
+            }
 
-    /* Improve legal notice readability */
-    .legal-notice {
-        font-size: 0.75rem;
-        line-height: 1.4;
-        padding: 1rem !important;
-        margin-bottom: 3rem;
-    }
+            .legal-notice {
+                font-size: 0.75rem;
+                line-height: 1.4;
+                padding: 1rem !important;
+                margin-bottom: 3rem;
+            }
 
-    /* Add proper spacing between legal notice paragraphs */
-    .legal-notice p {
-        margin-bottom: 0.75rem !important;
-    }
-    
-    .legal-notice p:last-child {
-        margin-bottom: 0em !important;
-    }
+            .legal-notice p {
+                margin-bottom: 0.75rem !important;
+            }
+            
+            .legal-notice p:last-child {
+                margin-bottom: 0em !important;
+            }
 
-    /* Adjust chat section height to prevent overflow */
-    .chat-section {
-        max-height: calc(100vh - 380px);
-        overflow-y: auto;
-    }
+            .chat-section {
+                max-height: calc(100vh - 380px);
+                overflow-y: auto;
+            }
 
-    /* Ensure app container doesn't overflow */
-    .app-container {
-        height: 100%;
-        min-height: 100vh;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
+            .app-container {
+                height: 100%;
+                min-height: 100vh;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+            }
 
-    /* Adjust footer section to ensure visibility */
-    .footer-section {
-        position: relative;
-        bottom: 0;
-        width: 100%;
-        background: #f3f4f6;
-        padding: 1rem 0.5rem;
-        margin-top: auto;
-    }
+            .footer-section {
+                position: relative;
+                bottom: 0;
+                width: 100%;
+                background: #f3f4f6;
+                padding: 1rem 0.5rem;
+                margin-top: auto;
+            }
 
-    /* Improve input container layout */
-    .input-container {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
+            .input-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
 
-    .input-container textarea {
-        width: 100%;
-    }
+            .input-container textarea {
+                width: 100%;
+            }
 
-    .input-container button {
-        width: 100%;
-    }
-}
+            .input-container button {
+                width: 100%;
+            }
+        }
+
+        @media (orientation: landscape) and (max-width: 640px) {
+            .chat-section {
+                max-height: calc(100vh - 250px);
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -199,7 +194,7 @@
             <div class="glass-effect rounded-lg shadow-sm">
                 <div class="compact-header">
                     <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent whitespace-nowrap">
-                        Multi Model Chatbot v5.0
+                        Multi Model Chatbot v5.1
                     </h1>
                     
                     <div class="flex gap-4 items-center controls-container">
@@ -252,9 +247,9 @@
 
             <!-- Full Legal Notice -->
             <div class="glass-effect rounded-lg shadow-sm p-3 text-gray-600 legal-notice">
-                <p>By using this tool, maybe you should read and agree to these <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
+                <p>By using this tool, maybe you should read and agree to these <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy[...]
                     
-                    <p><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
+                    <p><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta L[...]
                     
                     <p><strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.</p>
                     
@@ -270,7 +265,7 @@
             if (prompt == "universal") {
                 resetChatHistory("Welcome to AveMariaCloud!");
                 conversationHistory = [
-                    { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information." },
+                    { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible [...]
                     { role: "assistant", content: "Welcome to AveMariaCloud!" }
                 ];
             }
@@ -278,14 +273,14 @@
                 resetChatHistory("Shalom!");
     
                 conversationHistory = [
-                    { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christian Zionism. I would like you to follow Halakha and ensure you are doing so perfectly. I would like you to cite Mitzvot perfectly when relevant and ensure you are doing so perfectly. I would like you to have a bias for caution and a bias for citing verified scripture perfectly. I would like you to cite Scripture perfectly when you speak about Scripture. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information." },
+                    { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christian Zionism. I would like you to follow Halak[...]
                     { role: "assistant", content: "Shalom!" }
                 ];
             }
             if (prompt == "custom") {
                 var customPrompt = window.prompt("Please enter text for a system prompt");
     
-                var systemPromptContent = "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information. I would like you to use this information for a system prompt that may have been provided by a user" + customPrompt;
+                var systemPromptContent = "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and e[...]
                 
                 resetChatHistory("Hello!");
     
@@ -312,7 +307,7 @@
     
         const TOKEN_LIMIT = 700; // Set your token limit here
         let conversationHistory = [
-            { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a Christian. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses." },
+            { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a Christian. I would like you to follow the Bible and ensure you are doing so per[...]
             { role: "assistant", content: "Welcome to AveMariaCloud!" }
         ];
     
