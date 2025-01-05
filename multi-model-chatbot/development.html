@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Multi Model Chatbot v3.9</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>Multi Model Chatbot v4.0</title>
+
     <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
@@ -43,6 +43,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         /* Controls section */
@@ -56,6 +57,7 @@
         .button-group {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         /* Chat container */
@@ -109,6 +111,7 @@
         .input-form {
             display: flex;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .input-textarea {
@@ -178,6 +181,7 @@
             border-radius: 0.375rem;
             background: white;
             min-width: 200px;
+            width: 100%;
         }
 
         /* Responsive styles */
@@ -196,14 +200,6 @@
                 width: 100%;
             }
 
-            .button-group button {
-                flex: 1;
-            }
-
-            .model-select {
-                width: 100%;
-            }
-
             .message {
                 max-width: 90%;
             }
@@ -218,6 +214,12 @@
 
             .input-textarea {
                 width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                text-align: center;
             }
         }
 
@@ -250,7 +252,7 @@
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <h1 class="text-xl font-bold text-gray-900">Multi Model Chatbot v3.9</h1>
+                <h1 class="text-xl font-bold text-gray-900">Multi Model Chatbot v4.0</h1>
                 <div class="controls">
                     <div class="button-group">
                         <button class="send-button" onclick="updateSystemPrompt('universal')">Universal</button>
@@ -298,7 +300,10 @@
             </div>
         </footer>
     </div>
-    
+</body>
+</html>
+
+
     <script>
 
         function updateSystemPrompt(prompt) {
@@ -483,5 +488,3 @@
     
         userInput.focus();
     </script>
-</body>
-</html>
