@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat Application</title>
+    <title>AI Research Tool v1.1</title>
     <style>
         /* General Reset */
         * {
@@ -127,7 +127,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Chat Application</div>
+        <div class="header">AI Research Tool v1.1</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -159,7 +159,7 @@
 
     <script>
         const apiKey = "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";
-        const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+        const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
 
         document.getElementById('submit-button').addEventListener('click', async () => {
             const systemMessage = document.getElementById('system-message').value;
