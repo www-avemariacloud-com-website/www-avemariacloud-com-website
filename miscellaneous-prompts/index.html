@@ -15,8 +15,10 @@
             height: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             flex-direction: column;
+            min-height: 100vh;  /* Ensures body is at least as tall as the screen */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         h2 {
@@ -35,10 +37,10 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-height: 80vh;  /* Allow container to expand beyond viewport */
         }
 
         /* Form Styling */
