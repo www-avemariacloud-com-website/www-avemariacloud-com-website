@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Multi Model Chatbot v6.3</title>
+    <title>Multi Model Chatbot v6.4</title>
     
     <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
@@ -199,7 +199,7 @@
             <div class="glass-effect rounded-lg shadow-sm">
                 <div class="compact-header">
                     <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent whitespace-nowrap">
-                        Multi Model Chatbot v6.3
+                        Multi Model Chatbot v6.4
                     </h1>
                     
                     <div class="flex gap-4 items-center controls-container">
@@ -313,7 +313,7 @@ I would like you to always cite Scripture perfectly and in full 100% as it is in
             if (prompt == "custom") {
                 var customPrompt = window.prompt("Please enter text for a system prompt");
     
-                var systemPromptContent = "I would like you to be a helpful AI chatbot for a Christian website.
+                var systemPromptContent = `I would like you to be a helpful AI chatbot for a Christian website.
 
 I would like a very strong bias for caution and perfect information.
 
@@ -321,7 +321,7 @@ I would like you to always cite Scripture perfectly from the NIV translation of 
 
 I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.
 
-I would like you to use this information for a system prompt that may have been provided by a user" + customPrompt;
+I would like you to use this information for a system prompt that may have been provided by a user` + customPrompt;
                 
                 resetChatHistory("Hello!");
     
