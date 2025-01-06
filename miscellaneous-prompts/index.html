@@ -5,78 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Response Generator</title>
     <style>
+        /* Global Styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
         }
 
+        h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Container */
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 40px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
-        .prompt-selector {
-            margin-bottom: 20px;
-        }
-
-        .model-selector {
-            margin-bottom: 20px;
-        }
-
-        .input-textarea {
+        .container select,
+        .container textarea,
+        .container button {
             width: 100%;
-            height: 150px;
+            margin: 10px 0;
             padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #cccccc;
-            border-radius: 10px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
 
-        .response-textarea {
-            width: 100%;
-            height: 200px;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 10px;
-        }
-
+        /* Button Styles */
         .button {
             background-color: #4CAF50;
-            color: #ffffff;
-            padding: 10px 20px;
+            color: #fff;
             border: none;
-            border-radius: 10px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .button:hover {
-            background-color: #3e8e41;
+            background-color: #45a049;
         }
 
+        /* Input Styles */
+        .input-textarea,
+        .response-textarea {
+            height: 150px;
+            resize: none;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .response-textarea {
+            height: 200px;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f7f7f7;
+        }
+
+        /* Select Elements */
+        select {
+            height: 45px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        /* Media Query for Mobile Devices */
         @media only screen and (max-width: 600px) {
             .container {
+                padding: 20px;
                 margin: 20px;
-                padding: 10px;
             }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .button {
+                font-size: 1rem;
+            }
+        }
+
+        /* Additional Styles for Loading State */
+        .loading-state {
+            color: #777;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
         <h2>AI Response Generator</h2>
+
+        <!-- Prompt Selector -->
         <select id="prompt-selector" class="prompt-selector"></select>
+
+        <!-- Model Selector -->
         <select id="model-selector" class="model-selector">
             <option value="gemma2-9b-it">gemma2-9b-it</option>
             <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
             <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
         </select>
+
+        <!-- System Message Input -->
         <textarea id="system-message" class="input-textarea" placeholder="Enter your message..."></textarea>
+
+        <!-- Generate Button -->
         <button id="submit-button" class="button">Generate Response</button>
-        <textarea id="response-text" class="response-textarea" readonly></textarea>
+
+        <!-- Response Text Area -->
+        <textarea id="response-text" class="response-textarea" readonly placeholder="The response will appear here..."></textarea>
     </div>
 
     <script>
@@ -84,6 +132,7 @@
         const apiKey = "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";
         const promptsUrl = "prompts.csv";
 
+        // Fetch prompts from CSV file
         fetch(promptsUrl)
             .then(response => response.text())
             .then(text => {
@@ -98,6 +147,7 @@
                 });
             });
 
+        // Handle the Generate button click
         document.getElementById('submit-button').addEventListener('click', async () => {
             const systemMessage = document.getElementById('system-message').value;
             const selectedPrompt = document.getElementById('prompt-selector').value;
@@ -136,5 +186,6 @@
             }
         });
     </script>
+
 </body>
 </html>
