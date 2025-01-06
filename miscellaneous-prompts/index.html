@@ -3,112 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Prompt Generator</title>
+    <title>AI Response Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 40px auto;
+            background-color: #f0f0f0;
         }
-        
+
         .container {
+            max-width: 800px;
+            margin: 40px auto;
             padding: 20px;
-            border: 1px solid #ddd;
+            background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        
-        .input-group {
+
+        .prompt-selector {
             margin-bottom: 20px;
         }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 10px;
+
+        .model-selector {
+            margin-bottom: 20px;
         }
-        
-        .input-group textarea {
+
+        .input-textarea {
             width: 100%;
-            height: 100px;
+            height: 150px;
             padding: 10px;
-            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 10px;
         }
-        
-        .input-group select {
+
+        .response-textarea {
             width: 100%;
-            height: 40px;
+            height: 200px;
             padding: 10px;
-            font-size: 16px;
+            border: 1px solid #cccccc;
+            border-radius: 10px;
         }
-        
+
         .button {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
             background-color: #4CAF50;
-            color: #fff;
+            color: #ffffff;
+            padding: 10px 20px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
         }
-        
+
         .button:hover {
             background-color: #3e8e41;
         }
-        
-        .output {
-            margin-top: 20px;
-        }
-        
-        .output textarea {
-            width: 100%;
-            height: 200px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        
-        @media (max-width: 768px) {
+
+        @media only screen and (max-width: 600px) {
             .container {
+                margin: 20px;
                 padding: 10px;
-            }
-            .input-group textarea {
-                height: 80px;
-            }
-            .button {
-                height: 30px;
-                padding: 5px;
-            }
-            .output textarea {
-                height: 150px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>AI Prompt Generator</h2>
-        <div class="input-group">
-            <label for="input-message">Input Message</label>
-            <textarea id="input-message" placeholder="Enter your input message"></textarea>
-        </div>
-        <div class="input-group">
-            <label for="prompt-select">Select Prompt</label>
-            <select id="prompt-select"></select>
-        </div>
-        <div class="input-group">
-            <label for="model-select">Select AI Model</label>
-            <select id="model-select">
-                <option value="gemma2-9b-it">gemma2-9b-it</option>
-                <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
-                <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
-            </select>
-        </div>
-        <button class="button" onclick="generateResponse()">Generate Response</button>
-        <div class="output">
-            <label for="output-message">Output Response</label>
-            <textarea id="output-message" readonly></textarea>
-        </div>
+        <h2>AI Response Generator</h2>
+        <select id="prompt-selector" class="prompt-selector"></select>
+        <select id="model-selector" class="model-selector">
+            <option value="gemma2-9b-it">gemma2-9b-it</option>
+            <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
+            <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+        </select>
+        <textarea id="system-message" class="input-textarea" placeholder="Enter your message..."></textarea>
+        <button id="submit-button" class="button">Generate Response</button>
+        <textarea id="response-text" class="response-textarea" readonly></textarea>
     </div>
 
     <script>
@@ -116,46 +84,57 @@
         const apiKey = "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";
         const promptsUrl = "prompts.csv";
 
-        // Load prompts from CSV file
         fetch(promptsUrl)
             .then(response => response.text())
-            .then(data => {
-                const prompts = data.trim().split("\n");
-                prompts.shift(); // Remove header row
-                prompts.forEach(prompt => {
-                    const [act, promptText] = prompt.split(",");
-                    const option = document.createElement("option");
-                    option.value = act.trim().replace(/"/g, "");
-                    option.text = act.trim().replace(/"/g, "") + " - " + promptText.trim().replace(/"/g, "");
-                    document.getElementById("prompt-select").appendChild(option);
-                });
-            })
-            .catch(error => console.error("Error loading prompts:", error));
+            .then(text => {
+                const prompts = text.trim().split("\n").slice(1).map(prompt => prompt.split(",")[1].trim());
+                const promptSelector = document.getElementById("prompt-selector");
 
-        // Generate response using AI API
-        function generateResponse() {
-            const inputMessage = document.getElementById("input-message").value;
-            const prompt = document.getElementById("prompt-select").value;
-            const model = document.getElementById("model-select").value;
-            const payload = {
-                "act": prompt,
-                "prompt": inputMessage
-            };
-            const options = {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${apiKey}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            };
-            fetch(apiUrl + model, options)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("output-message").value = data.response.text;
-                })
-                .catch(error => console.error("Error generating response:", error));
-        }
+                prompts.forEach(prompt => {
+                    const option = document.createElement("option");
+                    option.text = prompt;
+                    option.value = prompt;
+                    promptSelector.appendChild(option);
+                });
+            });
+
+        document.getElementById('submit-button').addEventListener('click', async () => {
+            const systemMessage = document.getElementById('system-message').value;
+            const selectedPrompt = document.getElementById('prompt-selector').value;
+            const selectedModel = document.getElementById('model-selector').value;
+
+            const responseText = document.getElementById('response-text');
+            responseText.value = "Loading...";
+
+            try {
+                const requestBody = {
+                    model: selectedModel,
+                    messages: [
+                        { role: 'system', content: selectedPrompt },
+                        { role: 'user', content: systemMessage }
+                    ]
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const content = data.choices[0]?.message?.content || "No response received.";
+                responseText.value = content;
+            } catch (error) {
+                responseText.value = `Error: ${error.message}`;
+            }
+        });
     </script>
 </body>
 </html>
