@@ -12,6 +12,11 @@
             padding: 0;
             background-color: #f4f4f9;
             color: #333;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
         h2 {
@@ -23,40 +28,39 @@
 
         /* Container */
         .container {
-            max-width: 900px;
-            margin: 40px auto;
+            width: 100%;
+            max-width: 1200px;
             padding: 30px;
             background-color: #fff;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            overflow: hidden;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .container select,
-        .container textarea,
-        .container button {
-            width: 100%;
+        /* Form Styling */
+        .form-group {
             margin: 10px 0;
-            padding: 10px;
+        }
+
+        select,
+        textarea,
+        button {
+            width: 100%;
+            padding: 12px;
             font-size: 1rem;
             border-radius: 8px;
             border: 1px solid #ccc;
         }
 
-        /* Button Styles */
-        .button {
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+        select {
+            height: 45px;
+            background-color: #f9f9f9;
         }
 
-        .button:hover {
-            background-color: #45a049;
-        }
-
-        /* Input Styles */
         .input-textarea,
         .response-textarea {
             height: 150px;
@@ -72,18 +76,25 @@
             background-color: #f7f7f7;
         }
 
-        /* Select Elements */
-        select {
-            height: 45px;
-            border: 1px solid #ddd;
-            background-color: #f9f9f9;
+        /* Button Styles */
+        .button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
         }
 
-        /* Media Query for Mobile Devices */
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        /* Mobile-Friendly Styles */
         @media only screen and (max-width: 600px) {
             .container {
                 padding: 20px;
-                margin: 20px;
+                margin: 10px;
             }
 
             h2 {
@@ -94,12 +105,6 @@
                 font-size: 1rem;
             }
         }
-
-        /* Additional Styles for Loading State */
-        .loading-state {
-            color: #777;
-            font-style: italic;
-        }
     </style>
 </head>
 <body>
@@ -108,23 +113,33 @@
         <h2>AI Response Generator</h2>
 
         <!-- Prompt Selector -->
-        <select id="prompt-selector" class="prompt-selector"></select>
+        <div class="form-group">
+            <select id="prompt-selector" class="prompt-selector"></select>
+        </div>
 
         <!-- Model Selector -->
-        <select id="model-selector" class="model-selector">
-            <option value="gemma2-9b-it">gemma2-9b-it</option>
-            <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
-            <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
-        </select>
+        <div class="form-group">
+            <select id="model-selector" class="model-selector">
+                <option value="gemma2-9b-it">gemma2-9b-it</option>
+                <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
+                <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+            </select>
+        </div>
 
         <!-- System Message Input -->
-        <textarea id="system-message" class="input-textarea" placeholder="Enter your message..."></textarea>
+        <div class="form-group">
+            <textarea id="system-message" class="input-textarea" placeholder="Enter your message..."></textarea>
+        </div>
 
         <!-- Generate Button -->
-        <button id="submit-button" class="button">Generate Response</button>
+        <div class="form-group">
+            <button id="submit-button" class="button">Generate Response</button>
+        </div>
 
         <!-- Response Text Area -->
-        <textarea id="response-text" class="response-textarea" readonly placeholder="The response will appear here..."></textarea>
+        <div class="form-group">
+            <textarea id="response-text" class="response-textarea" readonly placeholder="The response will appear here..."></textarea>
+        </div>
     </div>
 
     <script>
@@ -136,13 +151,13 @@
         fetch(promptsUrl)
             .then(response => response.text())
             .then(text => {
-                const prompts = text.trim().split("\n").slice(1).map(prompt => prompt.split(",")[1].trim());
+                const prompts = text.trim().split("\n").slice(1).map(row => row.split(","));
                 const promptSelector = document.getElementById("prompt-selector");
 
-                prompts.forEach(prompt => {
+                prompts.forEach(([act, prompt]) => {
                     const option = document.createElement("option");
-                    option.text = prompt;
-                    option.value = prompt;
+                    option.text = act.trim();  // Using the first column as the option text
+                    option.value = prompt.trim();  // Using the second column as the option value
                     promptSelector.appendChild(option);
                 });
             });
