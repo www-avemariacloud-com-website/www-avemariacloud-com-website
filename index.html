@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Head section remains the same until the hero style -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,21 +14,35 @@
     <link rel="icon" type="image/jpeg" href="Fra_Angelico_069.jpg">
     
     <style>
+        :root {
+            --primary-color: #89a6c4;         /* Soft slate blue - main color */
+            --primary-light: #b4c8dd;         /* Lighter blue - for hover states */
+            --primary-dark: #5c7b99;          /* Darker blue - for text and accents */
+            --background-light: #f5f7fa;      /* Very light blue-gray - for sections */
+            --accent-color: #d4b0b0;          /* Soft rose - for special highlights */
+            --text-dark: #2c3e50;             /* Deep blue-gray - for main text */
+            --text-light: #ffffff;            /* White - for contrast text */
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
+            color: var(--text-dark);
         }
+
         h1, h2, h3 {
             font-family: 'Montserrat', sans-serif;
         }
+
         .hero {
-            background: linear-gradient(135deg, #0056b3, #80caff);
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--text-light);
             text-align: center;
             padding: 120px 20px;
             position: relative;
             overflow: hidden;
         }
+
         .hero::before {
             content: '';
             position: absolute;
@@ -38,99 +53,77 @@
             background: url('data:image/svg+xml,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h20v20H0z" fill="rgba(255,255,255,0.05)"/></svg>');
             opacity: 0.1;
         }
+
         .hero h1 {
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
+
         .hero p {
             font-size: 1.25rem;
             max-width: 95%;
             margin: 0 auto;
         }
+
         .navigation {
-            background-color: white;
+            background-color: var(--text-light);
             padding: 20px 0;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
+
         .navigation .nav-link {
-            color: #0056b3;
+            color: var(--primary-color);
             font-weight: 500;
             padding: 12px 24px;
             margin: 0 10px;
             border-radius: 25px;
             transition: all 0.3s ease;
         }
+
         .navigation .nav-link:hover {
-            background-color: #0056b3;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--text-light);
             transform: translateY(-2px);
         }
+
         .navigation .nav-link i {
             margin-right: 8px;
         }
-        .feature-card {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            margin: 20px 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-        .feature-card i {
-            font-size: 2.5rem;
-            color: #0056b3;
-            margin-bottom: 20px;
-        }
-        #instagram {
-            background-color: #f8f9fa;
-            padding: 60px 0;
-        }
+
         .section-title {
             text-align: center;
             margin-bottom: 40px;
-            color: #0056b3;
+            color: var(--primary-dark);
         }
+
+        #instagram {
+            background-color: var(--background-light);
+            padding: 60px 0;
+        }
+
         footer {
-            background-color: #0056b3;
-            color: white;
+            background-color: var(--primary-dark);
+            color: var(--text-light);
             text-align: center;
             padding: 40px 0;
         }
+
         footer a {
-            color: #ffcc33;
+            color: var(--primary-light);
             text-decoration: none;
             transition: color 0.3s;
         }
+
         footer a:hover {
-            color: white;
+            color: var(--text-light);
             text-decoration: none;
         }
-        .social-links {
-            margin: 20px 0;
-        }
-        .social-links a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            border-radius: 50%;
-            background-color: rgba(255,255,255,0.1);
-            margin: 0 10px;
-            transition: all 0.3s ease;
-        }
-        .social-links a:hover {
-            background-color: #ffcc33;
-            transform: translateY(-3px);
-        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
@@ -143,13 +136,12 @@
     </style>
 </head>
 <body>
-
 <!-- Hero Section -->
 <header class="hero">
     <div class="container">
         <h1>Welcome</h1>
         <p class="mb-4">Luke 1:26-28 New American Bible (Revised Edition)<BR><BR>
-26 In the sixth month, the angel Gabriel was sent from God to a town of Galilee called Nazareth, 27 to a virgin betrothed to a man named Joseph, of the house of David, and the virgin’s name was Mary. 28 And coming to her, he said, “Hail, favored one! The Lord is with you.”
+26 In the sixth month, the angel Gabriel was sent from God to a town of Galilee called Nazareth, 27 to a virgin betrothed to a man named Joseph, of the house of David, and the virgin's name was Mary. 28 And coming to her, he said, "Hail, favored one! The Lord is with you."
 </p>
     </div>
 </header>
@@ -158,10 +150,8 @@
 <section class="navigation">
     <div class="container">
         <div class="row justify-content-center">
-            
             <div class="col-md-10">
                 <nav class="nav justify-content-center">
-
                     <a class="nav-link" href="https://www.avemariacloud.com/image-creator/">
                         <i class="fa-solid fa-image"></i>Image Creator
                     </a>
@@ -174,16 +164,11 @@
                     <a class="nav-link" href="https://www.avemariacloud.com/zionism-research-tool/">
                         <i class="fa-solid fa-star-of-david"></i>Zionism Research Tool
                     </a>
-                    
                 </nav>
             </div>
-            
-            
         </div>
     </div>
 </section>
-
-<!-- Features Section -->
 
 <!-- Instagram Section -->
 <section id="instagram">
@@ -194,6 +179,22 @@
             <div class="col-md-10">
                 <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/bible_verses_and_pictures/" data-instgrm-version="14" style="background:#FFF; border:0; margin: 0 auto; padding:0; width:100%;">
                 </blockquote>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Miscellaneous Software Section -->
+<section class="navigation">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h2 class="section-title">Miscellaneous Software</h2>
+                <nav class="nav justify-content-center">
+                    <a class="nav-link" href="https://www.avemariacloud.com/multi-model-chatbot/system-and-user-message.html">
+                        <i class="fa-solid fa-robot"></i>AI Research Tool
+                    </a>
+                </nav>
             </div>
         </div>
     </div>
