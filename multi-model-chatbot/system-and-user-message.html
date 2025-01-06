@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Research Tool v1.5</title>
+    <title>AI Research Tool v1.6</title>
     <style>
         /* General Reset */
         * {
@@ -81,15 +81,41 @@
             background-color: #0056b3;
         }
 
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
 
-        .checkbox-container input[type="checkbox"] {
-            width: auto;
-        }
+.checkbox-input {
+    width: 18px;
+    height: 18px;
+    accent-color: #007bff; /* Modern browsers will use the accent color for checkboxes */
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.checkbox-input:checked {
+    transform: scale(1.1); /* Slightly grow when checked */
+}
+
+.checkbox-label {
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.checkbox-label:hover {
+    color: #007bff; /* Highlight label on hover */
+}
+
+.checkbox-container input[type="checkbox"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
 
         .output-container {
             background: #f9f9f9;
@@ -127,7 +153,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool v1.5</div>
+        <div class="header">AI Research Tool v1.6</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
