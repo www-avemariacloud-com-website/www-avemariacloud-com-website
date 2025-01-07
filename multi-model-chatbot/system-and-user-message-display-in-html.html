@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Research Tool HTML Display v1.6</title>
+    <title>AI Research Tool HTML Display v1.7</title>
     <style>
         /* General Reset */
         * {
@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool HTML Display v1.6</div>
+        <div class="header">AI Research Tool HTML Display v1.7</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -270,7 +270,7 @@
                 }
             } catch (error) {
                 if (retryCount < MAX_RETRIES) {
-                    responseText.textContent = `Error occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
+                    outputContainer.innerHTML = `Error occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
                     await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
                     return makeApiRequest(retryCount + 1);
                 } else {
