@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Research Tool HTML Display v1.9</title>
+    <title>AI Research Tool HTML Display v2.0</title>
     <style>
         /* General Reset */
         * {
@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool HTML Display v1.9</div>
+        <div class="header">AI Research Tool HTML Display v2.0</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -192,7 +192,7 @@
     <script>
         const apiKey = "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";
         const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
-        const MAX_RETRIES = 3;
+        const MAX_RETRIES = 6;
         const RETRY_DELAY = 1000; // 1 second
 
         async function makeApiRequest(retryCount = 0) {
@@ -250,19 +250,25 @@
                             
                         } else {
                             responseText.style.display = 'block';
-                            responseText.innerHTML = JSON.stringify(jsonContent, null, 2);
+
+                            throw new Error(`API Error: ${response.statusText}`);
+                            //responseText.innerHTML = JSON.stringify(jsonContent, null, 2);
                         }
                     } catch (e) {
                         responseText.style.display = 'block';
-                        responseText.innerHTML = content;
+
+                        throw new Error(`API Error: ${response.statusText}`);
+                        //responseText.innerHTML = content;
                     }
                 } else {
                     responseText.style.display = 'block';
-                    responseText.innerHTML = content;
+
+                    throw new Error(`API Error: ${response.statusText}`);
+                    //responseText.innerHTML = content;
                 }
             } catch (error) {
                 if (retryCount < MAX_RETRIES) {
-                    responseText.innerHTML = `Error occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
+                    responseText.innerHTML = `An error possibly occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
                     await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
                     return makeApiRequest(retryCount + 1);
                 } else {
