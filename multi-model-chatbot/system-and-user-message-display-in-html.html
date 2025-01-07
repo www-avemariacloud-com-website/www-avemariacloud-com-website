@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Research Tool HTML Display v1.0</title>
+    <title>AI Research Tool HTML Display v1.4</title>
     <style>
         /* General Reset */
         * {
@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool HTML Display v1.0</div>
+        <div class="header">AI Research Tool HTML Display v1.4</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -244,7 +244,15 @@
                         const jsonContent = JSON.parse(content);
                         if (jsonContent.HTML_File) {
                             responseText.style.display = 'none';
-                            htmlContainer.innerHTML = jsonContent.HTML_File;
+                            
+                            //htmlContainer.innerHTML = jsonContent.HTML_File;
+
+                            const newTab = window.open('', '_blank'); // Open a blank tab
+                            newTab.document.open(); // Open the document for writing
+                            newTab.document.write(jsonContent.HTML_File); // Write the HTML content
+                            newTab.document.close(); // Close the document stream
+
+                            
                         } else {
                             responseText.style.display = 'block';
                             responseText.textContent = JSON.stringify(jsonContent, null, 2);
