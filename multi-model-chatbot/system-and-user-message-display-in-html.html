@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Research Tool HTML Display v1.6</title>
+    <title>AI Research Tool HTML Display v1.7</title>
     <style>
         /* General Reset */
         * {
@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool HTML Display v1.6</div>
+        <div class="header">AI Research Tool HTML Display v1.7</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -202,6 +202,8 @@
             const requestJson = document.getElementById('json-response').checked;
             const responseText = document.getElementById('response-text');
 
+            responseText.innerHTML = "Loading...";
+            
             try {
                 const requestBody = {
                     model: selectedModel,
