@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +18,6 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            
             min-height: 100vh;
             color: #333;
         }
@@ -28,7 +26,6 @@
             width: 100%;
             max-width: 100%;
             background: #ffffff;
-            
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -81,48 +78,43 @@
             background-color: #0056b3;
         }
 
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-        
-.checkbox-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-}
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+            accent-color: #007bff;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            margin-top: 3px;
+        }
 
-.checkbox-input {
-    width: 18px;
-    height: 18px;
-    accent-color: #007bff; /* Modern browsers will use the accent color for checkboxes */
-    cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-    margin-top: 3px; /* Adjust the vertical position of the checkbox */
-}
+        .checkbox-input:checked {
+            transform: scale(1.1);
+        }
 
-.checkbox-input:checked {
-    transform: scale(1.1); /* Slightly grow when checked */
-}
+        .checkbox-label {
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            line-height: 1.2;
+            vertical-align: bottom;
+        }
 
-.checkbox-label {
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
-    transition: color 0.2s ease;
-    line-height: 1.2; /* Reduce line-height to match the checkbox height more closely */
-    vertical-align: bottom;
-}
+        .checkbox-label:hover {
+            color: #007bff;
+        }
 
-.checkbox-label:hover {
-    color: #007bff; /* Highlight label on hover */
-}
-
-.checkbox-container input[type="checkbox"]:focus {
-    outline: none;
-    border-color: #007bff;
-}
-
-
-
+        .checkbox-container input[type="checkbox"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
 
         .output-container {
             background: #f9f9f9;
@@ -132,6 +124,14 @@
             height: 300px;
             overflow-y: auto;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        .html-response-container {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            position: relative;
         }
 
         .output-container strong {
@@ -185,6 +185,7 @@
             <button id="submit-button">Submit</button>
             <div class="output-container" id="output">
                 <strong>Response:</strong>
+                <div id="html-response-container" class="html-response-container"></div>
                 <pre id="response-text">Waiting for input...</pre>
             </div>
         </div>
@@ -193,15 +194,19 @@
     <script>
         const apiKey = "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";
         const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
+        const MAX_RETRIES = 3;
+        const RETRY_DELAY = 1000; // 1 second
 
-        document.getElementById('submit-button').addEventListener('click', async () => {
+        async function makeApiRequest(retryCount = 0) {
             const systemMessage = document.getElementById('system-message').value;
             const userMessage = document.getElementById('user-message').value;
             const selectedModel = document.getElementById('model-selector').value;
             const requestJson = document.getElementById('json-response').checked;
-
             const responseText = document.getElementById('response-text');
+            const htmlContainer = document.getElementById('html-response-container');
+
             responseText.textContent = "Loading...";
+            htmlContainer.innerHTML = '';
 
             try {
                 const requestBody = {
@@ -233,26 +238,37 @@
 
                 const data = await response.json();
                 const content = data.choices[0]?.message?.content || "No response received.";
-                
-                // If JSON response, format it nicely
+
                 if (requestJson) {
                     try {
                         const jsonContent = JSON.parse(content);
-
-                        console.log(jsonContent);
-                        document.getElementById('output').innerHTML = jsonContent.HTML_File;
-                      
-                        //responseText.textContent = JSON.stringify(jsonContent, null, 2);
+                        if (jsonContent.HTML_File) {
+                            responseText.style.display = 'none';
+                            htmlContainer.innerHTML = jsonContent.HTML_File;
+                        } else {
+                            responseText.style.display = 'block';
+                            responseText.textContent = JSON.stringify(jsonContent, null, 2);
+                        }
                     } catch (e) {
+                        responseText.style.display = 'block';
                         responseText.textContent = content;
                     }
                 } else {
+                    responseText.style.display = 'block';
                     responseText.textContent = content;
                 }
             } catch (error) {
-                responseText.textContent = `Error: ${error.message}`;
+                if (retryCount < MAX_RETRIES) {
+                    responseText.textContent = `Error occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
+                    await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+                    return makeApiRequest(retryCount + 1);
+                } else {
+                    responseText.textContent = `Error after ${MAX_RETRIES} attempts: ${error.message}`;
+                }
             }
-        });
+        }
+
+        document.getElementById('submit-button').addEventListener('click', () => makeApiRequest());
     </script>
 </body>
 </html>
