@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Research Tool HTML Display v1.5</title>
+    <title>AI Research Tool HTML Display v1.6</title>
     <style>
         /* General Reset */
         * {
@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool HTML Display v1.5</div>
+        <div class="header">AI Research Tool HTML Display v1.6</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -183,7 +183,7 @@
                 <label for="json-response" class="checkbox-label">Request Response in JSON</label>
             </div>
             <button id="submit-button">Submit</button>
-            <div class="output-container" id="output">
+            <div id="output">
                 Waiting for input...
             </div>
         </div>
@@ -204,7 +204,7 @@
             const responseText = document.getElementById('response-text');
             const htmlContainer = document.getElementById('html-response-container');
             
-            const outputContainer = document.getElementById('output-container');
+            const outputContainer = document.getElementById('output');
 
             outputContainer.innerHTML = "Ready for input...";
             
