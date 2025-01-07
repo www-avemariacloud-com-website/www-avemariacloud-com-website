@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Research Tool HTML Display v1.0</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 100%;
+            background: #ffffff;
+            
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+
+        
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.checkbox-input {
+    width: 18px;
+    height: 18px;
+    accent-color: #007bff; /* Modern browsers will use the accent color for checkboxes */
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    margin-top: 3px; /* Adjust the vertical position of the checkbox */
+}
+
+.checkbox-input:checked {
+    transform: scale(1.1); /* Slightly grow when checked */
+}
+
+.checkbox-label {
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    line-height: 1.2; /* Reduce line-height to match the checkbox height more closely */
+    vertical-align: bottom;
+}
+
+.checkbox-label:hover {
+    color: #007bff; /* Highlight label on hover */
+}
+
+.checkbox-container input[type="checkbox"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+
+
+
+        .output-container {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .output-container strong {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .output-container pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 15px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">AI Research Tool HTML Display v1.0</div>
+        <div class="content">
+            <div>
+                <label for="system-message">System Message</label>
+                <textarea id="system-message" placeholder="Enter the system message..."></textarea>
+            </div>
+            <div>
+                <label for="user-message">User Message</label>
+                <textarea id="user-message" placeholder="Enter the user message..."></textarea>
+            </div>
+            <div>
+                <label for="model-selector">Select Model</label>
+                <select id="model-selector">
+                    <option value="gemma2-9b-it">gemma2-9b-it</option>
+                    <option value="llama-3.2-90b-vision-preview" selected>llama-3.2-90b-vision-preview</option>
+                    <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+                </select>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="json-response" name="json-response" class="checkbox-input">
+                <label for="json-response" class="checkbox-label">Request Response in JSON</label>
+            </div>
+            <button id="submit-button">Submit</button>
+            <div class="output-container" id="output">
+                <strong>Response:</strong>
+                <pre id="response-text">Waiting for input...</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = "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";
+        const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
+
+        document.getElementById('submit-button').addEventListener('click', async () => {
+            const systemMessage = document.getElementById('system-message').value;
+            const userMessage = document.getElementById('user-message').value;
+            const selectedModel = document.getElementById('model-selector').value;
+            const requestJson = document.getElementById('json-response').checked;
+
+            const responseText = document.getElementById('response-text');
+            responseText.textContent = "Loading...";
+
+            try {
+                const requestBody = {
+                    model: selectedModel,
+                    messages: [
+                        { role: 'system', content: systemMessage },
+                        { role: 'user', content: userMessage }
+                    ]
+                };
+
+                if (requestJson) {
+                    requestBody.response_format = {
+                        type: "json_object"
+                    };
+                }
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const content = data.choices[0]?.message?.content || "No response received.";
+                
+                // If JSON response, format it nicely
+                if (requestJson) {
+                    try {
+                        const jsonContent = JSON.parse(content);
+
+                        console.log(jsonContent);
+                        document.getElementById('output').innerHTML = jsonContent.HTML_File;
+                      
+                        //responseText.textContent = JSON.stringify(jsonContent, null, 2);
+                    } catch (e) {
+                        responseText.textContent = content;
+                    }
+                } else {
+                    responseText.textContent = content;
+                }
+            } catch (error) {
+                responseText.textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
