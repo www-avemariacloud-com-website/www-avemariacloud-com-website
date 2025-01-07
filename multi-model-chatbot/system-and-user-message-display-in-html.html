@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Research Tool HTML Display v1.7</title>
+    <title>AI Research Tool HTML Display v1.4</title>
     <style>
         /* General Reset */
         * {
@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool HTML Display v1.7</div>
+        <div class="header">AI Research Tool HTML Display v1.4</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -183,8 +183,10 @@
                 <label for="json-response" class="checkbox-label">Request Response in JSON</label>
             </div>
             <button id="submit-button">Submit</button>
-            <div id="output">
-                Waiting for input...
+            <div class="output-container" id="output">
+                <strong>Response:</strong>
+                <div id="html-response-container" class="html-response-container"></div>
+                <pre id="response-text">Waiting for input...</pre>
             </div>
         </div>
     </div>
@@ -192,24 +194,19 @@
     <script>
         const apiKey = "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";
         const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
-        const MAX_RETRIES = 7;
+        const MAX_RETRIES = 3;
         const RETRY_DELAY = 1000; // 1 second
 
         async function makeApiRequest(retryCount = 0) {
-            
             const systemMessage = document.getElementById('system-message').value;
             const userMessage = document.getElementById('user-message').value;
             const selectedModel = document.getElementById('model-selector').value;
             const requestJson = document.getElementById('json-response').checked;
             const responseText = document.getElementById('response-text');
             const htmlContainer = document.getElementById('html-response-container');
-            
-            const outputContainer = document.getElementById('output');
 
-            outputContainer.innerHTML = "Ready for input...";
-            
-            //responseText.textContent = "Loading...";
-            //htmlContainer.innerHTML = '';
+            responseText.textContent = "Loading...";
+            htmlContainer.innerHTML = '';
 
             try {
                 const requestBody = {
@@ -246,16 +243,16 @@
                     try {
                         const jsonContent = JSON.parse(content);
                         if (jsonContent.HTML_File) {
-                            
                             responseText.style.display = 'none';
                             
+                            //htmlContainer.innerHTML = jsonContent.HTML_File;
+
                             const newTab = window.open('', '_blank'); // Open a blank tab
                             newTab.document.open(); // Open the document for writing
                             newTab.document.write(jsonContent.HTML_File); // Write the HTML content
                             newTab.document.close(); // Close the document stream
 
-                            outputContainer.innerHTML = "Ready for input...";
-
+                            
                         } else {
                             responseText.style.display = 'block';
                             responseText.textContent = JSON.stringify(jsonContent, null, 2);
@@ -270,7 +267,7 @@
                 }
             } catch (error) {
                 if (retryCount < MAX_RETRIES) {
-                    outputContainer.innerHTML = `Error occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
+                    responseText.textContent = `Error occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
                     await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
                     return makeApiRequest(retryCount + 1);
                 } else {
