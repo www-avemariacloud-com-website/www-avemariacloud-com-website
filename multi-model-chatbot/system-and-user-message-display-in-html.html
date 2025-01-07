@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Research Tool HTML Display v1.5</title>
+    <title>AI Research Tool HTML Display v1.6</title>
     <style>
         /* General Reset */
         * {
@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool HTML Display v1.5</div>
+        <div class="header">AI Research Tool HTML Display v1.6</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -183,6 +183,9 @@
                 <label for="json-response" class="checkbox-label">Request Response in JSON</label>
             </div>
             <button id="submit-button">Submit</button>
+            
+            <div id="response-text">Ready for input...</div>
+            
         </div>
     </div>
 
@@ -198,10 +201,6 @@
             const selectedModel = document.getElementById('model-selector').value;
             const requestJson = document.getElementById('json-response').checked;
             const responseText = document.getElementById('response-text');
-            const htmlContainer = document.getElementById('html-response-container');
-
-            responseText.textContent = "Loading...";
-            htmlContainer.innerHTML = '';
 
             try {
                 const requestBody = {
@@ -238,35 +237,33 @@
                     try {
                         const jsonContent = JSON.parse(content);
                         if (jsonContent.HTML_File) {
-                            responseText.style.display = 'none';
                             
-                            //htmlContainer.innerHTML = jsonContent.HTML_File;
-
                             const newTab = window.open('', '_blank'); // Open a blank tab
                             newTab.document.open(); // Open the document for writing
                             newTab.document.write(jsonContent.HTML_File); // Write the HTML content
                             newTab.document.close(); // Close the document stream
 
+                            responseText.innerHTML = "Ready for input...";
                             
                         } else {
                             responseText.style.display = 'block';
-                            responseText.textContent = JSON.stringify(jsonContent, null, 2);
+                            responseText.innerHTML = JSON.stringify(jsonContent, null, 2);
                         }
                     } catch (e) {
                         responseText.style.display = 'block';
-                        responseText.textContent = content;
+                        responseText.innerHTML = content;
                     }
                 } else {
                     responseText.style.display = 'block';
-                    responseText.textContent = content;
+                    responseText.innerHTML = content;
                 }
             } catch (error) {
                 if (retryCount < MAX_RETRIES) {
-                    responseText.textContent = `Error occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
+                    responseText.innerHTML = `Error occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
                     await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
                     return makeApiRequest(retryCount + 1);
                 } else {
-                    responseText.textContent = `Error after ${MAX_RETRIES} attempts: ${error.message}`;
+                    responseText.innerHTML = `Error after ${MAX_RETRIES} attempts: ${error.message}`;
                 }
             }
         }
