@@ -9,7 +9,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <title>Zionism Research Tool v64</title>
+    <title>Zionism Research Tool v65</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -216,7 +216,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v64</header>
+        <header>Zionism Research Tool v65</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -697,7 +697,30 @@ Use a name-value pair for the data within contextual_analysis, classification, s
 
 
 
-
+<div id="search-bar">
+    <input 
+      type="text" 
+      id="search-input" 
+      placeholder="Enter a location (e.g., Jerusalem)" 
+      style="width: 70%; padding: 8px;">
+    <button 
+      id="search-button" 
+      style="padding: 8px 16px;">Search</button>
+  </div>
+  
+  <!-- Map Container -->
+  <div id="map-container">
+    <iframe
+      id="map-iframe"
+      width="100%"
+      height="600"
+      style="border:0;"
+      loading="lazy"
+      allowfullscreen
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ&q=Israel">
+    </iframe>
+  </div>
  
   
 
@@ -905,30 +928,7 @@ function createKeyValuePairs(obj) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-  <div id="search-bar">
-    <input 
-      type="text" 
-      id="search-input" 
-      placeholder="Enter a location (e.g., Jerusalem)" 
-      style="width: 70%; padding: 8px;">
-    <button 
-      id="search-button" 
-      style="padding: 8px 16px;">Search</button>
-  </div>
   
-  <!-- Map Container -->
-  <div id="map-container">
-    <iframe
-      id="map-iframe"
-      width="100%"
-      height="600"
-      style="border:0;"
-      loading="lazy"
-      allowfullscreen
-      referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ&q=Israel">
-    </iframe>
-  </div>
 
   <script>
     document.getElementById("search-button").addEventListener("click", function () {
