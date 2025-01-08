@@ -707,7 +707,7 @@ Use a name-value pair for the data within contextual_analysis, classification, s
       style="width: 70%; padding: 8px;">
     <button 
       id="search-button" 
-      style="padding: 8px 16px;">Search</button>
+      style="padding: 8px 16px;" onclick="searchMap();">Search</button>
   </div>
   <BR>
   <!-- Map Container -->
@@ -933,7 +933,7 @@ function createKeyValuePairs(obj) {
   
 
   <script>
-    document.getElementById("search-button").addEventListener("click", function () {
+    function searchMap() {
       // Get the user's search input
       const searchInput = document.getElementById("search-input").value.trim();
       
@@ -947,7 +947,7 @@ function createKeyValuePairs(obj) {
       } else {
         alert("Please enter a location to search.");
       }
-    });
+    }
   </script>
   
     
