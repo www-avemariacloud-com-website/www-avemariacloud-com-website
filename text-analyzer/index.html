@@ -364,8 +364,13 @@
         .key {
             font-weight: 500;
             color: var(--text-secondary);
-            width: 150px;
+            width: 200px;
             flex-shrink: 0;
+            padding-right:6px;
+              white-space: normal; /* Ensures text wraps to the next line */
+              word-wrap: break-word; /* Breaks long words to wrap to the next line */
+              word-break: break-word; /* Provides support for older browsers */
+              overflow-wrap: break-word; /* Ensures wrapping in modern browsers */
         }
 
         .value {
@@ -472,32 +477,37 @@
 
 
         async function analyzeText() {
-            const inputText = document.getElementById("inputText").value;
-            const selectedModel = document.getElementById("aiModel").value;
-            const selectedPrompt = document.getElementById("aiPrompt").value;
             
-            if (!inputText) {
-                showError("Please enter a statement to analyze.");
-                return;
+        const inputText = document.getElementById("inputText").value;
+        const selectedModel = document.getElementById("aiModel").value;
+        const selectedPrompt = document.getElementById("aiPrompt").value;
+    
+        if (!inputText) {
+            showError("Please enter some text to analyze.");
+            return;
+        }
+    
+        const loading = document.getElementById("loading");
+        const result = document.getElementById("result");
+        const error = document.getElementById("error");
+    
+        loading.style.display = "block";
+        result.style.display = "none";
+        error.style.display = "none";
+    
+        const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
+        const requestData = {
+            model: selectedModel,
+            messages: createPromptMessages(selectedPrompt, inputText),
+            response_format: {
+                type: "json_object"
             }
-
-            const loading = document.getElementById("loading");
-            const result = document.getElementById("result");
-            const error = document.getElementById("error");
-
-            loading.style.display = "block";
-            result.style.display = "none";
-            error.style.display = "none";
-
-            const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
-            const requestData = {
-                model: selectedModel,
-                messages: createPromptMessages(selectedPrompt, inputText),
-                response_format: {
-                    type: "json_object"
-                }
-            };
-
+        };
+    
+        const maxRetries = 6; // Configurable number of retries
+        let attempt = 0;
+    
+        while (attempt < maxRetries) {
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -507,23 +517,30 @@
                     },
                     body: JSON.stringify(requestData),
                 });
-
+    
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
+    
                 const data = await response.json();
                 const analysisResult = JSON.parse(data.choices[0].message.content);
-
+    
                 messageHistory.push({ role: "user", content: inputText });
                 messageHistory.push({ role: "assistant", content: data.choices[0].message.content });
-
+    
                 displayResults(analysisResult);
                 loading.style.display = "none";
                 result.style.display = "block";
-            } catch (error) {
+                return; // Exit the function if successful
+        } catch (error) {
+            attempt++;
+            if (attempt >= maxRetries) {
                 showError("An error occurred while analyzing the text. Please try again.");
                 loading.style.display = "none";
+            } else {
+                console.warn(`Retrying... (${attempt}/${maxRetries})`);
+                    }
+                }
             }
         }
 
