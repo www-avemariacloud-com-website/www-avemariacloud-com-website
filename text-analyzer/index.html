@@ -500,7 +500,8 @@
 
                 const data = await response.json();
                 const analysisResult = JSON.parse(data.choices[0].message.content);
-                
+
+                messageHistory.push({ role: "user", content: inputText });
                 messageHistory.push({ role: "assistant", content: data.choices[0].message.content });
 
                 displayResults(analysisResult);
