@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Text Analyzer v4.0</title>
+    <title>Text Analyzer v4.2</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -97,7 +97,7 @@
         }
 
         textarea.input-field {
-            min-height: 120px;
+            
             resize: vertical;
         }
 
@@ -188,7 +188,6 @@
 
         .chat-input {
             flex: 1;
-            height: 3em;
         }
 
         .send-button {
@@ -391,7 +390,7 @@
         <div class="card">
             <h2 class="card-title">Input Text</h2>
             <div class="input-group">
-            <textarea id="inputText" class="input-field" placeholder="Enter your text here..."></textarea>
+            <textarea rows="9" id="inputText" class="input-field" placeholder="Enter your text here..."></textarea>
             </div>
 
             <div class="grid">
@@ -429,7 +428,7 @@
             <h2 class="card-title">Research Assistant</h2>
             <div id="chat-box" class="chat-container"></div>
             <div class="chat-input-container">
-                <input type="text" rows="3" id="user-input" class="input-field chat-input" placeholder="You can type a message here...">
+                <textarea rows="3" id="user-input" class="input-field chat-input" placeholder="You can type a message here..."></textarea>
                 <button id="send-button" class="send-button">Send</button>
             </div>
         </div>
