@@ -848,52 +848,69 @@ Respond in JSON.`
         }
 
         async function sendMessage() {
-            const userInput = document.getElementById("user-input");
-            const chatBox = document.getElementById("chat-box");
-            const message = userInput.value.trim();
+    const userInput = document.getElementById("user-input");
+    const chatBox = document.getElementById("chat-box");
+    const message = userInput.value.trim();
 
-            if (!message) return;
+    if (!message) return;
 
-            // Add user message to chat
-            addMessageToChat('user', message);
-            userInput.value = '';
+    // Add user message to chat
+    addMessageToChat('user', message);
+    userInput.value = '';
 
-            // Add to message history
-            messageHistory.push({ role: "user", content: message });
+    // Add to message history
+    messageHistory.push({ role: "user", content: message });
 
-            // Prepare API request
-            const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
-            const requestData = {
-                model: document.getElementById("aiModel").value,
-                messages: messageHistory
-            };
+    // Prepare API request
+    const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
+    const requestData = {
+        model: document.getElementById("aiModel").value,
+        messages: messageHistory
+    };
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer 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"
-                    },
-                    body: JSON.stringify(requestData)
-                });
+    const maxRetries = 3; // Configurable retry limit
+    const retryDelay = 1000; // Configurable delay in milliseconds
 
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status}`);
-                }
+    let attempts = 0;
 
-                const data = await response.json();
-                const botReply = data.choices[0].message.content;
+    while (attempts < maxRetries) {
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer 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"
+                },
+                body: JSON.stringify(requestData)
+            });
 
-                //const formattedText = botReply.replace(/\n/g, '<br>');
-                // Add bot message to chat
-                addMessageToChat('bot', botReply);
-                
-                messageHistory.push({ role: "assistant", content: botReply });
-            } catch (error) {
-                addMessageToChat('bot', 'Sorry, I encountered an error. Please try again.');
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
             }
+
+            const data = await response.json();
+            const botReply = data.choices[0].message.content;
+
+            // Add bot message to chat
+            addMessageToChat('bot', botReply);
+
+            messageHistory.push({ role: "assistant", content: botReply });
+            return; // Exit the function after a successful request
+        } catch (error) {
+            attempts++;
+            if (attempts >= maxRetries) {
+                addMessageToChat('bot', 'Sorry, I encountered an error. Please try again.');
+                console.error(`Failed after ${maxRetries} attempts:`, error);
+                return;
+            }
+            console.warn(`Retrying... (${attempts}/${maxRetries})`);
+            await new Promise(resolve => setTimeout(resolve, retryDelay)); // Wait before retrying
         }
+    }
+}
+
+
+        
 
         function addMessageToChat(role, content) {
             const chatBox = document.getElementById("chat-box");
