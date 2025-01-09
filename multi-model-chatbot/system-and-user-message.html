@@ -232,10 +232,10 @@
                     // Extract and display error response
                     const errorDetails = await response.json();
                     console.error("Error response:", errorDetails);
-                
+                    
                     // Optionally display a user-friendly message
-                    const errorMessage = errorDetails.message || "An error occurred while processing the request.";
-                    alert(errorMessage);
+                    const errorMessage = errorDetails.error.message || "An error occurred while processing the request.";
+                    //alert(errorMessage);
                 
                     throw new Error(errorMessage);
                 }
