@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Zionism Research Tool v70.8</title>
+    <title>Zionism Research Tool v70.9</title>
     <style>
         :root {
             --primary-color: #0000f7;
@@ -366,6 +366,7 @@
             color: var(--text-secondary);
             width: 200px;
             flex-shrink: 0;
+            padding-right:6px;
               white-space: normal; /* Ensures text wraps to the next line */
               word-wrap: break-word; /* Breaks long words to wrap to the next line */
               word-break: break-word; /* Provides support for older browsers */
@@ -387,12 +388,12 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Zionism Research Tool v70.8 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Zionism Research Tool v70.9 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
             <p>A tool that can analyze text with AI</p>
         </header>
 
         <div class="card">
-            <h2 class="card-title">Input Text</h2>
+            <h2 class="card-title">Text Analyzer</h2>
             <div class="input-group">
             <textarea rows="9" id="inputText" class="input-field" placeholder="Enter your text here..."></textarea>
             </div>
@@ -432,11 +433,48 @@
         </div>
 
         <div class="card">
-            <h2 class="card-title">Research Assistant</h2>
+            <h2 class="card-title">Chatbot</h2>
             <div id="chat-box" class="chat-container"></div>
             <div class="chat-input-container">
                 <textarea rows="3" id="user-input" class="input-field chat-input" placeholder="You can type a message here..."></textarea>
                 <button id="send-button" class="send-button">Send</button>
+            </div>
+        </div>
+
+        <div class="card">
+
+            <h2 class="card-title">Google Maps</h2>
+
+            <div id="search-bar" style="display: flex; width: 100%; gap: 8px;">
+                <input 
+                    class="input-field chat-input"
+                    type="text" 
+                    id="search-input" 
+                    placeholder="Enter a location (e.g., Jerusalem)" 
+                    style="flex: 1; padding: 8px; box-sizing: border-box;">
+                <button 
+                    class="send-button"
+                    id="search-button" 
+                    style="padding: 8px 16px; box-sizing: border-box;" 
+                    onclick="searchMap();">
+                    Search
+                </button>
+            </div>
+            
+            
+            <BR>
+            <!-- Map Container -->
+            <div id="map-container">
+                <iframe
+                id="map-iframe"
+                width="100%"
+                height="600"
+                style="border:0;"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ&q=Israel">
+                </iframe>
             </div>
         </div>
 
@@ -477,6 +515,12 @@
             }
         });
 
+        document.getElementById("search-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                searchMap();
+            }
+        });
+
 
         
 
@@ -488,7 +532,7 @@
         const selectedPrompt = document.getElementById("aiPrompt").value;
     
         if (!inputText) {
-            showError("Please enter a statement to analyze.");
+            showError("Please enter some text to analyze.");
             return;
         }
     
@@ -648,7 +692,10 @@ Deliver your findings with a detailed explanation, identifying problematic eleme
             return [
                 {
                     role: "system",
-                    content: `${prompts[promptType]}\n\nPlease use proper spacing in JSON labels. Respond in JSON.`
+                    content: `${prompts[promptType]}
+                    
+Please use proper spacing in JSON labels.
+Respond in JSON.`
                 },
                 {
                     role: "user",
@@ -856,6 +903,26 @@ Deliver your findings with a detailed explanation, identifying problematic eleme
             chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        
     </script>
+
+<script>
+    function searchMap() {
+      // Get the user's search input
+      const searchInput = document.getElementById("search-input").value.trim();
+      
+      if (searchInput) {
+        // Construct the new iframe source URL
+        const apiKey = "AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ";
+        const newSrc = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(searchInput)}`;
+        
+        // Update the iframe's src attribute
+        document.getElementById("map-iframe").src = newSrc;
+      } else {
+        alert("Please enter a location to search.");
+      }
+    }
+  </script>
 </body>
 </html>
