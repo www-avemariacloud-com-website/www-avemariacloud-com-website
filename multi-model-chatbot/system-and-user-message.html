@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>AI Research Tool v1.7</title>
+    <title>AI Research Tool v1.8</title>
     <style>
         /* General Reset */
         * {
@@ -161,7 +161,7 @@
 </head>
 <body>
     <div class="app-container">
-        <div class="header">AI Research Tool v1.7</div>
+        <div class="header">AI Research Tool v1.8</div>
         <div class="content">
             <div>
                 <label for="system-message">System Message</label>
@@ -229,7 +229,12 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`API Error: ${response.statusText}`);
+                    
+                const data = await response.json();
+                const content = data.choices[0]?.message?.content || "No response received.";
+                const jsonContent = JSON.parse(content);
+                    
+                    throw new Error(JSON.stringify(jsonContent, null, 2));
                 }
 
                 const data = await response.json();
