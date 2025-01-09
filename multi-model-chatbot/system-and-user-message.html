@@ -231,6 +231,10 @@
                 if (!response.ok) {
                     
                     console.log(response);
+
+                    var objString = JSON.stringify(response);
+                    
+                    throw new Error(objString);
                     
                 }
 
