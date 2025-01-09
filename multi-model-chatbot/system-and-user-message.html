@@ -230,9 +230,12 @@
 
                 if (!response.ok) {
                     
-                    console.log(response);
+                    const data = await response.json();
+                    const content = data.choices[0]?.message?.content || "No response received.";
+
+                    console.log(data);
+                    console.log(content);
                     
-                    throw new Error(response);
                 }
 
                 const data = await response.json();
