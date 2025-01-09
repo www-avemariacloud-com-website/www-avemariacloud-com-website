@@ -713,9 +713,9 @@
                 const data = await response.json();
                 const botReply = data.choices[0].message.content;
 
-                const formattedText = botReply.replace(/\n/g, '<br>');
+                //const formattedText = botReply.replace(/\n/g, '<br>');
                 // Add bot message to chat
-                addMessageToChat('bot', formattedText);
+                addMessageToChat('bot', botReply);
                 
                 messageHistory.push({ role: "assistant", content: botReply });
             } catch (error) {
