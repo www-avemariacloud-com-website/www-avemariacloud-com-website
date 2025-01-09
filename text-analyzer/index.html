@@ -554,7 +554,10 @@
             return [
                 {
                     role: "system",
-                    content: `${prompts[promptType]}\n\nRespond in JSON.`
+                    content: `${prompts[promptType]}
+
+Please use proper spacing in JSON labels.
+Respond in JSON.``
                 },
                 {
                     role: "user",
