@@ -229,7 +229,7 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(JSON.stringify(response));
+                    throw new Error(response);
                 }
 
                 const data = await response.json();
