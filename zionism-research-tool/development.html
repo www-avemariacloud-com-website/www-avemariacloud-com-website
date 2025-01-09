@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Zionism Research Tool v70.6</title>
+    <title>Zionism Research Tool v70.8</title>
     <style>
         :root {
-            --primary-color: #2563eb;
+            --primary-color: #0000f7;
             --primary-hover: #1d4ed8;
             --background-color: #f8fafc;
             --card-background: #ffffff;
@@ -364,9 +364,8 @@
         .key {
             font-weight: 500;
             color: var(--text-secondary);
-            width: 150px;
-            flex-grow: 1;
-            padding-right: 10px;
+            width: 200px;
+            flex-shrink: 0;
               white-space: normal; /* Ensures text wraps to the next line */
               word-wrap: break-word; /* Breaks long words to wrap to the next line */
               word-break: break-word; /* Provides support for older browsers */
@@ -388,7 +387,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;">Zionism Research Tool v70.6</h1>
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Zionism Research Tool v70.8 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
             <p>A tool that can analyze text with AI</p>
         </header>
 
@@ -432,14 +431,61 @@
             <div id="resultContent"></div>
         </div>
 
-        <div class="card">
-            <h2 class="card-title">Research Assistant</h2>
-            <div id="chat-box" class="chat-container"></div>
-            <div class="chat-input-container">
-                <textarea rows="3" id="user-input" class="input-field chat-input" placeholder="You can type a message here..."></textarea>
-                <button id="send-button" class="send-button">Send</button>
-            </div>
+<div class="card">
+    <h2 class="card-title">Research Assistant</h2>
+    <div class="tabs">
+        <button class="tab-button active" onclick="showTab('chat-tab')">Chatbot</button>
+        <button class="tab-button" onclick="showTab('map-tab')">Google Maps</button>
+    </div>
+    <div id="chat-tab" class="tab-content active">
+        <div id="chat-box" class="chat-container"></div>
+        <div class="chat-input-container">
+            <textarea rows="3" id="user-input" class="input-field chat-input" placeholder="You can type a message here..."></textarea>
+            <button id="send-button" class="send-button">Send</button>
         </div>
+    </div>
+    <div id="map-tab" class="tab-content">
+        <div id="search-bar">
+            <input 
+                type="text" 
+                id="search-input" 
+                placeholder="Enter a location (e.g., Jerusalem)" 
+                style="width: 70%; padding: 8px;">
+            <button 
+                id="search-button" 
+                style="padding: 8px 16px;" onclick="searchMap();">Search</button>
+        </div>
+        <br>
+        <div id="map-container">
+            <iframe
+                id="map-iframe"
+                width="100%"
+                height="400"
+                style="border:0;"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ&q=Israel">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+
+<script>
+function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab-content');
+    const buttons = document.querySelectorAll('.tab-button');
+
+    tabs.forEach(tab => tab.classList.remove('active'));
+    buttons.forEach(button => button.classList.remove('active'));
+
+    document.getElementById(tabId).classList.add('active');
+    document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+}
+</script>
+
+
 
         <footer class="footer">
             <p>By using this tool, maybe you should read and agree to these <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
