@@ -229,12 +229,7 @@
                 });
 
                 if (!response.ok) {
-                    
-                const data = await response.json();
-                const content = data.choices[0]?.message?.content || "No response received.";
-                const jsonContent = JSON.parse(content);
-                    
-                    throw new Error(JSON.stringify(jsonContent, null, 2));
+                    throw new Error(JSON.stringify(response));
                 }
 
                 const data = await response.json();
