@@ -6,7 +6,10 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zionism Research Tool v57.1</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Zionism Research Tool v69</title>
     <style>
         /* General Full-Screen and Full-Width Layout */
         body,
@@ -213,7 +216,7 @@
 
 <body>
     <div class="container">
-        <header>Zionism Research Tool v57.1</header>
+        <header>Zionism Research Tool v69</header>
 
         <div class="button-group">
           <button onclick="fillText('love')">Love</button>
@@ -635,9 +638,26 @@ Use a name-value pair for the data within contextual_analysis, classification, s
 
 
             resultContainer.innerHTML = resultContainer.innerHTML + `
-        <BR>
-            <h3>Research Assistant</h3>
-    <div id="chat-box" style="width: 100%; height: 400px; border: 1px solid #ccc; border-radius: 8px; overflow-y: auto; padding: 10px; background: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column;"></div>
+
+
+
+            <div class="container mt-4">
+
+            <h3>Additional Research</h3>
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">Chatbot</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false">Google Maps</button>
+      </li>
+    </ul>
+
+    <!-- Tabs Content -->
+    <div class="tab-content mt-3" id="myTabContent">
+      <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+        <div id="chat-box" style="width: 100%; height: 400px; border: 1px solid #ccc; border-radius: 8px; overflow-y: auto; padding: 10px; background: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column;"></div>
     <div style="width: 100%; margin-top: 10px; display: flex; gap: 10px;">
     <textarea id="user-input" 
               placeholder="Type your message here..." 
@@ -671,6 +691,53 @@ Use a name-value pair for the data within contextual_analysis, classification, s
         Send
     </button>
 </div>
+      </div>
+      <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+       
+
+
+
+
+
+<div id="search-bar">
+    <input 
+      type="text" 
+      id="search-input" 
+      placeholder="Enter a location (e.g., Jerusalem)" 
+      style="width: 70%; padding: 8px;">
+    <button 
+      id="search-button" 
+      style="padding: 8px 16px;" onclick="searchMap();">Search</button>
+  </div>
+  <BR>
+  <!-- Map Container -->
+  <div id="map-container">
+    <iframe
+      id="map-iframe"
+      width="100%"
+      height="400"
+      style="border:0;"
+      loading="lazy"
+      allowfullscreen
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ&q=Israel">
+    </iframe>
+  </div>
+ 
+  
+
+
+
+      
+
+    
+      </div>
+    </div>
+  </div>
+
+
+  
+    
 `;
             
             // Success - exit retry loop
@@ -857,8 +924,32 @@ function createKeyValuePairs(obj) {
         userInput.value = "";
         chatBox.scrollTop = chatBox.scrollHeight;
     }
-</script>
 
+      
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  
+
+  <script>
+    function searchMap() {
+      // Get the user's search input
+      const searchInput = document.getElementById("search-input").value.trim();
+      
+      if (searchInput) {
+        // Construct the new iframe source URL
+        const apiKey = "AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ";
+        const newSrc = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(searchInput)}`;
+        
+        // Update the iframe's src attribute
+        document.getElementById("map-iframe").src = newSrc;
+      } else {
+        alert("Please enter a location to search.");
+      }
+    }
+  </script>
+  
     
 </body>
 
