@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Text Analyzer v1.6</title>
+    <title>Text Analyzer v1.7</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -215,7 +215,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>Text Analyzer v1.6</h1>
+            <h1>Text Analyzer v1.7</h1>
             <p>A tool that can analyze text with AI</p>
         </header>
 
@@ -361,112 +361,141 @@
         }
 
         function displayResults(results) {
-            const resultContent = document.getElementById("resultContent");
-            
-            // Clear previous results
-            resultContent.innerHTML = '';
+        const resultContent = document.getElementById("resultContent");
+        resultContent.innerHTML = '';
 
-            // Create container for structured display
-            const container = document.createElement('div');
-            container.className = 'results-container';
+        const container = document.createElement('div');
+        container.className = 'results-container';
 
-            // Helper function to create result sections
-            function createSection(title, content) {
-                const section = document.createElement('div');
-                section.className = 'result-section';
-                
-                const header = document.createElement('div');
-                header.className = 'result-header';
-                
-                const titleElem = document.createElement('h3');
-                titleElem.className = 'result-title';
-                titleElem.textContent = title;
-                
-                header.appendChild(titleElem);
-                section.appendChild(header);
-
-                const contentElem = document.createElement('div');
-                contentElem.className = 'result-content';
-                
-                // Handle different types of content
-                if (Array.isArray(content)) {
-                    const keyFindings = document.createElement('div');
-                    keyFindings.className = 'key-findings';
-                    
-                    content.forEach((finding, index) => {
-                        const findingItem = document.createElement('div');
-                        findingItem.className = 'finding-item';
-                        
-                        const bullet = document.createElement('span');
-                        bullet.className = 'finding-bullet';
-                        bullet.textContent = (index + 1);
-                        
-                        const text = document.createElement('span');
-                        text.textContent = finding;
-                        
-                        findingItem.appendChild(bullet);
-                        findingItem.appendChild(text);
-                        keyFindings.appendChild(findingItem);
-                    });
-                    
-                    contentElem.appendChild(keyFindings);
-                } else if (typeof content === 'object') {
-                    const metricGrid = document.createElement('div');
-                    metricGrid.className = 'metric-grid';
-                    
-                    Object.entries(content).forEach(([key, value]) => {
-                        const metricCard = document.createElement('div');
-                        metricCard.className = 'metric-card';
-                        
-                        const label = document.createElement('div');
-                        label.className = 'metric-label';
-                        label.textContent = key.replace(/_/g, ' ').toUpperCase();
-                        
-                        const metricValue = document.createElement('div');
-                        metricValue.className = 'metric-value';
-                        
-                        if (typeof value === 'number' && key.includes('confidence')) {
-                            metricValue.textContent = `${(value * 100).toFixed(1)}%`;
-                            
-                            const confidenceBar = document.createElement('div');
-                            confidenceBar.className = 'confidence-bar';
-                            
-                            const confidenceFill = document.createElement('div');
-                            confidenceFill.className = 'confidence-fill';
-                            confidenceFill.style.width = `${value * 100}%`;
-                            
-                            confidenceBar.appendChild(confidenceFill);
-                            metricCard.appendChild(label);
-                            metricCard.appendChild(metricValue);
-                            metricCard.appendChild(confidenceBar);
-                        } else {
-                            metricValue.textContent = value;
-                            metricCard.appendChild(label);
-                            metricCard.appendChild(metricValue);
-                        }
-                        
-                        metricGrid.appendChild(metricCard);
-                    });
-                    
-                    contentElem.appendChild(metricGrid);
-                } else {
-                    contentElem.textContent = content;
-                }
-                
-                section.appendChild(contentElem);
-                return section;
+        function formatValue(value) {
+            if (value === null || value === undefined) {
+                return 'N/A';
             }
+            if (typeof value === 'number') {
+                return value.toLocaleString();
+            }
+            if (typeof value === 'boolean') {
+                return value ? 'Yes' : 'No';
+            }
+            return String(value);
+        }
 
-            // Process each key in the results object
-            Object.entries(results).forEach(([key, value]) => {
-                container.appendChild(createSection(
-                    key.replace(/_/g, ' ').toUpperCase(),
-                    value
-                ));
+        function createObjectDisplay(obj, level = 0) {
+            const container = document.createElement('div');
+            container.className = level > 0 ? 'nested-object' : '';
+
+            Object.entries(obj).forEach(([key, value]) => {
+                const pair = document.createElement('div');
+                pair.className = 'key-value-pair';
+
+                const keyElem = document.createElement('div');
+                keyElem.className = 'key';
+                keyElem.textContent = key.replace(/_/g, ' ').toUpperCase();
+
+                const valueElem = document.createElement('div');
+                valueElem.className = 'value';
+
+                if (typeof value === 'object' && value !== null) {
+                    if (Array.isArray(value)) {
+                        valueElem.appendChild(createFindingsList(value));
+                    } else {
+                        valueElem.appendChild(createObjectDisplay(value, level + 1));
+                    }
+                } else {
+                    valueElem.textContent = formatValue(value);
+
+                    if (key.toLowerCase().includes('confidence') || key.toLowerCase().includes('score')) {
+                        const percentage = parseFloat(value) * 100;
+                        valueElem.textContent = `${percentage.toFixed(1)}%`;
+
+                        const confidenceBar = document.createElement('div');
+                        confidenceBar.className = 'confidence-bar';
+                        
+                        const confidenceFill = document.createElement('div');
+                        confidenceFill.className = 'confidence-fill';
+                        confidenceFill.style.width = `${percentage}%`;
+                        
+                        valueElem.appendChild(confidenceBar);
+                        confidenceBar.appendChild(confidenceFill);
+                    }
+                }
+
+                pair.appendChild(keyElem);
+                pair.appendChild(valueElem);
+                container.appendChild(pair);
             });
 
-            resultContent.appendChild(container);
+            return container;
         }
+
+        function createFindingsList(findings) {
+            const list = document.createElement('div');
+            list.className = 'findings-list';
+
+            findings.forEach((finding, index) => {
+                const item = document.createElement('div');
+                item.className = 'finding-item';
+
+                const number = document.createElement('div');
+                number.className = 'finding-number';
+                number.textContent = index + 1;
+
+                const content = document.createElement('div');
+                content.className = 'finding-content';
+
+                if (typeof finding === 'object' && finding !== null) {
+                    content.appendChild(createObjectDisplay(finding));
+                } else {
+                    content.textContent = formatValue(finding);
+                }
+
+                item.appendChild(number);
+                item.appendChild(content);
+                list.appendChild(item);
+            });
+
+            return list;
+                }
+        
+                Object.entries(results).forEach(([key, value]) => {
+                    const section = document.createElement('div');
+                    section.className = 'result-section';
+        
+                    const header = document.createElement('div');
+                    header.className = 'result-header';
+        
+                    const title = document.createElement('h3');
+                    title.className = 'result-title';
+                    title.textContent = key.replace(/_/g, ' ').toUpperCase();
+        
+                    header.appendChild(title);
+                    section.appendChild(header);
+        
+                    if (typeof value === 'object' && value !== null) {
+                        if (Array.isArray(value)) {
+                            section.appendChild(createFindingsList(value));
+                        } else {
+                            section.appendChild(createObjectDisplay(value));
+                        }
+                    } else {
+                        const content = document.createElement('div');
+                        content.className = 'result-content';
+                        content.textContent = formatValue(value);
+                        section.appendChild(content);
+                    }
+        
+                    container.appendChild(section);
+                });
+        
+                resultContent.appendChild(container);
+        
+                // Animate confidence bars after render
+                setTimeout(() => {
+                    document.querySelectorAll('.confidence-fill').forEach(bar => {
+                        bar.style.transition = 'width 1s ease-out';
+                    });
+                }, 100);
+            }
 
         function showError(message) {
             const error = document.getElementById("error");
