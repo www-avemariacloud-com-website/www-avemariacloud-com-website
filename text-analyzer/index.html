@@ -501,6 +501,8 @@
                 const data = await response.json();
                 const analysisResult = JSON.parse(data.choices[0].message.content);
                 
+                messageHistory.push({ role: "assistant", content: data.choices[0].message.content });
+
                 displayResults(analysisResult);
                 loading.style.display = "none";
                 result.style.display = "block";
