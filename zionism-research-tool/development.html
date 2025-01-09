@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Zionism Research Tool v70.4</title>
+    <title>Zionism Research Tool v70.5</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -388,7 +388,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;">Zionism Research Tool v70.4</h1>
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;">Zionism Research Tool v70.5</h1>
             <p>A tool that can analyze text with AI</p>
         </header>
 
@@ -479,33 +479,41 @@
         });
 
 
+        
+
+
         async function analyzeText() {
-            const inputText = document.getElementById("inputText").value;
-            const selectedModel = document.getElementById("aiModel").value;
-            const selectedPrompt = document.getElementById("aiPrompt").value;
             
-            if (!inputText) {
-                showError("Please enter a statement to analyze.");
-                return;
+        const inputText = document.getElementById("inputText").value;
+        const selectedModel = document.getElementById("aiModel").value;
+        const selectedPrompt = document.getElementById("aiPrompt").value;
+    
+        if (!inputText) {
+            showError("Please enter a statement to analyze.");
+            return;
+        }
+    
+        const loading = document.getElementById("loading");
+        const result = document.getElementById("result");
+        const error = document.getElementById("error");
+    
+        loading.style.display = "block";
+        result.style.display = "none";
+        error.style.display = "none";
+    
+        const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
+        const requestData = {
+            model: selectedModel,
+            messages: createPromptMessages(selectedPrompt, inputText),
+            response_format: {
+                type: "json_object"
             }
-
-            const loading = document.getElementById("loading");
-            const result = document.getElementById("result");
-            const error = document.getElementById("error");
-
-            loading.style.display = "block";
-            result.style.display = "none";
-            error.style.display = "none";
-
-            const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
-            const requestData = {
-                model: selectedModel,
-                messages: createPromptMessages(selectedPrompt, inputText),
-                response_format: {
-                    type: "json_object"
-                }
-            };
-
+        };
+    
+        const maxRetries = 6; // Configurable number of retries
+        let attempt = 0;
+    
+        while (attempt < maxRetries) {
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -515,25 +523,37 @@
                     },
                     body: JSON.stringify(requestData),
                 });
-
+    
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
+    
                 const data = await response.json();
                 const analysisResult = JSON.parse(data.choices[0].message.content);
-
+    
                 messageHistory.push({ role: "user", content: inputText });
                 messageHistory.push({ role: "assistant", content: data.choices[0].message.content });
-
+    
                 displayResults(analysisResult);
                 loading.style.display = "none";
                 result.style.display = "block";
+                return; // Exit the function if successful
             } catch (error) {
-                showError("An error occurred while analyzing the text. Please try again.");
-                loading.style.display = "none";
+                attempt++;
+                if (attempt >= maxRetries) {
+                    showError("An error occurred while analyzing the text. Please try again.");
+                    loading.style.display = "none";
+                } else {
+                    console.warn(`Retrying... (${attempt}/${maxRetries})`);
+                        }
+                    }
+                }
             }
-        }
+    
+            
+
+
+        
 
         function createPromptMessages(promptType, inputText) {
 
