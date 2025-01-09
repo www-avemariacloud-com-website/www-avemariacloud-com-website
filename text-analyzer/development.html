@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <title>Text Analyzer v3.7</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --error-color: #ef4444;
+            --success-color: #22c55e;
+            --highlight-bg: #f8fafc;
+            --tag-bg: #e5e7eb;
+            --gradient-start: #60a5fa;
+            --gradient-end: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+        }
+
+        .card {
+            background: var(--card-background);
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.15s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea.input-field {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        select.input-field {
+            background-color: white;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            width: 100%;
+        }
+
+        .button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: #fee2e2;
+            color: var(--error-color);
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+        }
+
+        .message.user {
+            background-color: #dbeafe;
+            margin-left: auto;
+        }
+
+        .message.bot {
+            background-color: white;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+        }
+
+        .send-button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+
+
+
+
+
+
+
+        .results-container {
+        }
+
+        .result-section {
+            background: var(--highlight-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .result-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .result-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .result-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 1.5em;
+            background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+            border-radius: 2px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .confidence-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            border-radius: 3px;
+            transition: width 1s ease-out;
+        }
+
+        .finding-item {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            transition: transform 0.2s ease;
+        }
+
+        .finding-item:hover {
+            transform: translateX(4px);
+        }
+
+        .finding-number {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .finding-content {
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .key-value-pair {
+            display: flex;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .key-value-pair:nth-child(even) {
+            background: var(--highlight-bg);
+        }
+
+        .key {
+            font-weight: 500;
+            color: var(--text-secondary);
+            width: 150px;
+            flex-shrink: 0;
+        }
+
+        .value {
+            color: var(--text-primary);
+            flex-grow: 1;
+        }
+
+        .nested-object {
+            margin-left: 1.5rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Text Analyzer v3.7</h1>
+            <p>A tool that can analyze text with AI</p>
+        </header>
+
+        <div class="card">
+            <h2 class="card-title">Input Text</h2>
+            <div class="input-group">
+                <textarea height="2" id="inputText" class="input-field" placeholder="Enter your text here..."></textarea>
+            </div>
+
+            <div class="grid">
+                <div class="input-group">
+                    <label for="aiModel">Select AI Model</label>
+                    <select id="aiModel" class="input-field">
+                        <option value="gemma2-9b-it">Gemma 2 9B</option>
+                        <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 90B Vision</option>
+                        <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="aiPrompt">Select Prompt Type</label>
+                    <select id="aiPrompt" class="input-field">
+                        <option value="detect_secrets" selected>Detect Secrets</option>
+                        <option value="summarize_text">Summarize Text</option>
+                        <option value="elaborate_text">Elaborate Text</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="submitBtn" class="button">Analyze Text</button>
+        </div>
+
+        <div id="error" class="alert"></div>
+        <div id="loading" class="loading">Analyzing with Artificial Intelligence...</div>
+
+        <div id="result" class="card" style="display: none;">
+            <h2 class="card-title">Analysis Results</h2>
+            <div id="resultContent"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Research Assistant</h2>
+            <div id="chat-box" class="chat-container"></div>
+            <div class="chat-input-container">
+                <input type="text" id="user-input" class="input-field chat-input" placeholder="Type your message here...">
+                <button id="send-button" class="send-button">Send</button>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>By using this tool, maybe you should read and agree to these <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
+        	<BR>
+            <strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.
+            <BR>
+              <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.
+             <BR>
+            <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.
+        </footer>
+    </div>
+
+    <script>
+        // Initialize message history
+        let messageHistory = [
+            { role: "system", content: "You are a chatbot designed to help with users with a web application called Text Analyzer" }
+        ];
+
+        // Event Listeners
+        document.getElementById("submitBtn").addEventListener("click", analyzeText);
+        document.getElementById("send-button").addEventListener("click", sendMessage);
+        document.getElementById("user-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") sendMessage();
+        });
+
+        async function analyzeText() {
+            const inputText = document.getElementById("inputText").value;
+            const selectedModel = document.getElementById("aiModel").value;
+            const selectedPrompt = document.getElementById("aiPrompt").value;
+            
+            if (!inputText) {
+                showError("Please enter a statement to analyze.");
+                return;
+            }
+
+            const loading = document.getElementById("loading");
+            const result = document.getElementById("result");
+            const error = document.getElementById("error");
+
+            loading.style.display = "block";
+            result.style.display = "none";
+            error.style.display = "none";
+
+            const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
+            const requestData = {
+                model: selectedModel,
+                messages: createPromptMessages(selectedPrompt, inputText),
+                response_format: {
+                    type: "json_object"
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer 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',
+                    },
+                    body: JSON.stringify(requestData),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const analysisResult = JSON.parse(data.choices[0].message.content);
+
+                messageHistory.push({ role: "user", content: inputText });
+                messageHistory.push({ role: "assistant", content: data.choices[0].message.content });
+
+                displayResults(analysisResult);
+                loading.style.display = "none";
+                result.style.display = "block";
+            } catch (error) {
+                showError("An error occurred while analyzing the text. Please try again.");
+                loading.style.display = "none";
+            }
+        }
+
+        function createPromptMessages(promptType, inputText) {
+            const prompts = {
+                detect_secrets: "I am interested in detecting secrets.",
+                summarize_text: "I am interested in summarizing text.",
+                elaborate_text: "I am interested in elaborating text."
+            };
+
+            return [
+                {
+                    role: "system",
+                    content: `${prompts[promptType]}\n\nRespond in JSON.`
+                },
+                {
+                    role: "user",
+                    content: `"${inputText}"`
+                }
+            ];
+        }
+
+        function displayResults(results) {
+        const resultContent = document.getElementById("resultContent");
+        resultContent.innerHTML = '';
+
+        const container = document.createElement('div');
+        container.className = 'results-container';
+
+        function formatValue(value) {
+            if (value === null || value === undefined) {
+                return 'N/A';
+            }
+            if (typeof value === 'number') {
+                return value.toLocaleString();
+            }
+            if (typeof value === 'boolean') {
+                return value ? 'Yes' : 'No';
+            }
+            return String(value);
+        }
+
+        function createObjectDisplay(obj, level = 0) {
+            const container = document.createElement('div');
+            container.className = level > 0 ? 'nested-object' : '';
+
+            Object.entries(obj).forEach(([key, value]) => {
+                const pair = document.createElement('div');
+                pair.className = 'key-value-pair';
+
+                const keyElem = document.createElement('div');
+                keyElem.className = 'key';
+                keyElem.textContent = key.replace(/_/g, ' ').toUpperCase();
+
+                const valueElem = document.createElement('div');
+                valueElem.className = 'value';
+
+                if (typeof value === 'object' && value !== null) {
+                    if (Array.isArray(value)) {
+                        valueElem.appendChild(createFindingsList(value));
+                    } else {
+                        valueElem.appendChild(createObjectDisplay(value, level + 1));
+                    }
+                } else {
+                    valueElem.textContent = formatValue(value);
+
+                    if (key.toLowerCase().includes('confidence') || key.toLowerCase().includes('score')) {
+                        const percentage = parseFloat(value) * 100;
+                        valueElem.textContent = `${percentage.toFixed(1)}%`;
+
+                        const confidenceBar = document.createElement('div');
+                        confidenceBar.className = 'confidence-bar';
+                        
+                        const confidenceFill = document.createElement('div');
+                        confidenceFill.className = 'confidence-fill';
+                        confidenceFill.style.width = `${percentage}%`;
+                        
+                        valueElem.appendChild(confidenceBar);
+                        confidenceBar.appendChild(confidenceFill);
+                    }
+                }
+
+                pair.appendChild(keyElem);
+                pair.appendChild(valueElem);
+                container.appendChild(pair);
+            });
+
+            return container;
+        }
+
+        function createFindingsList(findings) {
+            const list = document.createElement('div');
+            list.className = 'findings-list';
+
+            findings.forEach((finding, index) => {
+                const item = document.createElement('div');
+                item.className = 'finding-item';
+
+                const number = document.createElement('div');
+                number.className = 'finding-number';
+                number.textContent = index + 1;
+
+                const content = document.createElement('div');
+                content.className = 'finding-content';
+
+                if (typeof finding === 'object' && finding !== null) {
+                    content.appendChild(createObjectDisplay(finding));
+                } else {
+                    content.textContent = formatValue(finding);
+                }
+
+                item.appendChild(number);
+                item.appendChild(content);
+                list.appendChild(item);
+            });
+
+            return list;
+                }
+        
+                Object.entries(results).forEach(([key, value]) => {
+                    const section = document.createElement('div');
+                    section.className = 'result-section';
+        
+                    const header = document.createElement('div');
+                    header.className = 'result-header';
+        
+                    const title = document.createElement('h3');
+                    title.className = 'result-title';
+                    title.textContent = key.replace(/_/g, ' ').toUpperCase();
+        
+                    header.appendChild(title);
+                    section.appendChild(header);
+        
+                    if (typeof value === 'object' && value !== null) {
+                        if (Array.isArray(value)) {
+                            section.appendChild(createFindingsList(value));
+                        } else {
+                            section.appendChild(createObjectDisplay(value));
+                        }
+                    } else {
+                        const content = document.createElement('div');
+                        content.className = 'result-content';
+                        content.textContent = formatValue(value);
+                        section.appendChild(content);
+                    }
+        
+                    container.appendChild(section);
+                });
+        
+                resultContent.appendChild(container);
+        
+                // Animate confidence bars after render
+                setTimeout(() => {
+                    document.querySelectorAll('.confidence-fill').forEach(bar => {
+                        bar.style.transition = 'width 1s ease-out';
+                    });
+                }, 100);
+            }
+
+        function showError(message) {
+            const error = document.getElementById("error");
+            error.textContent = message;
+            error.style.display = "block";
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById("user-input");
+            const chatBox = document.getElementById("chat-box");
+            const message = userInput.value.trim();
+
+            if (!message) return;
+
+            // Add user message to chat
+            addMessageToChat('user', message);
+            userInput.value = '';
+
+            // Add to message history
+            messageHistory.push({ role: "user", content: message });
+
+            // Prepare API request
+            const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
+            const requestData = {
+                model: document.getElementById("aiModel").value,
+                messages: messageHistory
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer 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"
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const botReply = data.choices[0].message.content;
+
+                //const formattedText = botReply.replace(/\n/g, '<br>');
+                // Add bot message to chat
+                addMessageToChat('bot', botReply);
+                
+                messageHistory.push({ role: "assistant", content: botReply });
+            } catch (error) {
+                addMessageToChat('bot', 'Sorry, I encountered an error. Please try again.');
+            }
+        }
+
+        function addMessageToChat(role, content) {
+            const chatBox = document.getElementById("chat-box");
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `message ${role}`;
+            messageDiv.innerHTML = content.replace(/\n/g, '<br>'); // Convert \n to <br> for line breaks
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
