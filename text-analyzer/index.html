@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Text Analyzer v4.7</title>
+    <title>Text Analyzer v4.8</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -388,14 +388,14 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Text Analyzer v4.7 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Text Analyzer v4.8 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
             <p>A tool that can analyze text with AI</p>
         </header>
 
         <div class="card">
             <h2 class="card-title">Text Analyzer</h2>
             <div class="input-group">
-            <textarea rows="9" id="inputText" class="input-field" placeholder="Enter your text here..."></textarea>
+            <textarea rows="9" id="inputText" class="input-field" placeholder="You can enter text here..."></textarea>
             </div>
 
             <div class="grid">
@@ -452,7 +452,7 @@
     <script>
         // Initialize message history
         let messageHistory = [
-            { role: "system", content: "You are a chatbot designed to help with users with a web application called Text Analyzer" }
+            { role: "system", content: "You are a chatbot designed to help users with a web application called Text Analyzer" }
         ];
 
         // Event Listeners
@@ -483,7 +483,7 @@
         const selectedPrompt = document.getElementById("aiPrompt").value;
     
         if (!inputText) {
-            showError("Please enter some text to analyze.");
+            showError("You can enter some text to analyze.");
             return;
         }
     
