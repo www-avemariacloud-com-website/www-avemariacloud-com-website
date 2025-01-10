@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Zionism Research Tool v71.2</title>
+    <title>Zionism Research Tool v71.3</title>
     <style>
         :root {
             --primary-color: #0000f7;
@@ -388,7 +388,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Zionism Research Tool v71.2 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Zionism Research Tool v71.3 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
             <p>A tool that can analyze text with AI</p>
         </header>
 
@@ -492,7 +492,7 @@
     <script>
         // Initialize message history
         let messageHistory = [
-            { role: "system", content: "You are a chatbot designed to help with users with a web application called Zionism Research Tool" }
+            { role: "system", content: "You are a chatbot designed to help users with a web application called Zionism Research Tool" }
         ];
 
         // Event Listeners
@@ -584,7 +584,7 @@
             } catch (error) {
                 attempt++;
                 if (attempt >= maxRetries) {
-                    showError("An error occurred while analyzing the text. Please try again.");
+                    showError("An error occurred while analyzing the text. You can try again.");
                     loading.style.display = "none";
                 } else {
                     console.warn(`Retrying... (${attempt}/${maxRetries})`);
@@ -937,7 +937,7 @@ Respond in JSON.`
         // Update the iframe's src attribute
         document.getElementById("map-iframe").src = newSrc;
       } else {
-        alert("Please enter a location to search.");
+        alert("You can enter a location to search.");
       }
     }
   </script>
