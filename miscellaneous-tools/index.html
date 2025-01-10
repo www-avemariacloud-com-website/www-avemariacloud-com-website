@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Miscellaneous Tools v2.5</title>
+    <title>Miscellaneous Tools v2.6</title>
     <style>
         /* Modern CSS Reset and Base Styles */
         * {
@@ -154,7 +154,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>Miscellaneous Tools v2.5</h1>
+            <h1>Miscellaneous Tools v2.6</h1>
             <p>Generate responses using various models and prompts</p>
         </header>
         
@@ -175,7 +175,7 @@
 
             <div class="form-group">
                 <label for="message">Input</label>
-                <textarea id="message" placeholder="Enter your input here..."></textarea>
+                <textarea id="message" placeholder="You can enter text here..."></textarea>
             </div>
 
             <div class="form-group">
@@ -220,14 +220,14 @@
             })
             .catch(error => {
                 console.error('Error loading prompts:', error);
-                responseArea.value = 'Error loading prompts. Please try again later.';
+                responseArea.value = 'Error loading prompts. You can try again later.';
             });
 
         // Handle form submission
         submitButton.addEventListener('click', async () => {
             // Validation
             if (!messageInput.value.trim()) {
-                responseArea.value = 'Please enter a message.';
+                responseArea.value = 'You can enter a message.';
                 return;
             }
 
