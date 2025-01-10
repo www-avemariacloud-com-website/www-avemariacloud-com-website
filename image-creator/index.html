@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Creator v2.3</title>
+    <title>Image Creator v2.4</title>
     <link rel="icon" href="image-creator-icon.jpeg" type="image/jpeg">
 
 
@@ -29,14 +29,8 @@
             background-color: #f8f9fa;
             border-radius: 4px;
             font-size: 14px;
-            color: #666;
+            color: #777;
         }
-
-
-
-
-        
-
 
         .random-description-button {
             background-color: #28a745;
@@ -259,13 +253,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Image Creator v2.3</h1>
+        <h1>Image Creator v2.4</h1>
 
         <div class="model-selection">
             <label for="model-select">Image Generation Model:</label>
             <select id="model-select" class="model-select" onchange="updateModelDescription()">
+                <option value="sd35" selected>stabilityai/stable-diffusion-3.5-large</option>
                 <option value="flux">black-forest-labs/FLUX.1-dev</option>
-                <option value="sd35">stabilityai/stable-diffusion-3.5-large</option>
             </select>
             <div id="model-description" class="model-description"></div>
         </div>
@@ -370,50 +364,65 @@ IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OT
 
 
         async function generateRandomDescription() {
-            const randomDescButton = document.getElementById('random-description-button');
-            const descriptionTextarea = document.getElementById('description');
-            
-            randomDescButton.disabled = true;
-            
-            try {
-                const response = await fetch('https://proxy.small-recipe-9582.workers.dev/', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${GROQ_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        model: "llama-3.2-90b-vision-preview",
-                        messages: [
-                            {
-                                role: "system",
-                                content: "You are a creative assistant that generates random, detailed, loving and imaginative image descriptions for a Christian website. Focus on creating descriptions that would make interesting and visually appealing images. Include specific details about style, mood, lighting, and composition."
-                            },
-                            {
-                                role: "user",
-                                content: "Generate a random, creative image description that would work well for AI image generation. Make it detailed and specific, but keep it to 2-3 sentences. Return only the description with no additional text or formatting."
-                            }
-                        ]
-                    })
-                });
+    const randomDescButton = document.getElementById('random-description-button');
+    const descriptionTextarea = document.getElementById('description');
+    
+    randomDescButton.disabled = true;
+    
+    const maxRetries = 6; // Configurable retry count
+    let attempt = 0;
 
-                if (!response.ok) {
-                    throw new Error(`Groq API error: ${response.status}`);
-                }
+    const fetchData = async () => {
+        try {
+            const response = await fetch('https://proxy.small-recipe-9582.workers.dev/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${GROQ_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: "llama-3.2-90b-vision-preview",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a creative assistant that generates random, detailed, loving and imaginative image descriptions for a Christian website. Focus on creating descriptions that would make interesting and visually appealing images. Include specific details about style, mood, lighting, and composition."
+                        },
+                        {
+                            role: "user",
+                            content: "Generate a random, creative image description that would work well for AI image generation. Make it detailed and specific, but keep it to 2-3 sentences. Return only the description with no additional text or formatting."
+                        }
+                    ]
+                })
+            });
 
-                const data = await response.json();
-                if (!data.choices || !data.choices[0].message.content) {
-                    throw new Error('Invalid response from Groq API');
-                }
-
-                descriptionTextarea.value = data.choices[0].message.content.trim();
-            } catch (error) {
-                console.error('Error:', error);
-                showError(`Failed to generate random description: ${error.message}`);
-            } finally {
-                randomDescButton.disabled = false;
+            if (!response.ok) {
+                throw new Error(`Groq API error: ${response.status}`);
             }
+
+            const data = await response.json();
+            if (!data.choices || !data.choices[0].message.content) {
+                throw new Error('Invalid response from Groq API');
+            }
+
+            descriptionTextarea.value = data.choices[0].message.content.trim();
+        } catch (error) {
+            if (attempt < maxRetries) {
+                attempt++;
+                console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
+                await new Promise(resolve => setTimeout(resolve, 2000)); // Optional delay between retries (2 seconds)
+                await fetchData(); // Retry fetching
+            } else {
+                console.error('Error:', error);
+                showError(`Failed to generate random description after ${maxRetries} attempts: ${error.message}`);
+            }
+        } finally {
+            randomDescButton.disabled = false;
         }
+    };
+
+    await fetchData();
+}
+
 
         
         // API Configuration
@@ -448,88 +457,121 @@ IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OT
         }
 
         async function generatePrompts(description) {
-            try {
-                const response = await fetch('https://proxy.small-recipe-9582.workers.dev/', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${GROQ_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        model: "llama-3.2-90b-vision-preview",
-                        messages: [
-                            {
-                                role: "system",
-                                content: `I would like you to create a positive and negative prompt pair for stable-diffusion-3.5-large image generation. The image should be beautiful, loving, realistic, and perfect. The image should reflect the description that I provided in the user message.
+    const maxRetries = 6; // Configurable retry count
+    let attempt = 0;
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('https://proxy.small-recipe-9582.workers.dev/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${GROQ_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: "llama-3.2-90b-vision-preview",
+                    messages: [
+                        {
+                            role: "system",
+                            content: `I would like you to create a positive and negative prompt pair for stable-diffusion-3.5-large image generation. The image should be beautiful, loving, realistic, and perfect. The image should reflect the description that I provided in the user message.
 
 Respond in JSON with these keys: positive_prompt and negative_prompt.`
-                            },
-                            {
-                                role: "user",
-                                content: `${description}`
-                            }
-                        ],
-                        response_format: { type: "json_object" }
-                    })
-                });
+                        },
+                        {
+                            role: "user",
+                            content: `${description}`
+                        }
+                    ],
+                    response_format: { type: "json_object" }
+                })
+            });
 
-                if (!response.ok) {
-                    throw new Error(`Groq API error: ${response.status}`);
-                }
+            if (!response.ok) {
+                throw new Error(`Groq API error: ${response.status}`);
+            }
 
-                const data = await response.json();
-                if (!data.choices || !data.choices[0].message.content) {
-                    throw new Error('Invalid response from Groq API');
-                }
+            const data = await response.json();
+            if (!data.choices || !data.choices[0].message.content) {
+                throw new Error('Invalid response from Groq API');
+            }
 
-                return JSON.parse(data.choices[0].message.content);
-            } catch (error) {
-                throw new Error(`Failed to generate prompts: ${error.message}`);
+            return JSON.parse(data.choices[0].message.content);
+        } catch (error) {
+            if (attempt < maxRetries) {
+                attempt++;
+                console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
+                await new Promise(resolve => setTimeout(resolve, 2000)); // Optional delay between retries (2 seconds)
+                return await fetchData(); // Retry fetching
+            } else {
+                throw new Error(`Failed to generate prompts after ${maxRetries} attempts: ${error.message}`);
             }
         }
+    };
 
-        async function generateImage(positivePrompt, negativePrompt) {
-            try {
-                const modelSelect = document.getElementById('model-select');
-                const selectedModel = MODEL_CONFIGS[modelSelect.value];
-                
-                const requestBody = {
-                    inputs: positivePrompt,
-                    options: {
-                        wait_for_model: true
-                    }
-                };
+    return await fetchData();
+}
 
-                // Only add negative prompt if the model supports it
-                if (selectedModel.requiresNegativePrompt && negativePrompt) {
-                    requestBody.options.negative_prompt = negativePrompt;
+
+async function generateImage(positivePrompt, negativePrompt) {
+    const maxRetries = 6; // Configurable retry count
+    let attempt = 0;
+
+    const fetchData = async () => {
+        try {
+            const modelSelect = document.getElementById('model-select');
+            const selectedModel = MODEL_CONFIGS[modelSelect.value];
+            
+            const requestBody = {
+                inputs: positivePrompt,
+                options: {
+                    wait_for_model: true
                 }
+            };
 
-                const response = await fetch(selectedModel.url, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${HF_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestBody)
-                });
+            // Only add negative prompt if the model supports it
+            if (selectedModel.requiresNegativePrompt && negativePrompt) {
+                requestBody.options.negative_prompt = negativePrompt;
+            }
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Hugging Face API error: ${response.status} - ${errorText}`);
-                }
+            const response = await fetch(selectedModel.url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${HF_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
 
-                const blob = await response.blob();
-                if (blob.type.startsWith('application/json')) {
-                    const errorText = await blob.text();
-                    throw new Error(`API returned JSON instead of image: ${errorText}`);
-                }
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Hugging Face API error: ${response.status} - ${errorText}`);
+            }
 
-                return URL.createObjectURL(blob);
-            } catch (error) {
-                throw new Error(`Failed to generate image: ${error.message}`);
+            const blob = await response.blob();
+            if (blob.type.startsWith('application/json')) {
+                const errorText = await blob.text();
+                throw new Error(`API returned JSON instead of image: ${errorText}`);
+            }
+
+            return URL.createObjectURL(blob);
+        } catch (error) {
+            if (attempt < maxRetries) {
+                attempt++;
+                console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
+                await new Promise(resolve => setTimeout(resolve, 2000)); // Optional delay between retries (2 seconds)
+                return await fetchData(); // Retry fetching
+            } else {
+                throw new Error(`Failed to generate image after ${maxRetries} attempts: ${error.message}`);
             }
         }
+    };
+
+    return await fetchData();
+}
+
+
+
+
 
         function displayImage(imageUrl, positivePrompt, negativePrompt) {
             const modelSelect = document.getElementById('model-select');
