@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Multi Model Chatbot v6.5</title>
+    <title>Multi Model Chatbot v6.6</title>
     <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
     <style>
         html, body {
@@ -162,35 +162,13 @@
         .legal-notice a:hover {
             text-decoration: underline;
         }
-
-        @media (max-width: 640px) {
-            .controls-container {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .custom-select {
-                width: 100%;
-            }
-
-            .input-container {
-                flex-direction: column;
-            }
-
-            textarea {
-                width: 100%;
-            }
-
-            button {
-                width: 100%;
-            }
-        }
+        
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="header-section">
-            <h1>Multi Model Chatbot v6.5</h1>
+            <h1>Multi Model Chatbot v6.6</h1>
             <div class="controls-container">
                 <button class="custom-button" onclick="updateSystemPrompt('universal');">Universal</button>
                 <button class="custom-button" onclick="updateSystemPrompt('zionism');">Zionism</button>
@@ -277,7 +255,7 @@ I would like you to always cite Scripture perfectly and in full 100% as it is in
                 ];
             }
             if (prompt == "custom") {
-                var customPrompt = window.prompt("Please enter text for a system prompt");
+                var customPrompt = window.prompt("You can enter text for a system prompt");
     
                 var systemPromptContent = `I would like you to be a helpful AI chatbot for a Christian website.
 
