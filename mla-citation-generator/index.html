@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLA Citation Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+        }
+        header {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            background-color: #4a90e2;
+            color: #fff;
+        }
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        button {
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #357abf;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MLA Citation Tool</h1>
+    </header>
+    <div class="container">
+        <textarea id="url-list" placeholder="Enter a list of URLs, one per line..."></textarea>
+        <button id="process-urls">Generate MLA Citations</button>
+        <div id="output" class="output"></div>
+    </div>
+    <script>
+        const apiKey = "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";
+        const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
+
+
+        function extractTextFromHTML(html) {
+            // Create a temporary DOM element
+            let tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+
+            // Remove script and style tags to avoid extracting unwanted content
+            let scripts = tempDiv.getElementsByTagName("script");
+            let styles = tempDiv.getElementsByTagName("style");
+
+            // Remove them from the DOM
+            while (scripts.length > 0) {
+                scripts[0].parentNode.removeChild(scripts[0]);
+            }
+            while (styles.length > 0) {
+                styles[0].parentNode.removeChild(styles[0]);
+            }
+
+            // Get text content, removing excessive spaces and line breaks
+            let textContent = tempDiv.textContent || tempDiv.innerText;
+
+            // Normalize spaces (reduce multiple spaces to a single space)
+            return textContent.replace(/\s+/g, ' ').trim();
+        }
+
+
+
+        async function fetchUrlContent(url) {
+
+            var proxiedURL = "https://autumn-dream-50be.small-recipe-9582.workers.dev/?url=" + url;
+            try {
+                const response = await fetch(proxiedURL);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch URL: ${proxiedURL}`);
+                }
+                return await response.text();
+            } catch (error) {
+                return `Error fetching URL: ${error.message}`;
+            }
+        }
+
+        document.getElementById('process-urls').addEventListener('click', async () => {
+            const urlList = document.getElementById('url-list').value.trim().split('\n');
+            const output = document.getElementById('output');
+            output.textContent = "Processing...";
+
+            const citations = [];
+            for (const url of urlList) {
+                if (!url) continue;
+
+                try {
+                    const content = await fetchUrlContent(url);
+
+                    var extractedText = extractTextFromHTML(content);
+
+                    console.log("raw content: " + content);
+
+                    console.log("extracted content: " + extractedText);
+                    
+                    const requestBody = {
+                        response_format: {
+                            type: "json_object"
+                        },
+                        model: "llama-3.2-90b-vision-preview",
+                        messages: [
+                            { role: 'system', content: `Generate an MLA style citation from the provided content.
+
+Use the labels: citation, notes
+
+Respond in JSON.` },
+                            { role: 'user', content: `URL: ${url}\nContent: ${extractedText}` }
+                        ]
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    if (!response.ok) {
+                        const errorDetails = await response.json();
+                        throw new Error(errorDetails.error.message || "Failed to process URL.");
+                    }
+
+                    const data = await response.json();
+                    const citation = data.choices[0]?.message?.content || "No citation generated.";
+
+                    const citationObject = JSON.parse(citation);
+
+                    console.log(citationObject.citation);
+
+                    citations.push(`<strong>${url}:</strong> ${citationObject.citation}`);
+                } catch (error) {
+                    citations.push(`<strong>${url}:</strong> Error - ${error.message}`);
+                }
+            }
+
+            output.innerHTML = citations.length ? citations.join('<br><br>') : "No URLs provided or unable to generate citations.";
+        });
+    </script>
+</body>
+</html>
