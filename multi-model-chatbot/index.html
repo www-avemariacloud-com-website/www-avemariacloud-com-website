@@ -1,248 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Multi Model Chatbot v7.0</title>
-    <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi Model Chatbot</title>
     <style>
-        /* Reset and Base Styles */
-        *, *::before, *::after {
-            box-sizing: border-box;
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #34d399;
+            --background-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --border-color: #e1e8ed;
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        html, body {
-            height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #2c3e50;
-            line-height: 1.5;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-color);
+            background: var(--background-color);
+            line-height: 1.6;
         }
 
-        /* App Container */
-        .app-container {
-            display: grid;
-            grid-template-rows: auto 1fr auto;
+        .container {
+            display: flex;
+            flex-direction: column;
             height: 100vh;
             max-width: 100%;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* Header Section */
-        .header-section {
+        .header {
             padding: 1rem;
             background: white;
-            border-bottom: 1px solid #e1e8ed;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
-        .header-section h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #1a73e8;
-            margin: 0;
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            max-width: 100%;
+            margin: 0 auto;
         }
 
-        /* Controls Container */
-        .controls-container {
+        .title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .controls {
             display: flex;
-            gap: 0.75rem;
-            align-items: center;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
 
-        /* Button Styles */
-        .custom-button {
+        .button {
             padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: white;
-            background: linear-gradient(135deg, #1a73e8 0%, #165cb5 100%);
             border: none;
-            border-radius: 0.375rem;
+            border-radius: 4px;
+            background: var(--primary-color);
+            color: white;
             cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
         }
 
-        .custom-button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        .button:hover {
+            opacity: 0.9;
         }
 
-        .custom-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Select Styles */
-        .custom-select {
+        .select {
             padding: 0.5rem;
-            border: 1px solid #e1e8ed;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            background-color: white;
-            cursor: pointer;
-            transition: border-color 0.15s ease;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: white;
         }
 
-        .custom-select:hover {
-            border-color: #1a73e8;
-        }
-
-        /* Chat Section */
-        .chat-section {
-            padding: 1rem;
+        .chat {
+            flex: 1;
             overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e0 transparent;
-        }
-
-        .chat-container {
-            max-width: 100%;
-            margin: 0 auto;
             padding: 1rem;
         }
 
-        /* Message Styles */
         .message {
             max-width: 80%;
+            margin: 1rem 0;
             padding: 1rem;
-            margin: 0.75rem 0;
-            border-radius: 1rem;
-            position: relative;
-            animation: slideIn 0.3s ease-out;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            line-height: 1.5;
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .assistant-message {
-            background: white;
-            border-left: 4px solid #1a73e8;
+        .message.assistant {
+            background: #f8f9fa;
             margin-right: auto;
-            border-top-left-radius: 0;
         }
 
-        .user-message {
-            background: #1a73e8;
+        .message.user {
+            background: var(--primary-color);
             color: white;
             margin-left: auto;
-            border-top-right-radius: 0;
         }
 
-        /* Footer Section */
-        .footer-section {
+        .footer {
             padding: 1rem;
             background: white;
-            border-top: 1px solid #e1e8ed;
+            border-top: 1px solid var(--border-color);
         }
 
-        /* Input Container */
-        .input-container {
+        .input-form {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
             max-width: 100%;
             margin: 0 auto;
         }
 
-        textarea {
-            flex-grow: 1;
+        .input-textarea {
+            flex: 1;
             padding: 0.75rem;
-            border: 1px solid #e1e8ed;
-            border-radius: 0.375rem;
-            resize: none;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            resize: vertical;
             min-height: 50px;
-            font-size: 0.875rem;
-            transition: border-color 0.15s ease;
-            line-height: 1.5;
+            max-height: 150px;
         }
 
-        textarea:focus {
-            outline: none;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
-        }
-
-        /* Send Button */
         .send-button {
             padding: 0.75rem 1.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
+            background: var(--secondary-color);
             color: white;
-            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
             border: none;
-            border-radius: 0.375rem;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: 0.3s ease;
         }
 
         .send-button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            opacity: 0.9;
         }
 
-        .send-button:active {
-            transform: translateY(0);
-        }
-
-        /* Loading Indicator */
-        .loading-indicator {
+        .loading {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             padding: 1rem;
-            background: white;
-            border-radius: 0.375rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 1rem 0;
         }
 
-        .loading-dots {
-            display: flex;
-            gap: 0.25rem;
-        }
-
-        .loading-dots::after {
+        .loading::after {
             content: "...";
-            animation: loading 1.5s infinite;
+            animation: dots 1.5s infinite;
         }
 
-        @keyframes loading {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive Design */
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40%, 60% { content: ".."; }
+            80%, 100% { content: "..."; }
+        }
+
         @media (max-width: 768px) {
-            .header-section {
+            .header-content {
                 flex-direction: column;
                 align-items: stretch;
-                padding: 0.75rem;
             }
 
-            .controls-container {
+            .controls {
                 flex-direction: column;
             }
 
@@ -250,67 +189,36 @@
                 max-width: 90%;
             }
 
-            .input-container {
+            .input-form {
                 flex-direction: column;
             }
 
             .send-button {
                 width: 100%;
             }
-
-            .custom-select {
-                width: 100%;
-            }
         }
 
-        /* Accessibility Improvements */
-        @media (prefers-reduced-motion: reduce) {
-            .message,
-            .custom-button,
-            .send-button {
-                animation: none;
-                transition: none;
-            }
-        }
-
-        /* Focus States */
-        .custom-button:focus,
-        .custom-select:focus,
-        textarea:focus,
-        .send-button:focus {
-            outline: 2px solid #1a73e8;
-            outline-offset: 2px;
-        }
-
-        /* Dark Mode Support */
         @media (prefers-color-scheme: dark) {
-            html, body {
-                background: linear-gradient(135deg, #1a1c1e 0%, #2d3748 100%);
-                color: #e2e8f0;
+            :root {
+                --background-color: #1a1c1e;
+                --text-color: #e2e8f0;
+                --border-color: #2d3748;
             }
 
-            .app-container {
-                background: rgba(26, 28, 30, 0.95);
+            body {
+                background: var(--background-color);
             }
 
-            .header-section,
-            .footer-section {
+            .container, .header, .footer {
                 background: #1a1c1e;
-                border-color: #2d3748;
             }
 
-            .message.assistant-message {
+            .message.assistant {
                 background: #2d3748;
                 color: #e2e8f0;
             }
 
-            textarea {
-                background: #2d3748;
-                color: #e2e8f0;
-                border-color: #4a5568;
-            }
-
-            .custom-select {
+            .input-textarea, .select {
                 background: #2d3748;
                 color: #e2e8f0;
                 border-color: #4a5568;
@@ -318,261 +226,178 @@
         }
     </style>
 </head>
-
-
 <body>
-    <div class="app-container">
-        <div class="header-section">
-            <h1>Multi Model Chatbot v7.0</h1>
-            <div class="controls-container">
-                <button class="custom-button" onclick="updateSystemPrompt('universal');">Universal</button>
-                <button class="custom-button" onclick="updateSystemPrompt('zionism');">Zionism</button>
-                <button class="custom-button" onclick="updateSystemPrompt('custom');">Custom</button>
-                <select id="aiModel" class="custom-select">
-                    <option value="gemma2-9b-it">Gemma 2 (9B)</option>
-                    <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 (90B)</option>
-                    <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="chat-section">
-            <div class="chat-container" id="chatContainer">
-                <div id="chatMessages">
-                    <div class="message assistant-message">Welcome to AveMariaCloud!</div>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">Multi Model Chatbot</h1>
+                <div class="controls">
+                    <button class="button" onclick="updateSystemPrompt('universal')">Universal</button>
+                    <button class="button" onclick="updateSystemPrompt('zionism')">Zionism</button>
+                    <button class="button" onclick="updateSystemPrompt('custom')">Custom</button>
+                    <select id="aiModel" class="select">
+                        <option value="gemma2-9b-it">Gemma 2 (9B)</option>
+                        <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 (90B)</option>
+                        <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                    </select>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <div class="footer-section">
-            <form id="chatForm" class="input-container">
-                <textarea id="userInput" placeholder="Type your message..."></textarea>
+        <main class="chat" id="chat">
+            <div class="message assistant">Welcome to AveMariaCloud!</div>
+        </main>
+
+        <footer class="footer">
+            <form class="input-form" id="messageForm">
+                <textarea 
+                    id="userInput" 
+                    class="input-textarea" 
+                    placeholder="Type your message..."
+                    rows="1"
+                ></textarea>
                 <button type="submit" class="send-button">Send</button>
             </form>
-
-            
-        </div>
-        
+        </footer>
     </div>
-    <center>
-
-        <p>
-            © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
-            <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
-            <BR><BR>
-            Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
-            <br><br>
-            Code may have been generated with the assistance of ChatGPT (OpenAI), Claude AI (Anthropic), Meta Llama 3 (Meta), Gemma (Google), and Mixtral (Mistral AI). Each of these tools may have contributed to different aspects of the code. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to OpenAI, Anthropic, Meta, Google, and Mistral AI for more information. Image(s) may have been generated using AI tools such as Stable Diffusion or Flux. These tools utilize advanced machine learning models to create visual content. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to Stability AI and Flux AI. An API relating to Groq may be used. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to Groq, Inc.
-            <br><br>
+<center>
+    <p>
+        © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
+        <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
+        <BR><BR>
+        Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
+        <br><br>
+        Code may have been generated with the assistance of ChatGPT (OpenAI), Claude AI (Anthropic), Meta Llama 3 (Meta), Gemma (Google), and Mixtral (Mistral AI). Each of these tools may have contributed to different aspects of the code. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to OpenAI, Anthropic, Meta, Google, and Mistral AI for more information. Image(s) may have been generated using AI tools such as Stable Diffusion or Flux. These tools utilize advanced machine learning models to create visual content. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to Stability AI and Flux AI. An API relating to Groq may be used. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to Groq, Inc.
+        <br><br>
 Groq, Inc. (Groq): Relevant links include <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
 Stability AI (Stable Diffusion): Relevant links include <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
-            OpenAI (ChatGPT): Relevant links include <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
-            Anthropic (Claude AI): Relevant links include <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
-            Meta (Llama 3): Relevant links include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
-            Google (Gemma): Relevant links include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
-            Mistral AI (Mixtral): Relevant links include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href=”https://trust.mistral.ai/”>Trust Center</a>.
-            <br><br>
-            Some notices may be relevant.<br><br>
-            <strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.<br>
-            <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.<br>
-            <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.<br>
-            <strong><a href="https://avemariacloud.com/stability-ai-notice.txt">Notice</a>: Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved. Stability AI<br>
-            <strong>Hugging Face API:</strong> This tool may use the Hugging Face API, and may be subject to their <a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
-            <strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc. IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="https://avemariacloud.com/flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
-        </p>
-    </center>
+        OpenAI (ChatGPT): Relevant links include <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
+        Anthropic (Claude AI): Relevant links include <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
+        Meta (Llama 3): Relevant links include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
+        Google (Gemma): Relevant links include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
+        Mistral AI (Mixtral): Relevant links include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href=”https://trust.mistral.ai/”>Trust Center</a>.
+        <br><br>
+        Some notices may be relevant.<br><br>
+        <strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.<br>
+        <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.<br>
+        <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.<br>
+        <strong><a href="https://avemariacloud.com/stability-ai-notice.txt">Notice</a>: Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved. Stability AI<br>
+        <strong>Hugging Face API:</strong> This tool may use the Hugging Face API, and may be subject to their <a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
+        <strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc. IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="https://avemariacloud.com/flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
+    </p>
+
+
+
+</center>
+
+
+
 
     <script>
+        const TOKEN_LIMIT = 700;
+        const API_KEY = "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";
+        const API_URL = "https://proxy.small-recipe-9582.workers.dev/";
 
-        function updateSystemPrompt(prompt) {
-
-
-        
-
-
-
-
-
-
-
-
-
-            
-
-
-            if (prompt == "universal") {
-                resetChatHistory("Welcome to AveMariaCloud!");
-                conversationHistory = [
-                    { role: "system", content: `I would like you to be a helpful AI chatbot for a Christian website.
-
-I would like a very strong bias for caution and perfect information.
-
-I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
-
-I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.` },
-                    { role: "assistant", content: "Welcome to AveMariaCloud!" }
-                ];
+        let conversationHistory = [
+            {
+                role: "system",
+                content: `I would like you to be a helpful AI chatbot for a Christian website.
+                         I would like a very strong bias for caution and perfect information.
+                         I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
+                         I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
+            },
+            {
+                role: "assistant",
+                content: "Welcome to AveMariaCloud!"
             }
-            if (prompt == "zionism") {
-                resetChatHistory("Shalom!");
-    
-                conversationHistory = [
-                    { role: "system", content: `I would like you to be a helpful AI chatbot for a Christian website.
+        ];
 
-I would like you to share information within the context of Christian Zionism.
-
-I would like a very strong bias for caution and perfect information.
-
-I would like you to always cite Scripture perfectly from the KJV translation of the bible in any circumstance, even if asked for other translations.
-
-I would like you to always cite Scripture perfectly and in full 100% as it is in the KJV translation whenever you share any information in relation to Scripture.` },
-                    { role: "assistant", content: "Shalom!" }
-                ];
-            }
-            if (prompt == "custom") {
-                var customPrompt = window.prompt("You can enter text for a system prompt");
-    
-                var systemPromptContent = `I would like you to be a helpful AI chatbot for a Christian website.
-
-I would like a very strong bias for caution and perfect information.
-
-I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
-
-I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.
-
-I would like you to use this information for a system prompt that may have been provided by a user` + customPrompt;
-                
-                resetChatHistory("Hello!");
-    
-                conversationHistory = [
-                    { role: "system", content: systemPromptContent },
-                    { role: "assistant", content: "Hello!" }
-                ];
-    
-    
-}
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
-
-
-
-            
-        }
-    
-        function resetChatHistory(startingMessage) {
-            document.getElementById("chatMessages").innerHTML = `
-                    <div class="message assistant-message">` + startingMessage + `</div>
-                `;
-        }
-
-        const apiKey = "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";
-        const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
-        const chatMessages = document.getElementById('chatMessages');
-        const chatForm = document.getElementById('chatForm');
+        const chat = document.getElementById('chat');
+        const messageForm = document.getElementById('messageForm');
         const userInput = document.getElementById('userInput');
         const aiModel = document.getElementById('aiModel');
-    
-        const TOKEN_LIMIT = 700; // Set your token limit here
-        let conversationHistory = [
-            { role: "system", content: `I would like you to be a helpful AI chatbot for a Christian website.
 
-I would like a very strong bias for caution and perfect information.
-
-I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
-
-I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`},
-            { role: "assistant", content: "Welcome to AveMariaCloud!" }
-        ];
-    
-        // Function to estimate token usage for a message
-        function estimateTokens(message) {
-            const words = message.split(/\s+/).length;
-            return Math.ceil(words / 1.33); // Approximate 1.33 tokens per word
-        }
-    
-        // Function to trim conversation history to stay within token limit
-        function trimConversationHistory() {
-            let totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
-    
-            console.log("total tokens, untrimmed:" + totalTokens);
-            
-            // Trim messages from the beginning if the total token count exceeds the limit
-            while (totalTokens > TOKEN_LIMIT) {
-                conversationHistory.shift();
-                totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
-                
-                console.log("total tokens, trimmed:" + totalTokens);
-            }
-        }
-    
-        function scrollToBottom() {
-            const chatContainer = document.querySelector('.chat-container');
-            const chatMessages = document.getElementById('chatMessages');
-            
-            // Calculate the total scroll height
-            const scrollHeight = chatMessages.scrollHeight;
-            
-            // Smooth scroll to bottom
-            chatContainer.scrollTo({
-                top: scrollHeight,
-                behavior: 'smooth'
-            });
-            
-            // Fallback scroll check to ensure we reach bottom
-            setTimeout(() => {
-                if (chatContainer.scrollTop + chatContainer.clientHeight < scrollHeight) {
-                    chatContainer.scrollTop = scrollHeight;
+        function updateSystemPrompt(type) {
+            const prompts = {
+                universal: {
+                    greeting: "Welcome to AveMariaCloud!",
+                    content: `I would like you to be a helpful AI chatbot for a Christian website.
+                             I would like a very strong bias for caution and perfect information.
+                             I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
+                             I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
+                },
+                zionism: {
+                    greeting: "Shalom!",
+                    content: `I would like you to be a helpful AI chatbot for a Christian website.
+                             I would like you to share information within the context of Christian Zionism.
+                             I would like a very strong bias for caution and perfect information.
+                             I would like you to always cite Scripture perfectly from the KJV translation of the bible in any circumstance, even if asked for other translations.
+                             I would like you to always cite Scripture perfectly and in full 100% as it is in the KJV translation whenever you share any information in relation to Scripture.`
                 }
-            }, 100);
+            };
+
+            if (type === 'custom') {
+                const customPrompt = prompt("You can enter text for a system prompt");
+                resetChat("Hello!", `${prompts.universal.content}\nI would like you to use this information for a system prompt that may have been provided by a user${customPrompt}`);
+                return;
+            }
+
+            const selectedPrompt = prompts[type];
+            resetChat(selectedPrompt.greeting, selectedPrompt.content);
         }
-    
+
+        function resetChat(greeting, systemContent) {
+            chat.innerHTML = `<div class="message assistant">${greeting}</div>`;
+            conversationHistory = [
+                { role: "system", content: systemContent },
+                { role: "assistant", content: greeting }
+            ];
+        }
+
         function addMessage(content, role) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ` + role + `-message`;
-            messageDiv.textContent = content;
-            chatMessages.appendChild(messageDiv);
-            scrollToBottom();
+            const message = document.createElement('div');
+            message.className = `message ${role}`;
+            message.textContent = content;
+            chat.appendChild(message);
+            chat.scrollTop = chat.scrollHeight;
         }
-    
+
         function addLoadingIndicator() {
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg';
-            loadingDiv.id = 'loadingIndicator';
-            const loadingContent = document.createElement('span');
-            loadingContent.className = 'loading-dots';
-            loadingDiv.appendChild(loadingContent);
-            chatMessages.appendChild(loadingDiv);
-            scrollToBottom();
+            const loading = document.createElement('div');
+            loading.className = 'loading';
+            loading.id = 'loadingIndicator';
+            chat.appendChild(loading);
+            chat.scrollTop = chat.scrollHeight;
         }
-    
+
         function removeLoadingIndicator() {
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            if (loadingIndicator) {
-                loadingIndicator.remove();
+            const loading = document.getElementById('loadingIndicator');
+            if (loading) loading.remove();
+        }
+
+        function estimateTokens(message) {
+            return Math.ceil(message.split(/\s+/).length / 1.33);
+        }
+
+        function trimConversationHistory() {
+            let totalTokens = conversationHistory.reduce((sum, msg) => 
+                sum + estimateTokens(msg.content), 0);
+
+            while (totalTokens > TOKEN_LIMIT && conversationHistory.length > 2) {
+                conversationHistory.splice(1, 1);
+                totalTokens = conversationHistory.reduce((sum, msg) => 
+                    sum + estimateTokens(msg.content), 0);
             }
         }
-    
+
         async function sendMessage(message) {
             try {
-                // Trim conversation history to fit within the token limit
                 trimConversationHistory();
-    
-                const response = await fetch(apiUrl, {
+
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${apiKey}`,
+                        'Authorization': `Bearer ${API_KEY}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -582,11 +407,9 @@ I would like you to always cite Scripture perfectly and in full 100% as it is in
                         max_tokens: 1000
                     })
                 });
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-    
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
                 const data = await response.json();
                 const aiResponse = data.choices[0].message.content;
                 
@@ -599,36 +422,27 @@ I would like you to always cite Scripture perfectly and in full 100% as it is in
                 addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
             }
         }
-    
-        function handleMessageSubmit(e) {
-            if (e) e.preventDefault();
-            const message = userInput.value;
-            console.log(message);
+
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
             if (!message) return;
-    
+
             addMessage(message, 'user');
             conversationHistory.push({ role: "user", content: message });
             userInput.value = '';
             addLoadingIndicator();
             sendMessage(message);
-        }
-    
-        chatForm.addEventListener('submit', handleMessageSubmit);
-    
-        function isMobileDevice() {
-            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-        }
-    
+        });
+
         userInput.addEventListener('keypress', (e) => {
-            if (!isMobileDevice() && e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === 'Enter' && !e.shiftKey && !(/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent))) {
                 e.preventDefault();
-                handleMessageSubmit();
+                messageForm.dispatchEvent(new Event('submit'));
             }
         });
-    
+
         userInput.focus();
     </script>
-
-
 </body>
 </html>
