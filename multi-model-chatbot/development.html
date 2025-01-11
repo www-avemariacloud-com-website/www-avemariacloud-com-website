@@ -1,403 +1,388 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head content and styles remain the same until media queries -->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Multi Model Chatbot v5.2</title>
-    
-    <link rel="icon" href="multi-model-ai-chatbot.png" type="image/x-icon">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Chat Interface</title>
     <style>
-        /* Previous styles remain the same */
-        html, body {
-            height: 100vh;
+        /* Modern CSS Reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            background-color: #f3f4f6;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
-        .app-container {
+        /* Variables */
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --secondary: #10b981;
+            --background: #ffffff;
+            --surface: #f9fafb;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --radius: 0.5rem;
+            --transition: all 0.2s ease;
+        }
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #111827;
+                --surface: #1f2937;
+                --text: #f9fafb;
+                --text-light: #9ca3af;
+                --border: #374151;
+            }
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .app {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
             height: 100vh;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 1rem;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .header-section {
-            flex-shrink: 0;
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius);
+            background: var(--primary);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .button:hover {
+            background: var(--primary-light);
+        }
+
+        .select {
             padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--background);
+            color: var(--text);
+            font-size: 0.875rem;
         }
 
-        .chat-section {
-            flex-grow: 1;
-            min-height: 0;
-            position: relative;
-            padding: 0 0.5rem;
-        }
-
-        .footer-section {
-            flex-shrink: 0;
-            padding: 0.5rem;
-        }
-
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Chat Area */
+        .chat {
+            padding: 1rem;
+            overflow-y: auto;
+            background: var(--background);
         }
 
         .message {
-            max-width: 85%;
-            word-break: break-word;
-            overflow-wrap: break-word;
-            animation: fadeIn 0.3s ease-in;
-            white-space: pre-wrap;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .chat-container {
-            height: 100%;
-            overflow-y: auto;
+            max-width: 80%;
+            margin: 1rem 0;
             padding: 1rem;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e0 #f3f4f6;
+            border-radius: var(--radius);
+            animation: slideIn 0.3s ease;
         }
 
-        .custom-button {
-            transition: all 0.2s ease;
-            padding: 0.4rem 0.8rem;
-            font-size: 0.875rem;
+        .message.assistant {
+            background: var(--surface);
+            margin-right: auto;
+            border-bottom-left-radius: 0;
         }
 
-        .custom-select {
-            background-color: white;
-            transition: all 0.2s ease;
-            border: 1px solid #e5e7eb;
-            font-size: 0.875rem;
-            padding: 0.4rem;
+        .message.user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
         }
 
-        .input-container {
+        /* Input Area */
+        .footer {
+            padding: 1rem;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        .input-form {
             display: flex;
-            gap: 0.5rem;
+            gap: 1rem;
+        }
+
+        .input-textarea {
+            flex: 1;
             padding: 0.75rem;
-            background: white;
-            border-radius: 0.5rem;
-        }
-
-        textarea {
-            min-height: 45px;
-            max-height: 120px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--background);
+            color: var(--text);
             resize: none;
+            min-height: 50px;
+            max-height: 150px;
+            transition: var(--transition);
         }
 
-        .compact-header {
-            display: flex;
+        .input-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .send-button {
+            padding: 0.75rem 1.5rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .send-button:hover {
+            opacity: 0.9;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem;
+            gap: 0.25rem;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: var(--radius);
+            margin: 1rem 0;
         }
 
-        .legal-notice {
-            font-size: 0.75rem;
-            line-height: 1.25;
+        .loading::after {
+            content: "...";
+            animation: dots 1.5s steps(4, end) infinite;
         }
 
-        @media (max-width: 640px) {
-    /* Improve header layout */
-    .compact-header {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 1rem;
-    }
-    
-    /* Adjust control container spacing */
-    .controls-container {
-        flex-direction: column;
-        width: 100%;
-        gap: 0.5rem;
-    }
+        /* Animations */
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    /* Ensure button group is properly spaced */
-    .button-group {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        width: 100%;
-    }
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40%, 60% { content: ".."; }
+            80%, 100% { content: "..."; }
+        }
 
-    /* Make select full width */
-    .custom-select {
-        width: 100% !important;
-    }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
 
-    /* Improve legal notice readability */
-    .legal-notice {
-        font-size: 0.75rem;
-        line-height: 1.4;
-        padding: 1rem !important;
-        margin-bottom: 3rem;
-    }
+            .controls {
+                flex-direction: column;
+            }
 
-    /* Add proper spacing between legal notice paragraphs */
-    .legal-notice p {
-        margin-bottom: 0.75rem !important;
-    }
-    
-    .legal-notice p:last-child {
-        margin-bottom: 0em !important;
-    }
+            .message {
+                max-width: 90%;
+            }
 
-    /* Adjust chat section height to prevent overflow */
-    .chat-section {
-        max-height: calc(100vh - 380px);
-        overflow-y: auto;
-    }
+            .input-form {
+                flex-direction: column;
+            }
 
-    /* Ensure app container doesn't overflow */
-    .app-container {
-        height: 100%;
-        min-height: 100vh;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Adjust footer section to ensure visibility */
-    .footer-section {
-        position: relative;
-        bottom: 0;
-        width: 100%;
-        background: #f3f4f6;
-        padding: 1rem 0.5rem;
-        margin-top: auto;
-    }
-
-    /* Improve input container layout */
-    .input-container {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .input-container textarea {
-        width: 100%;
-    }
-
-    .input-container button {
-        width: 100%;
-    }
-}
+            .send-button {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="app-container bg-gradient-to-br from-blue-50 to-indigo-50">
-        <!-- Compact Header -->
-        <div class="header-section">
-            <div class="glass-effect rounded-lg shadow-sm">
-                <div class="compact-header">
-                    <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent whitespace-nowrap">
-                        Multi Model Chatbot v5.2
-                    </h1>
-                    
-                    <div class="flex gap-4 items-center controls-container">
-                        <div class="button-group">
-                            <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('universal');">Universal</button>
-                            <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('zionism');">Zionism</button>
-                            <button class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded text-sm" onclick="updateSystemPrompt('custom');">Custom</button>
-                        </div>
-                        
-                        <select id="aiModel" class="custom-select rounded text-gray-700 text-sm w-48">
-                            <option value="gemma2-9b-it">Gemma 2 (9B)</option>
-                            <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 (90B)</option>
-                            <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
-                        </select>
-                    </div>
+    <div class="app">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">Multi Model Chatbot</h1>
+                <div class="controls">
+                    <button class="button" onclick="updateSystemPrompt('universal')">Universal</button>
+                    <button class="button" onclick="updateSystemPrompt('zionism')">Zionism</button>
+                    <button class="button" onclick="updateSystemPrompt('custom')">Custom</button>
+                    <select id="aiModel" class="select">
+                        <option value="gemma2-9b-it">Gemma 2 (9B)</option>
+                        <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 (90B)</option>
+                        <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                    </select>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <!-- Chat Section -->
-        <div class="chat-section">
-            <div class="glass-effect rounded-lg shadow-lg h-full">
-                <div class="chat-container" id="chatContainer">
-                    <div id="chatMessages" class="space-y-3">
-                        <div class="message assistant-message mr-auto p-3 rounded-lg">Welcome to AveMariaCloud!</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <main class="chat" id="chat">
+            <div class="message assistant">Welcome to AveMariaCloud!</div>
+        </main>
 
-        <!-- Footer -->
-        <div class="footer-section">
-            <!-- Input Area -->
-            <div class="glass-effect rounded-lg shadow-sm mb-2">
-                <form id="chatForm" class="input-container">
-                    <textarea
-                        id="userInput"
-                        class="flex-1 p-2 rounded border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 text-sm"
-                        placeholder="Type your message..."
-                        required
-                    ></textarea>
-                    <button
-                        type="submit"
-                        class="custom-button bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded whitespace-nowrap"
-                    >
-                        Send
-                    </button>
-                </form>
-            </div>
-
-            <!-- Full Legal Notice -->
-            <div class="glass-effect rounded-lg shadow-sm p-3 text-gray-600 legal-notice">
-                <p>By using this tool, maybe you should read and agree to these <a href="terms.html" target="_blank">Terms of Service</a> and this <a href="privacy.html" target="_blank">Privacy Policy</a>. I hope that these things will benefit you.</p>
-                    
-                    <p><strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.</p>
-                    
-                    <p><strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.</p>
-                    
-                    <p><strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.</p>
-            </div>
-        </div>
+        <footer class="footer">
+            <form class="input-form" id="messageForm">
+                <textarea 
+                    id="userInput" 
+                    class="input-textarea" 
+                    placeholder="Type your message..."
+                    rows="1"
+                ></textarea>
+                <button type="submit" class="send-button">Send</button>
+            </form>
+        </footer>
     </div>
 
     <script>
+        const TOKEN_LIMIT = 700;
+        const API_KEY = "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";
+        const API_URL = "https://proxy.small-recipe-9582.workers.dev/";
 
-        function updateSystemPrompt(prompt) {
-
-
-if (prompt == "universal") {
-                resetChatHistory("Welcome to AveMariaCloud!");
-                conversationHistory = [
-                    { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information. I would like you to give perfect caution to the citation of Scripture. I would like you to use to always use a translation that you are certain of, even if provided a different translation by the user." },
-                    { role: "assistant", content: "Welcome to AveMariaCloud!" }
-                ];
+        let conversationHistory = [
+            {
+                role: "system",
+                content: `I would like you to be a helpful AI chatbot for a Christian website.
+                         I would like a very strong bias for caution and perfect information.
+                         I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
+                         I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
+            },
+            {
+                role: "assistant",
+                content: "Welcome to AveMariaCloud!"
             }
-            if (prompt == "zionism") {
-                resetChatHistory("Shalom!");
-    
-                conversationHistory = [
-                    { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christian Zionism. I would like you to follow Halakha and ensure you are doing so perfectly. I would like you to cite Mitzvot perfectly when relevant and ensure you are doing so perfectly. I would like you to have a bias for caution and a bias for citing verified scripture perfectly. I would like you to cite Scripture perfectly when you speak about Scripture. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information. I would like you to give perfect caution to the citation of Scripture. I would like you to use to always use a translation that you are certain of, even if provided a different translation by the user." },
-                    { role: "assistant", content: "Shalom!" }
-                ];
-            }
-            if (prompt == "custom") {
-                var customPrompt = window.prompt("Please enter text for a system prompt");
-    
-                var systemPromptContent = "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information. I would like you to give perfect caution to the citation of Scripture. I would like you to use to always use a translation that you are certain of, even if provided a different translation by the user. I would like you to use this information for a system prompt that may have been provided by a user" + customPrompt;
-                
-                resetChatHistory("Hello!");
-    
-                conversationHistory = [
-                    { role: "system", content: systemPromptContent },
-                    { role: "assistant", content: "Hello!" }
-                ];
-    
-    
-            }
+        ];
 
-
-
-            
-        }
-    
-        function resetChatHistory(startingMessage) {
-            document.getElementById("chatMessages").innerHTML = `
-                    <div class="message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg">` + startingMessage + `</div>
-                `;
-        }
-        const apiKey = "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";
-        const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
-        const chatMessages = document.getElementById('chatMessages');
-        const chatForm = document.getElementById('chatForm');
+        const chat = document.getElementById('chat');
+        const messageForm = document.getElementById('messageForm');
         const userInput = document.getElementById('userInput');
         const aiModel = document.getElementById('aiModel');
-    
-        const TOKEN_LIMIT = 700; // Set your token limit here
-        let conversationHistory = [
-            { role: "system", content: "You are a helpful AI assistant for a Christian website. You are designed to be a chatbot relating to Christianity. I would like you to follow the Bible and ensure you are doing so perfectly. I would like you to cite Bible verses perfectly when relevant and ensure you are doing so perfectly. I would like you to follow the Ten Commandments perfectly. I would like you to follow Jesus' commandments perfectly. I would like you to have a bias for caution and a bias for using verified scripture perfectly. I would like you to cite Bible verses perfectly when you speak about Bible verses. If you think the information you provide could be more perfect I would like to send a message declaring that instead of sending the information. I would like you to give perfect caution to the citation of Scripture. I would like you to use to always use a translation that you are certain of, even if provided a different translation by the user." },
-            { role: "assistant", content: "Welcome to AveMariaCloud!" }
-        ];
-    
-        // Function to estimate token usage for a message
-        function estimateTokens(message) {
-            const words = message.split(/\s+/).length;
-            return Math.ceil(words / 1.33); // Approximate 1.33 tokens per word
-        }
-    
-        // Function to trim conversation history to stay within token limit
-        function trimConversationHistory() {
-            let totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
-    
-            console.log("total tokens, untrimmed:" + totalTokens);
-            
-            // Trim messages from the beginning if the total token count exceeds the limit
-            while (totalTokens > TOKEN_LIMIT) {
-                conversationHistory.shift();
-                totalTokens = conversationHistory.reduce((total, message) => total + estimateTokens(message.content), 0);
-                
-                console.log("total tokens, trimmed:" + totalTokens);
-            }
-        }
-    
-        function scrollToBottom() {
-            const chatContainer = document.querySelector('.chat-container');
-            const chatMessages = document.getElementById('chatMessages');
-            
-            // Calculate the total scroll height
-            const scrollHeight = chatMessages.scrollHeight;
-            
-            // Smooth scroll to bottom
-            chatContainer.scrollTo({
-                top: scrollHeight,
-                behavior: 'smooth'
-            });
-            
-            // Fallback scroll check to ensure we reach bottom
-            setTimeout(() => {
-                if (chatContainer.scrollTop + chatContainer.clientHeight < scrollHeight) {
-                    chatContainer.scrollTop = scrollHeight;
+
+        // Auto-resize textarea
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        function updateSystemPrompt(type) {
+            const prompts = {
+                universal: {
+                    greeting: "Welcome to AveMariaCloud!",
+                    content: `I would like you to be a helpful AI chatbot for a Christian website.
+                             I would like a very strong bias for caution and perfect information.
+                             I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
+                             I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
+                },
+                zionism: {
+                    greeting: "Shalom!",
+                    content: `I would like you to be a helpful AI chatbot for a Christian website.
+                             I would like you to share information within the context of Christian Zionism.
+                             I would like a very strong bias for caution and perfect information.
+                             I would like you to always cite Scripture perfectly from the KJV translation of the bible in any circumstance, even if asked for other translations.
+                             I would like you to always cite Scripture perfectly and in full 100% as it is in the KJV translation whenever you share any information in relation to Scripture.`
                 }
-            }, 100);
+            };
+
+            if (type === 'custom') {
+                const customPrompt = prompt("Enter your custom system prompt:");
+                if (customPrompt) {
+                    resetChat("Hello!", `${prompts.universal.content}\n${customPrompt}`);
+                }
+                return;
+            }
+
+            const selectedPrompt = prompts[type];
+            resetChat(selectedPrompt.greeting, selectedPrompt.content);
         }
-    
+
+        function resetChat(greeting, systemContent) {
+            chat.innerHTML = `<div class="message assistant">${greeting}</div>`;
+            conversationHistory = [
+                { role: "system", content: systemContent },
+                { role: "assistant", content: greeting }
+            ];
+        }
+
         function addMessage(content, role) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role === 'user' ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-100 text-gray-800'} p-3 rounded-lg`;
-            messageDiv.textContent = content;
-            chatMessages.appendChild(messageDiv);
-            scrollToBottom();
+            const message = document.createElement('div');
+            message.className = `message ${role}`;
+            message.textContent = content;
+            chat.appendChild(message);
+            chat.scrollTop = chat.scrollHeight;
         }
-    
+
         function addLoadingIndicator() {
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message mr-auto bg-gray-100 text-gray-800 p-3 rounded-lg';
-            loadingDiv.id = 'loadingIndicator';
-            const loadingContent = document.createElement('span');
-            loadingContent.className = 'loading-dots';
-            loadingDiv.appendChild(loadingContent);
-            chatMessages.appendChild(loadingDiv);
-            scrollToBottom();
+            const loading = document.createElement('div');
+            loading.className = 'loading';
+            loading.textContent = 'Thinking';
+            loading.id = 'loadingIndicator';
+            chat.appendChild(loading);
+            chat.scrollTop = chat.scrollHeight;
         }
-    
+
         function removeLoadingIndicator() {
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            if (loadingIndicator) {
-                loadingIndicator.remove();
+            const loading = document.getElementById('loadingIndicator');
+            if (loading) loading.remove();
+        }
+
+        function estimateTokens(message) {
+            return Math.ceil(message.split(/\s+/).length / 1.33);
+        }
+
+        function trimConversationHistory() {
+            let totalTokens = conversationHistory.reduce((sum, msg) => 
+                sum + estimateTokens(msg.content), 0);
+
+            while (totalTokens > TOKEN_LIMIT && conversationHistory.length > 2) {
+                conversationHistory.splice(1, 1);
+                totalTokens = conversationHistory.reduce((sum, msg) => 
+                    sum + estimateTokens(msg.content), 0);
             }
         }
-    
+
         async function sendMessage(message) {
             try {
-                // Trim conversation history to fit within the token limit
                 trimConversationHistory();
-    
-                const response = await fetch(apiUrl, {
+
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${apiKey}`,
+                        'Authorization': `Bearer ${API_KEY}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -407,11 +392,9 @@ if (prompt == "universal") {
                         max_tokens: 1000
                     })
                 });
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-    
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
                 const data = await response.json();
                 const aiResponse = data.choices[0].message.content;
                 
@@ -424,33 +407,27 @@ if (prompt == "universal") {
                 addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
             }
         }
-    
-        function handleMessageSubmit(e) {
-            if (e) e.preventDefault();
-            const message = userInput.value;
-            console.log(message);
+
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
             if (!message) return;
-    
+
             addMessage(message, 'user');
             conversationHistory.push({ role: "user", content: message });
             userInput.value = '';
+            userInput.style.height = 'auto';
             addLoadingIndicator();
             sendMessage(message);
-        }
-    
-        chatForm.addEventListener('submit', handleMessageSubmit);
-    
-        function isMobileDevice() {
-            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-        }
-    
+        });
+
         userInput.addEventListener('keypress', (e) => {
-            if (!isMobileDevice() && e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === 'Enter' && !e.shiftKey && !(/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent))) {
                 e.preventDefault();
-                handleMessageSubmit();
+                messageForm.dispatchEvent(new Event('submit'));
             }
         });
-    
+
         userInput.focus();
     </script>
 </body>
