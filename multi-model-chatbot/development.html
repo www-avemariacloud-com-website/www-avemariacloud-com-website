@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Chat Interface</title>
+    <title>Multi Model Chatbot</title>
     <style>
         /* Modern CSS Reset */
         *, *::before, *::after {
@@ -12,163 +12,166 @@
             padding: 0;
         }
 
-        /* Variables */
+        /* Custom Properties */
         :root {
-            --primary: #4f46e5;
-            --primary-light: #6366f1;
-            --secondary: #10b981;
-            --background: #ffffff;
-            --surface: #f9fafb;
-            --text: #1f2937;
-            --text-light: #6b7280;
-            --border: #e5e7eb;
-            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --radius: 0.5rem;
-            --transition: all 0.2s ease;
+            --primary-color: #2563eb;
+            --secondary-color: #10b981;
+            --background-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        /* Dark Mode */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --background: #111827;
-                --surface: #1f2937;
-                --text: #f9fafb;
-                --text-light: #9ca3af;
-                --border: #374151;
-            }
-        }
-
+        /* Base Styles */
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: var(--background);
-            color: var(--text);
+            font-family: var(--font-sans);
+            color: var(--text-primary);
+            background-color: var(--background-color);
             line-height: 1.5;
         }
 
-        .app {
-            display: grid;
-            grid-template-rows: auto 1fr auto;
-            height: 100vh;
+        /* Layout */
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             max-width: 100%;
             margin: 0 auto;
+            background: var(--surface-color);
+            box-shadow: var(--shadow-md);
         }
 
-        /* Header Styles */
+        /* Header */
         .header {
             padding: 1rem;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
+            background: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
+            padding: 0.5rem;
         }
 
-        .app-title {
+        .title {
             font-size: 1.5rem;
+            color: var(--primary-color);
             font-weight: 600;
-            color: var(--primary);
         }
 
+        /* Controls */
         .controls {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .button {
             padding: 0.5rem 1rem;
             border: none;
-            border-radius: var(--radius);
-            background: var(--primary);
+            border-radius: var(--radius-sm);
+            background: var(--primary-color);
             color: white;
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: opacity 0.2s ease;
         }
 
         .button:hover {
-            background: var(--primary-light);
+            opacity: 0.9;
         }
 
         .select {
             padding: 0.5rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--background);
-            color: var(--text);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--surface-color);
+            color: var(--text-primary);
             font-size: 0.875rem;
         }
 
         /* Chat Area */
         .chat {
-            padding: 1rem;
+            flex: 1;
             overflow-y: auto;
-            background: var(--background);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .message {
-            max-width: 80%;
-            margin: 1rem 0;
+            max-width: 85%;
             padding: 1rem;
-            border-radius: var(--radius);
-            animation: slideIn 0.3s ease;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.3s ease;
         }
 
         .message.assistant {
-            background: var(--surface);
+            background: var(--background-color);
             margin-right: auto;
-            border-bottom-left-radius: 0;
+            color: var(--text-primary);
         }
 
         .message.user {
-            background: var(--primary);
+            background: var(--primary-color);
             color: white;
             margin-left: auto;
-            border-bottom-right-radius: 0;
         }
 
-        /* Input Area */
+        /* Footer */
         .footer {
             padding: 1rem;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
         }
 
         .input-form {
             display: flex;
             gap: 1rem;
+            max-width: 100%;
         }
 
         .input-textarea {
             flex: 1;
             padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--background);
-            color: var(--text);
-            resize: none;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            resize: vertical;
             min-height: 50px;
             max-height: 150px;
-            transition: var(--transition);
+            font-family: inherit;
+            font-size: 0.875rem;
         }
 
         .input-textarea:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: var(--primary-color);
         }
 
         .send-button {
             padding: 0.75rem 1.5rem;
-            background: var(--secondary);
+            background: var(--secondary-color);
             color: white;
             border: none;
-            border-radius: var(--radius);
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: var(--transition);
+            font-weight: 500;
+            transition: opacity 0.2s ease;
         }
 
         .send-button:hover {
@@ -177,36 +180,70 @@
 
         /* Loading Animation */
         .loading {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
             padding: 1rem;
-            background: var(--surface);
-            border-radius: var(--radius);
+            background: var(--background-color);
+            border-radius: var(--radius-md);
             margin: 1rem 0;
+            animation: fadeIn 0.3s ease;
         }
 
         .loading::after {
             content: "...";
-            animation: dots 1.5s steps(4, end) infinite;
+            animation: dots 1.5s infinite;
+        }
+
+        /* Footer Content */
+        .footer-content {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+
+        .footer-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
         }
 
         /* Animations */
-        @keyframes slideIn {
-            from { 
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes dots {
             0%, 20% { content: "."; }
             40%, 60% { content: ".."; }
             80%, 100% { content: "..."; }
+        }
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #0f172a;
+                --surface-color: #1e293b;
+                --text-primary: #e2e8f0;
+                --text-secondary: #94a3b8;
+                --border-color: #334155;
+            }
+
+            .select {
+                background: var(--surface-color);
+                color: var(--text-primary);
+            }
+
+            .input-textarea {
+                background: var(--surface-color);
+                color: var(--text-primary);
+            }
         }
 
         /* Responsive Design */
@@ -229,16 +266,20 @@
             }
 
             .send-button {
-                padding: 1rem;
+                width: 100%;
+            }
+
+            .footer-content {
+                font-size: 0.75rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app">
+    <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="app-title">Multi Model Chatbot</h1>
+                <h1 class="title">Multi Model Chatbot</h1>
                 <div class="controls">
                     <button class="button" onclick="updateSystemPrompt('universal')">Universal</button>
                     <button class="button" onclick="updateSystemPrompt('zionism')">Zionism</button>
@@ -268,13 +309,10 @@
             </form>
         </footer>
 
-
+        
     </div>
 
-
-<center>
-    <BR>
-    <p>
+    <p><BR><BR><center>
         © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
         <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
         <BR><BR>
@@ -300,166 +338,162 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
     </p>
 </center>
 
-    <script>
-        const TOKEN_LIMIT = 700;
-        const API_KEY = "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";
-        const API_URL = "https://proxy.small-recipe-9582.workers.dev/";
 
-        let conversationHistory = [
-            {
-                role: "system",
+
+    <!-- Your existing JavaScript code goes here -->
+</body>
+</html>
+
+
+
+<script>
+    const TOKEN_LIMIT = 700;
+    const API_KEY = "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";
+    const API_URL = "https://proxy.small-recipe-9582.workers.dev/";
+
+    let conversationHistory = [
+        {
+            role: "system",
+            content: `I would like you to be a helpful AI chatbot for a Christian website.
+                     I would like a very strong bias for caution and perfect information.
+                     I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
+                     I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
+        },
+        {
+            role: "assistant",
+            content: "Welcome to AveMariaCloud!"
+        }
+    ];
+
+    const chat = document.getElementById('chat');
+    const messageForm = document.getElementById('messageForm');
+    const userInput = document.getElementById('userInput');
+    const aiModel = document.getElementById('aiModel');
+
+    function updateSystemPrompt(type) {
+        const prompts = {
+            universal: {
+                greeting: "Welcome to AveMariaCloud!",
                 content: `I would like you to be a helpful AI chatbot for a Christian website.
                          I would like a very strong bias for caution and perfect information.
                          I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
                          I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
             },
-            {
-                role: "assistant",
-                content: "Welcome to AveMariaCloud!"
+            zionism: {
+                greeting: "Shalom!",
+                content: `I would like you to be a helpful AI chatbot for a Christian website.
+                         I would like you to share information within the context of Christian Zionism.
+                         I would like a very strong bias for caution and perfect information.
+                         I would like you to always cite Scripture perfectly from the KJV translation of the bible in any circumstance, even if asked for other translations.
+                         I would like you to always cite Scripture perfectly and in full 100% as it is in the KJV translation whenever you share any information in relation to Scripture.`
             }
+        };
+
+        if (type === 'custom') {
+            const customPrompt = prompt("You can enter text for a system prompt");
+            resetChat("Hello!", `${prompts.universal.content}\nI would like you to use this information for a system prompt that may have been provided by a user${customPrompt}`);
+            return;
+        }
+
+        const selectedPrompt = prompts[type];
+        resetChat(selectedPrompt.greeting, selectedPrompt.content);
+    }
+
+    function resetChat(greeting, systemContent) {
+        chat.innerHTML = `<div class="message assistant">${greeting}</div>`;
+        conversationHistory = [
+            { role: "system", content: systemContent },
+            { role: "assistant", content: greeting }
         ];
+    }
 
-        const chat = document.getElementById('chat');
-        const messageForm = document.getElementById('messageForm');
-        const userInput = document.getElementById('userInput');
-        const aiModel = document.getElementById('aiModel');
+    function addMessage(content, role) {
+        const message = document.createElement('div');
+        message.className = `message ${role}`;
+        message.textContent = content;
+        chat.appendChild(message);
+        chat.scrollTop = chat.scrollHeight;
+    }
 
-        // Auto-resize textarea
-        userInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
+    function addLoadingIndicator() {
+        const loading = document.createElement('div');
+        loading.className = 'loading';
+        loading.id = 'loadingIndicator';
+        chat.appendChild(loading);
+        chat.scrollTop = chat.scrollHeight;
+    }
 
-        function updateSystemPrompt(type) {
-            const prompts = {
-                universal: {
-                    greeting: "Welcome to AveMariaCloud!",
-                    content: `I would like you to be a helpful AI chatbot for a Christian website.
-                             I would like a very strong bias for caution and perfect information.
-                             I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
-                             I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
-                },
-                zionism: {
-                    greeting: "Shalom!",
-                    content: `I would like you to be a helpful AI chatbot for a Christian website.
-                             I would like you to share information within the context of Christian Zionism.
-                             I would like a very strong bias for caution and perfect information.
-                             I would like you to always cite Scripture perfectly from the KJV translation of the bible in any circumstance, even if asked for other translations.
-                             I would like you to always cite Scripture perfectly and in full 100% as it is in the KJV translation whenever you share any information in relation to Scripture.`
-                }
-            };
+    function removeLoadingIndicator() {
+        const loading = document.getElementById('loadingIndicator');
+        if (loading) loading.remove();
+    }
 
-            if (type === 'custom') {
-                const customPrompt = prompt("Enter your custom system prompt:");
-                if (customPrompt) {
-                    resetChat("Hello!", `${prompts.universal.content}\n${customPrompt}`);
-                }
-                return;
-            }
+    function estimateTokens(message) {
+        return Math.ceil(message.split(/\s+/).length / 1.33);
+    }
 
-            const selectedPrompt = prompts[type];
-            resetChat(selectedPrompt.greeting, selectedPrompt.content);
-        }
+    function trimConversationHistory() {
+        let totalTokens = conversationHistory.reduce((sum, msg) => 
+            sum + estimateTokens(msg.content), 0);
 
-        function resetChat(greeting, systemContent) {
-            chat.innerHTML = `<div class="message assistant">${greeting}</div>`;
-            conversationHistory = [
-                { role: "system", content: systemContent },
-                { role: "assistant", content: greeting }
-            ];
-        }
-
-        function addMessage(content, role) {
-            const message = document.createElement('div');
-            message.className = `message ${role}`;
-            message.textContent = content;
-            chat.appendChild(message);
-            chat.scrollTop = chat.scrollHeight;
-        }
-
-        function addLoadingIndicator() {
-            const loading = document.createElement('div');
-            loading.className = 'loading';
-            loading.textContent = 'Loading';
-            loading.id = 'loadingIndicator';
-            chat.appendChild(loading);
-            chat.scrollTop = chat.scrollHeight;
-        }
-
-        function removeLoadingIndicator() {
-            const loading = document.getElementById('loadingIndicator');
-            if (loading) loading.remove();
-        }
-
-        function estimateTokens(message) {
-            return Math.ceil(message.split(/\s+/).length / 1.33);
-        }
-
-        function trimConversationHistory() {
-            let totalTokens = conversationHistory.reduce((sum, msg) => 
+        while (totalTokens > TOKEN_LIMIT && conversationHistory.length > 2) {
+            conversationHistory.splice(1, 1);
+            totalTokens = conversationHistory.reduce((sum, msg) => 
                 sum + estimateTokens(msg.content), 0);
-
-            while (totalTokens > TOKEN_LIMIT && conversationHistory.length > 2) {
-                conversationHistory.splice(1, 1);
-                totalTokens = conversationHistory.reduce((sum, msg) => 
-                    sum + estimateTokens(msg.content), 0);
-            }
         }
+    }
 
-        async function sendMessage(message) {
-            try {
-                trimConversationHistory();
+    async function sendMessage(message) {
+        try {
+            trimConversationHistory();
 
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        model: aiModel.value,
-                        messages: conversationHistory,
-                        temperature: 0.7,
-                        max_tokens: 1000
-                    })
-                });
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: aiModel.value,
+                    messages: conversationHistory,
+                    temperature: 0.7,
+                    max_tokens: 1000
+                })
+            });
 
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-                const data = await response.json();
-                const aiResponse = data.choices[0].message.content;
-                
-                conversationHistory.push({ role: "assistant", content: aiResponse });
-                removeLoadingIndicator();
-                addMessage(aiResponse, 'assistant');
-            } catch (error) {
-                console.error('Error:', error);
-                removeLoadingIndicator();
-                addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
-            }
+            const data = await response.json();
+            const aiResponse = data.choices[0].message.content;
+            
+            conversationHistory.push({ role: "assistant", content: aiResponse });
+            removeLoadingIndicator();
+            addMessage(aiResponse, 'assistant');
+        } catch (error) {
+            console.error('Error:', error);
+            removeLoadingIndicator();
+            addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
         }
+    }
 
-        messageForm.addEventListener('submit', (e) => {
+    messageForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, 'user');
+        conversationHistory.push({ role: "user", content: message });
+        userInput.value = '';
+        addLoadingIndicator();
+        sendMessage(message);
+    });
+
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey && !(/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent))) {
             e.preventDefault();
-            const message = userInput.value.trim();
-            if (!message) return;
+            messageForm.dispatchEvent(new Event('submit'));
+        }
+    });
 
-            addMessage(message, 'user');
-            conversationHistory.push({ role: "user", content: message });
-            userInput.value = '';
-            userInput.style.height = 'auto';
-            addLoadingIndicator();
-            sendMessage(message);
-        });
-
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey && !(/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent))) {
-                e.preventDefault();
-                messageForm.dispatchEvent(new Event('submit'));
-            }
-        });
-
-        userInput.focus();
-    </script>
-</body>
-</html>
+    userInput.focus();
+</script>
