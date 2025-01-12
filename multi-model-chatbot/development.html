@@ -436,6 +436,7 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
                     removeLoadingIndicator();
                     addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
                 }
+                window.scrollTo({ top: 0, behavior: 'auto' });
             }
         
             messageForm.addEventListener('submit', (e) => {
