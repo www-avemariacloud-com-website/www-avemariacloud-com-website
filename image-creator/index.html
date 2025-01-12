@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Creator v2.5</title>
+    <title>Image Creator v2.6</title>
     <link rel="icon" href="image-creator-icon.jpeg" type="image/jpeg">
 
 
@@ -253,7 +253,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Image Creator v2.5</h1>
+        <h1>Image Creator v2.6</h1>
 
         <div class="model-selection">
             <label for="model-select">Image Generation Model:</label>
@@ -422,7 +422,7 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
             if (attempt < maxRetries) {
                 attempt++;
                 console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
-                await new Promise(resolve => setTimeout(resolve, 2000)); // Optional delay between retries (2 seconds)
+                await new Promise(resolve => setTimeout(resolve, 61000)); // Optional delay between retries (61 seconds)
                 await fetchData(); // Retry fetching
             } else {
                 console.error('Error:', error);
@@ -513,7 +513,7 @@ Respond in JSON with these keys: positive_prompt and negative_prompt.`
             if (attempt < maxRetries) {
                 attempt++;
                 console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
-                await new Promise(resolve => setTimeout(resolve, 2000)); // Optional delay between retries (2 seconds)
+                await new Promise(resolve => setTimeout(resolve, 61000)); // Optional delay between retries (61 seconds)
                 return await fetchData(); // Retry fetching
             } else {
                 throw new Error(`Failed to generate prompts after ${maxRetries} attempts: ${error.message}`);
