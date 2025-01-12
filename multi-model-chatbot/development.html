@@ -58,7 +58,7 @@
             .container {
                 display: flex;
                 flex-direction: column;
-                height: 90vh;
+                height: 100svh;
                 max-width: 100%;
                 width: 100%;
                 margin: 0 auto;
@@ -406,6 +406,9 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
             }
         
             async function sendMessage(message) {
+                
+                window.scrollTo({ top: 0, behavior: 'auto' });
+                
                 try {
                     trimConversationHistory();
         
@@ -431,10 +434,14 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
                     conversationHistory.push({ role: "assistant", content: aiResponse });
                     removeLoadingIndicator();
                     addMessage(aiResponse, 'assistant');
+                    
+                window.scrollTo({ top: 0, behavior: 'auto' });
                 } catch (error) {
                     console.error('Error:', error);
                     removeLoadingIndicator();
                     addMessage("I apologize, but I encountered an error. Please try again.", 'assistant');
+                    
+                window.scrollTo({ top: 0, behavior: 'auto' });
                 }
                 window.scrollTo({ top: 0, behavior: 'auto' });
             }
