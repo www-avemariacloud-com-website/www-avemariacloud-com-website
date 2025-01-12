@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Creator v2.6</title>
+    <title>Image Creator v2.7</title>
     <link rel="icon" href="image-creator-icon.jpeg" type="image/jpeg">
 
 
@@ -253,10 +253,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Image Creator v2.6</h1>
+        <h1>Image Creator v2.7</h1>
 
         <div class="model-selection">
-            <label for="model-select">Image Generation Model:</label>
+            <label for="model-select">Image Creation Model</label>
             <select id="model-select" class="model-select" onchange="updateModelDescription()">
                 <option value="sd35" selected>stabilityai/stable-diffusion-3.5-large</option>
                 <option value="flux">black-forest-labs/FLUX.1-dev</option>
@@ -272,11 +272,22 @@
         <div id="error-message" class="error"></div>
 
         <div id="description-tab" class="tab-content active">
+            <div class="text-model-selection">
+                <label for="text-model-select">Text Creation Model</label>
+                <select id="textAIModel" class="model-select">
+                        <option value="gemma2-9b-it">Gemma 2 9B</option>
+                        <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 90B Vision</option>
+                        <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                </select>
+            </div>
+            <BR>
+
             <div class="form-group">
-                <label for="description">Image Description:</label>
+                <label for="description">Image Description (Use AI to Create Positive and Negative Prompts)</label>
                 <textarea id="description" placeholder="Enter a description for your image..."></textarea>
                 <button class="random-description-button" onclick="generateRandomDescription()" id="random-description-button">Create Random Image Description</button>
             </div>
+            
             <div class="form-group">
                 <label for="num-images">Number of Images:</label>
                 <input type="number" id="num-images" min="1" max="10" value="1">
@@ -394,7 +405,7 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: "llama-3.2-90b-vision-preview",
+                    model: document.getElementById('textAIModel').value,
                     messages: [
                         {
                             role: "system",
@@ -482,7 +493,7 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: "llama-3.2-90b-vision-preview",
+                    model: document.getElementById('textAIModel').value,
                     messages: [
                         {
                             role: "system",
