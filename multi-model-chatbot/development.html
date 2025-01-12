@@ -309,6 +309,8 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
 
 
         <script>
+
+            
             const TOKEN_LIMIT = 700;
             const API_KEY = "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";
             const API_URL = "https://proxy.small-recipe-9582.workers.dev/";
@@ -370,9 +372,10 @@ Stability AI (Stable Diffusion): Relevant links may include <a href="https://sta
             }
         
             function addMessage(content, role) {
+                const formattedMessage = content.replace(/\n/g, "<br>");
                 const message = document.createElement('div');
                 message.className = `message ${role}`;
-                message.textContent = content;
+                message.innerHTML = formattedMessage;
                 chat.appendChild(message);
                 chat.scrollTop = chat.scrollHeight;
             }
