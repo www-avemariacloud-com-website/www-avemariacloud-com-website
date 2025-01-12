@@ -3,80 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi Model Chatbot</title>
+    <title>Modern Chat Interface</title>
     <style>
-        /* Modern CSS Reset */
+        /* Reset and Base Styles */
         *, *::before, *::after {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Custom Properties */
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #10b981;
-            --background-color: #f8fafc;
-            --surface-color: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --background-color: #f8f9fa;
+            --chat-background: #ffffff;
+            --text-primary: #2b2d42;
+            --text-secondary: #8d99ae;
+            --border-color: #e9ecef;
+            --message-user: #4361ee;
+            --message-assistant: #f8f9fa;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --radius-sm: 0.375rem;
-            --radius-md: 0.5rem;
-            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        /* Base Styles */
         body {
-            font-family: var(--font-sans);
-            color: var(--text-primary);
+            font-family: var(--font-main);
             background-color: var(--background-color);
+            color: var(--text-primary);
             line-height: 1.5;
+            height: 100vh;
+            overflow: hidden;
         }
 
         /* Layout */
-        .container {
+        .app-container {
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
             max-width: 100%;
             margin: 0 auto;
-            background: var(--surface-color);
-            box-shadow: var(--shadow-md);
+            background: var(--chat-background);
+            position: relative;
         }
 
-        /* Header */
+        /* Header Styles */
         .header {
             padding: 1rem;
-            background: var(--surface-color);
+            background: var(--chat-background);
             border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
+            box-shadow: var(--shadow-sm);
             z-index: 10;
         }
 
         .header-content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 0.5rem;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .title {
+        .app-title {
             font-size: 1.5rem;
+            font-weight: 700;
             color: var(--primary-color);
-            font-weight: 600;
         }
 
-        /* Controls */
         .controls {
             display: flex;
-            gap: 0.75rem;
             flex-wrap: wrap;
-            align-items: center;
+            gap: 0.5rem;
         }
 
         .button {
@@ -88,6 +87,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: opacity 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .button:hover {
@@ -98,9 +98,10 @@
             padding: 0.5rem;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            background: var(--surface-color);
+            background: var(--chat-background);
             color: var(--text-primary);
-            font-size: 0.875rem;
+            font-size: 0.9rem;
+            min-width: 150px;
         }
 
         /* Chat Area */
@@ -111,39 +112,42 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            scroll-behavior: smooth;
         }
 
         .message {
             max-width: 85%;
             padding: 1rem;
             border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            animation: fadeIn 0.3s ease;
+            animation: messageSlide 0.3s ease;
+            word-wrap: break-word;
         }
 
         .message.assistant {
-            background: var(--background-color);
-            margin-right: auto;
-            color: var(--text-primary);
+            background: var(--message-assistant);
+            border: 1px solid var(--border-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
         }
 
         .message.user {
-            background: var(--primary-color);
+            background: var(--message-user);
             color: white;
-            margin-left: auto;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
         }
 
-        /* Footer */
+        /* Input Area */
         .footer {
             padding: 1rem;
-            background: var(--surface-color);
+            background: var(--chat-background);
             border-top: 1px solid var(--border-color);
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .input-form {
             display: flex;
-            gap: 1rem;
-            max-width: 100%;
+            gap: 0.5rem;
         }
 
         .input-textarea {
@@ -151,11 +155,12 @@
             padding: 0.75rem;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            resize: vertical;
-            min-height: 50px;
-            max-height: 150px;
+            resize: none;
             font-family: inherit;
-            font-size: 0.875rem;
+            font-size: 1rem;
+            min-height: 45px;
+            max-height: 150px;
+            transition: border-color 0.2s ease;
         }
 
         .input-textarea:focus {
@@ -165,7 +170,7 @@
 
         .send-button {
             padding: 0.75rem 1.5rem;
-            background: var(--secondary-color);
+            background: var(--success-color);
             color: white;
             border: none;
             border-radius: var(--radius-sm);
@@ -184,42 +189,30 @@
             align-items: center;
             gap: 0.5rem;
             padding: 1rem;
-            background: var(--background-color);
+            background: var(--message-assistant);
             border-radius: var(--radius-md);
-            margin: 1rem 0;
-            animation: fadeIn 0.3s ease;
+            align-self: flex-start;
+            max-width: 100px;
         }
 
         .loading::after {
             content: "...";
-            animation: dots 1.5s infinite;
-        }
-
-        /* Footer Content */
-        .footer-content {
-            text-align: center;
-            padding: 2rem 1rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            line-height: 1.7;
-        }
-
-        .footer-content a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .footer-content a:hover {
-            text-decoration: underline;
+            animation: loadingDots 1.5s infinite;
         }
 
         /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        @keyframes dots {
+        @keyframes loadingDots {
             0%, 20% { content: "."; }
             40%, 60% { content: ".."; }
             80%, 100% { content: "..."; }
@@ -228,37 +221,45 @@
         /* Dark Mode */
         @media (prefers-color-scheme: dark) {
             :root {
-                --background-color: #0f172a;
-                --surface-color: #1e293b;
-                --text-primary: #e2e8f0;
-                --text-secondary: #94a3b8;
-                --border-color: #334155;
-            }
-
-            .select {
-                background: var(--surface-color);
-                color: var(--text-primary);
+                --background-color: #1a1b1e;
+                --chat-background: #2d2f34;
+                --text-primary: #e9ecef;
+                --text-secondary: #adb5bd;
+                --border-color: #373a40;
+                --message-assistant: #373a40;
             }
 
             .input-textarea {
-                background: var(--surface-color);
+                background: var(--background-color);
+                color: var(--text-primary);
+            }
+
+            .select {
+                background: var(--background-color);
                 color: var(--text-primary);
             }
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        /* Mobile Responsiveness */
+        @media (min-width: 768px) {
             .header-content {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
             }
 
+            .message {
+                max-width: 70%;
+            }
+        }
+
+        @media (max-width: 480px) {
             .controls {
                 flex-direction: column;
             }
 
-            .message {
-                max-width: 90%;
+            .select {
+                width: 100%;
             }
 
             .input-form {
@@ -267,19 +268,16 @@
 
             .send-button {
                 width: 100%;
-            }
-
-            .footer-content {
-                font-size: 0.75rem;
+                padding: 0.75rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="app-container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Multi Model Chatbot</h1>
+                <h1 class="app-title">Modern Chat Interface</h1>
                 <div class="controls">
                     <button class="button" onclick="updateSystemPrompt('universal')">Universal</button>
                     <button class="button" onclick="updateSystemPrompt('zionism')">Zionism</button>
@@ -294,7 +292,7 @@
         </header>
 
         <main class="chat" id="chat">
-            <div class="message assistant">Welcome to AveMariaCloud!</div>
+            <div class="message assistant">Welcome to Modern Chat Interface!</div>
         </main>
 
         <footer class="footer">
@@ -308,42 +306,9 @@
                 <button type="submit" class="send-button">Send</button>
             </form>
         </footer>
-
-        
     </div>
-
-    <p><BR><BR><center>
-        © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
-        <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
-        <BR><BR>
-        Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
-        <br><br>
-        Code may have been generated with the assistance of ChatGPT (OpenAI), Claude AI (Anthropic), Meta Llama 3 (Meta), Gemma (Google), and Mixtral (Mistral AI). Each of these tools may have contributed to different aspects of the code. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to OpenAI, Anthropic, Meta, Google, and Mistral AI for more information. Image(s) may have been generated using AI tools such as Stable Diffusion or Flux. These tools may use advanced machine learning models to create visual content. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to Stability AI and Flux AI. An API relating to Groq may be used. You may benefit from consulting the terms of service, usage guidelines, and/or other documentation relating to Groq, Inc.
-        <br><br>
-Groq, Inc. (Groq): Relevant links may include <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
-Stability AI (Stable Diffusion): Relevant links may include <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
-        OpenAI (ChatGPT): Relevant links may include <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
-        Anthropic (Claude AI): Relevant links may include <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
-        Meta (Llama 3): Relevant links may include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
-        Google (Gemma): Relevant links may include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
-        Mistral AI (Mixtral): Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href=”https://trust.mistral.ai/”>Trust Center</a>.
-        <br><br>
-        Some notices may be relevant.<br><br>
-        <strong>Built with Meta Llama 3:</strong> This tool incorporates Meta Llama 3, which is licensed under the <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 Community License</a>. Copyright © Meta Platforms, Inc. All Rights Reserved.<br>
-        <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.<br>
-        <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.<br>
-        <strong><a href="https://avemariacloud.com/stability-ai-notice.txt">Notice</a>: Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved. Stability AI<br>
-        <strong>Hugging Face API:</strong> This tool may use the Hugging Face API, and may be subject to their <a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
-        <strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc. IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="https://avemariacloud.com/flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
-    </p>
-</center>
-
-
-
-    <!-- Your existing JavaScript code goes here -->
 </body>
 </html>
-
 
 
 <script>
