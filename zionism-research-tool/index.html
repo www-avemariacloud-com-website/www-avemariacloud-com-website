@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <title>Zionism Research Tool v71.3</title>
+    <style>
+        :root {
+            --primary-color: #0000f7;
+            --primary-hover: #1d4ed8;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --error-color: #ef4444;
+            --success-color: #22c55e;
+            --highlight-bg: #f8fafc;
+            --tag-bg: #e5e7eb;
+            --gradient-start: #60a5fa;
+            --gradient-end: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+        }
+
+        .card {
+            background: var(--card-background);
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.15s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea.input-field {
+            
+            resize: vertical;
+        }
+
+        select.input-field {
+            background-color: white;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            width: 100%;
+        }
+
+        .button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: #fee2e2;
+            color: var(--error-color);
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+        }
+
+        .message.user {
+            background-color: #dbeafe;
+            margin-left: auto;
+        }
+
+        .message.bot {
+            background-color: white;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+        }
+
+        .send-button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+
+
+
+
+
+
+
+        .results-container {
+        }
+
+        .result-section {
+            background: var(--highlight-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .result-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .result-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .result-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 1.5em;
+            background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+            border-radius: 2px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .confidence-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            border-radius: 3px;
+            transition: width 1s ease-out;
+        }
+
+        .finding-item {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            transition: transform 0.2s ease;
+        }
+
+        .finding-item:hover {
+            transform: translateX(4px);
+        }
+
+        .finding-number {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .finding-content {
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .key-value-pair {
+            display: flex;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .key-value-pair:nth-child(even) {
+            background: var(--highlight-bg);
+        }
+
+        .key {
+            font-weight: 500;
+            color: var(--text-secondary);
+            width: 200px;
+            flex-shrink: 0;
+            padding-right:6px;
+              white-space: normal; /* Ensures text wraps to the next line */
+              word-wrap: break-word; /* Breaks long words to wrap to the next line */
+              word-break: break-word; /* Provides support for older browsers */
+              overflow-wrap: break-word; /* Ensures wrapping in modern browsers */
+        }
+
+        .value {
+            color: var(--text-primary);
+            flex-grow: 1;
+        }
+
+        .nested-object {
+            margin-left: 1.5rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Zionism Research Tool v71.3 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
+            <p>A tool that can analyze text with AI</p>
+        </header>
+
+        <div class="card">
+            <h2 class="card-title">Text Analyzer</h2>
+            <div class="input-group">
+            <textarea rows="9" id="inputText" class="input-field" placeholder="You can enter text here..."></textarea>
+            </div>
+
+            <div class="grid">
+                <div class="input-group">
+                    <label for="aiModel">Select AI Model</label>
+                    <select id="aiModel" class="input-field">
+                        <option value="gemma2-9b-it">Gemma 2 9B</option>
+                        <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 90B Vision</option>
+                        <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="aiPrompt">Select Prompt Type</label>
+                    <select id="aiPrompt" class="input-field">
+                <option value="zionism_research" selected>Zionism Research v1.4</option>
+                <option value="zionism_identifier_and_responder">Zionism Identifier and Responder v1.0</option>
+                <option value="IHRA_Antisemitism_Identifier_And_Combat_Strategy">Antisemitism Identifier and Combat Strategy (Utilising IHRA’s non-legally binding working definition of antisemitism) v1.0</option>
+                <option value="the_pyramid_insight_ADL_pyramid_of_hate">The Pyramid Insight: Identifying and Interrupting Hate using ADL Pyramid of Hate v1.0</option>
+                <option value="harm_and_critique_utilizing_JDA">Harm and Critique: A JDA-Informed Guide v1.0</option>
+                <option value="antisemitism_sentinel_a_comprehensive_analysis_framework">Antisemitism Sentinel: A Comprehensive Analysis Framework (Using IHRA, ADL Pyramid of Hate, and JDA) v1.0</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="submitBtn" class="button">Analyze Text</button>
+        </div>
+
+        <div id="error" class="alert"></div>
+        <div id="loading" class="loading">Analyzing with Artificial Intelligence...</div>
+
+        <div id="result" class="card" style="display: none;">
+            <h2 class="card-title">Analysis Results</h2>
+            <div id="resultContent"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Chatbot</h2>
+            <div id="chat-box" class="chat-container"></div>
+            <div class="chat-input-container">
+                <textarea rows="3" id="user-input" class="input-field chat-input" placeholder="You can type a message here..."></textarea>
+                <button id="send-button" class="send-button">Send</button>
+            </div>
+        </div>
+
+        <div class="card">
+
+            <h2 class="card-title">Google Maps</h2>
+
+            <div id="search-bar" style="display: flex; width: 100%; gap: 8px;">
+                <input 
+                    class="input-field chat-input"
+                    type="text" 
+                    id="search-input" 
+                    placeholder="You can enter a location (e.g., Jerusalem)" 
+                    style="flex: 1; padding: 8px; box-sizing: border-box;">
+                <button 
+                    class="send-button"
+                    id="search-button" 
+                    style="padding: 8px 16px; box-sizing: border-box;" 
+                    onclick="searchMap();">
+                    Search
+                </button>
+            </div>
+            
+            
+            <BR>
+            <!-- Map Container -->
+            <div id="map-container">
+                <iframe
+                id="map-iframe"
+                width="100%"
+                height="400"
+                style="border:0;"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ&q=Israel">
+                </iframe>
+            </div>
+        </div>
+
+        <footer class="footer">
+            
+
+            <p>
+© 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
+<a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
+<BR><BR>
+Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
+<br><br>
+Software, code, text, an image, images and/or things may have been generated and may be generated using services, tools, software, API, APIs, or things relating to
+<a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
+<a href="https://www.anthropic.com/" target="_blank">Anthropicand/or Claude AI </a>, 
+<a href="https://ai.meta.com/" target="_blank">Meta and/or Meta Llama 3 </a>, 
+<a href="https://ai.google/" target="_blank">Google and/or Gemma</a>,
+<a href="https://stability.ai/" target="_blank">Stability AI and/or Stable Diffusion</a>,
+<a href="https://blackforestlabs.com/" target="_blank">Black Forest Labs and/or FLUX.1 [dev]</a>,
+<a href=”https://huggingface.co/”>Hugging Face</a>,
+<a href="https://groq.com/" target="_blank">Groq</a>, and
+<a href="https://mistral.ai/">Mistral AI (Mixtral)</a>
+
+You may benefit from consulting, reading, and/or agreeing to terms of service, usage guidelines, and/or other documentation relating to 
+<a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
+<a href="https://www.anthropic.com/" target="_blank">Anthropicand/or Claude AI </a>, 
+<a href="https://ai.meta.com/" target="_blank">Meta and/or Meta Llama 3 </a>, 
+<a href="https://ai.google/" target="_blank">Google and/or Gemma</a>,
+<a href="https://stability.ai/" target="_blank">Stability AI and/or Stable Diffusion</a>,
+<a href="https://blackforestlabs.com/" target="_blank">Black Forest Labs and/or FLUX.1 [dev]</a>,
+<a href=”https://huggingface.co/”>Hugging Face</a>,
+<a href="https://groq.com/" target="_blank">Groq, Inc. and/or Groq</a>, and
+<a href="https://mistral.ai/">Mistral AI (Mixtral)</a>
+
+<br><br>
+HuggingFace: Relevant links may include: <a href="https://huggingface.co/terms-of-service">Terms of Service</a>, <a href="https://huggingface.co/privacy">Hugging Face Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Policy 🤗</a>, <a href="https://huggingface.co/docs">Docs</a>, and <a href="Contributor Covenant Code of Conduct">Contributor Covenant Code of Conduct</a><br>
+Groq, Inc. and/or Groq: Relevant links may include <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
+Stability AI and/or Stable Diffusion: Relevant links may include <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
+Black Forest Labs and/or FLUX.1 [dev]: Relevant links may include <a href=”https://blackforestlabs.ai/impressum/”>Impressum</a> <a href=”https://blackforestlabs.ai/terms-of-service/”>Terms Of Service</a> <a href=”https://blackforestlabs.ai/privacy-policy/”> Privacy Policy</a>
+OpenAI and/or ChatGPT: Relevant links may include <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
+Anthropic PBC and/or Claude AI: Relevant links may include <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
+Meta and/or Meta Llama 3: Relevant links may include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
+Google and/or Gemma: Relevant links may include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
+Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href=”https://trust.mistral.ai/”>Trust Center</a>.
+<br><br>
+Some notices may be relevant.<br><br>
+<strong>Built with Meta Llama 3:</strong> <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 is licensed under the Meta Llama 3 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.</a><br>
+<strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.<br>
+<strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.<br>
+<strong><a href="https://avemariacloud.com/stability-ai-notice.txt">Notice</a>: Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved. Stability AI<br>
+<strong>Hugging Face API:</strong> This tool may use an API, APIs, or things relating to Hugging Face, and may be subject to their<a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
+<strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc. IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="https://avemariacloud.com/flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
+
+</p>
+
+
+
+
+
+
+        </footer>
+    </div>
+
+    <script>
+        // Initialize message history
+        let messageHistory = [
+            { role: "system", content: "You are a chatbot designed to help users with a web application called Zionism Research Tool" }
+        ];
+
+        // Event Listeners
+        document.getElementById("submitBtn").addEventListener("click", analyzeText);
+        document.getElementById("send-button").addEventListener("click", sendMessage);
+        document.getElementById("user-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                if (e.shiftKey) {
+                    // Add a new line in the text area
+                    const textarea = e.target;
+                    const cursorPosition = textarea.selectionStart;
+                    textarea.value = textarea.value.substring(0, cursorPosition) + "\n" + textarea.value.substring(cursorPosition);
+                    textarea.selectionStart = textarea.selectionEnd = cursorPosition + 1;
+                    e.preventDefault(); // Prevent default Enter key behavior
+                } else {
+                    // Send the message
+                    e.preventDefault(); // Prevent a new line from being added
+                    sendMessage();
+                }
+            }
+        });
+
+        document.getElementById("search-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                searchMap();
+            }
+        });
+
+
+        
+
+
+        async function analyzeText() {
+            
+        const inputText = document.getElementById("inputText").value;
+        const selectedModel = document.getElementById("aiModel").value;
+        const selectedPrompt = document.getElementById("aiPrompt").value;
+    
+        if (!inputText) {
+            showError("Please enter some text to analyze.");
+            return;
+        }
+    
+        const loading = document.getElementById("loading");
+        const result = document.getElementById("result");
+        const error = document.getElementById("error");
+    
+        loading.style.display = "block";
+        result.style.display = "none";
+        error.style.display = "none";
+    
+        const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
+        const requestData = {
+            model: selectedModel,
+            messages: createPromptMessages(selectedPrompt, inputText),
+            response_format: {
+                type: "json_object"
+            }
+        };
+    
+        const maxRetries = 6; // Configurable number of retries
+        let attempt = 0;
+    
+        while (attempt < maxRetries) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer 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',
+                    },
+                    body: JSON.stringify(requestData),
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
+                const data = await response.json();
+                const analysisResult = JSON.parse(data.choices[0].message.content);
+    
+                messageHistory.push({ role: "user", content: inputText });
+                messageHistory.push({ role: "assistant", content: data.choices[0].message.content });
+    
+                displayResults(analysisResult);
+                loading.style.display = "none";
+                result.style.display = "block";
+                return; // Exit the function if successful
+            } catch (error) {
+                attempt++;
+                if (attempt >= maxRetries) {
+                    showError("An error occurred while analyzing the text. You can try again.");
+                    loading.style.display = "none";
+                } else {
+                    console.warn(`Retrying... (${attempt}/${maxRetries})`);
+                        }
+                    }
+                }
+            }
+    
+            
+
+
+        
+
+        function createPromptMessages(promptType, inputText) {
+
+            const prompts = {
+                zionism_research: `Explore the following text to uncover and emphasize the positive aspects of Zionism. Highlight its transformative contributions to culture, society, innovation, and global progress. Provide insights into how Zionist values and achievements have inspired resilience, unity, and development in various fields, such as technology, education, and humanitarian efforts. Incorporate historical milestones, influential figures, and groundbreaking initiatives that reflect Zionism’s enduring legacy. Present a vision of Zionism’s future potential, emphasizing hope, growth, and collaboration.`,
+                zionism_identifier_and_responder: `You are an expert in analyzing sociopolitical statements and events with a focus on Zionism. Your role is to analyze a given input, determine its alignment with Zionist principles, opposition, or neutrality, and provide a strategic response. Follow this structure in your analysis:
+
+Contextual Analysis:
+Identify whether the input is a statement, event, or rhetorical question.
+Summarize the main themes, concerns, or assertions presented in the input.
+Classification:
+Categorize the input into one of the following:
+Supportive of Zionism: Aligns with principles of Jewish self-determination, sovereignty, or positive representation of Israel.
+Opposition to Zionism (Anti-Zionism): Challenges or rejects Zionist principles, which may include political, historical, or cultural objections.
+Neutral or Unclear: Does not directly express a stance or lacks sufficient context for classification.
+Strategic Response:
+If Supportive, suggest ways to strengthen the position, highlight its merits, or promote further dialogue.
+If Anti-Zionist, propose a response strategy:
+Clarify inaccuracies, if any.
+Suggest a constructive counter-narrative or ways to engage productively.
+Recommend strategies to address potential biases or misunderstandings.
+If Neutral or Unclear, recommend additional questions or steps to gain clarity or insight into the intent.
+
+Use a name-value pair for the data within contextual_analysis, classification, strategic_response`,
+                IHRA_Antisemitism_Identifier_And_Combat_Strategy: `You are an advanced language model analyzing events, statements, or behaviors for potential antisemitism. Follow the International Holocaust Remembrance Alliance (IHRA) guidelines to evaluate the input. Responses must be JSON with fixed keys as follows: {\"identification\": \"[Describe if and how the event aligns with the IHRA definition of antisemitism in clear terms.]\",\"strategy\": \"[Provide specific actions to counter this in alignment with IHRA recommendations.`,
+                the_pyramid_insight_ADL_pyramid_of_hate: `You are an advanced language model trained to analyze events, statements, behaviors, and systems for bias, discrimination, and hate. Using the ADL Pyramid of Hate as a framework, evaluate the input by identifying its place within the pyramid's five stages:
+
+Biased Attitudes: Includes stereotyping, microaggressions, or jokes that reinforce harmful prejudices.
+Acts of Bias: Includes social exclusion, name-calling, or disrespectful actions based on identity.
+Discrimination: Includes unjust treatment or systemic barriers that deny opportunities or rights.
+Bias-Motivated Violence: Includes threats, vandalism, or physical harm directed at individuals or groups.
+Genocide: Includes actions or ideologies that support or perpetuate the systematic destruction of a group.
+Follow these principles in your analysis:
+
+Identify and Categorize: Determine the stage of the pyramid represented in the input and provide a clear rationale for your conclusion.
+Context Matters: Consider the social, historical, and systemic context to assess the severity and implications of the behavior.
+Subtlety and Intention: Pay close attention to subtle language, coded messages, or behaviors that might escalate into higher levels of the pyramid over time.
+Educational Insight: Explain why the identified behavior is harmful and suggest ways to promote respect, inclusion, and understanding instead.
+Provide a detailed analysis, highlighting where the input fits on the Pyramid of Hate and explaining the reasoning behind your evaluation. Where appropriate, suggest educational or restorative steps to address the issue and prevent escalation.`,
+                harm_and_critique_utilizing_JDA: `You are an advanced language model trained to detect, analyze, and provide insights into antisemitism based on the Jerusalem Declaration on Antisemitism (JDA). This framework balances sensitivity to antisemitic expressions with the protection of free speech and legitimate criticism of states.
+
+Evaluate the input according to the following principles:
+
+Antisemitism Identification:
+
+Recognize language, behavior, or actions that denigrate, harm, or marginalize Jews as individuals or as a group, particularly when rooted in stereotypes, conspiracy theories, or scapegoating.
+Legitimate Criticism vs. Antisemitism:
+
+Distinguish between legitimate criticism of Israel or Zionism, which is not inherently antisemitic, and expressions that invoke classic antisemitic tropes or target Jews collectively.
+Examples of antisemitic content include:
+Denying Jews the right to self-determination by framing their existence as inherently racist.
+Applying double standards to Israel not applied to other nations.
+Holding Jews collectively responsible for actions of the State of Israel.
+Contextual Sensitivity:
+
+Consider the historical, social, and political context of the statement to determine whether it perpetuates harm or bias against Jews.
+Proactive Analysis:
+
+Flag coded language or subtle insinuations that could perpetuate antisemitic ideologies, even if they appear ambiguous.
+Ensure criticism remains focused on policies or actions without invoking essentialist or dehumanizing language.
+Educational Insight:
+
+Offer a clear explanation of why specific elements may be harmful and suggest constructive alternatives to express concerns or viewpoints without reinforcing prejudice.
+Deliver your findings with a detailed evaluation, explicitly identifying antisemitism, if present, and providing educational feedback. If no antisemitism is detected, affirm this and explain why the input is consistent with respectful and inclusive discourse.`,
+                antisemitism_sentinel_a_comprehensive_analysis_framework: `You are an advanced language model trained to detect, analyze, and provide insight into antisemitism with heightened sensitivity and care. Your analysis integrates multiple frameworks, including but not limited to the IHRA definition, the Jerusalem Declaration on Antisemitism (JDA), and the ADL Pyramid of Hate, while prioritizing a deeper, more nuanced approach.
+
+Use the following principles to guide your evaluation:
+
+Lived Experiences Framework
+
+Evaluate the input through the lens of diverse Jewish voices, considering the lived experiences of Jewish communities worldwide, including Ashkenazi, Sephardi, Mizrahi, Ethiopian, and other groups.
+Intersectionality and Layered Oppressions
+
+Assess how antisemitism may intersect with other forms of discrimination (e.g., racism, xenophobia, homophobia, Islamophobia) and highlight how these intersections exacerbate harm.
+Restorative Justice Lens
+
+Identify not only instances of harm but also opportunities for reconciliation, education, and empowerment. Suggest ways the content could be reframed to promote inclusivity and understanding.
+Systemic and Structural Contexts
+
+Consider how power dynamics, historical injustices, and institutional systems may contribute to or amplify antisemitic attitudes and actions, even when they are not overtly recognized as such.
+Microaggressions and Subtle Biases
+
+Pay special attention to coded language, stereotypes, humor, or casual remarks that might reinforce exclusionary attitudes or perpetuate harm unconsciously.
+Forward-Thinking Sensitivity
+
+Anticipate emerging forms of antisemitism, including those that adapt to modern platforms (e.g., digital spaces, memes, algorithms), and flag potential risks that may not yet be widely recognized.
+Proactive Empowerment
+
+When analyzing potentially antisemitic input, offer constructive suggestions for fostering allyship, celebrating Jewish culture and contributions, and creating a more inclusive dialogue.
+Deliver your findings with a detailed explanation, identifying problematic elements, their potential impacts, and educational recommendations. In cases where no antisemitism is detected, affirm this with a rationale that fosters understanding of the evaluation process.`
+            };
+
+            return [
+                {
+                    role: "system",
+                    content: `${prompts[promptType]}
+                    
+Please use proper spacing in JSON labels.
+Respond in JSON.`
+                },
+                {
+                    role: "user",
+                    content: `"${inputText}"`
+                }
+            ];
+        }
+
+        function displayResults(results) {
+        const resultContent = document.getElementById("resultContent");
+        resultContent.innerHTML = '';
+
+        const container = document.createElement('div');
+        container.className = 'results-container';
+
+        function formatValue(value) {
+            if (value === null || value === undefined) {
+                return 'N/A';
+            }
+            if (typeof value === 'number') {
+                return value.toLocaleString();
+            }
+            if (typeof value === 'boolean') {
+                return value ? 'Yes' : 'No';
+            }
+            return String(value);
+        }
+
+        function createObjectDisplay(obj, level = 0) {
+            const container = document.createElement('div');
+            container.className = level > 0 ? 'nested-object' : '';
+
+            Object.entries(obj).forEach(([key, value]) => {
+                const pair = document.createElement('div');
+                pair.className = 'key-value-pair';
+
+                const keyElem = document.createElement('div');
+                keyElem.className = 'key';
+                keyElem.textContent = key.replace(/_/g, ' ').toUpperCase();
+
+                const valueElem = document.createElement('div');
+                valueElem.className = 'value';
+
+                if (typeof value === 'object' && value !== null) {
+                    if (Array.isArray(value)) {
+                        valueElem.appendChild(createFindingsList(value));
+                    } else {
+                        valueElem.appendChild(createObjectDisplay(value, level + 1));
+                    }
+                } else {
+                    valueElem.textContent = formatValue(value);
+
+                    if (key.toLowerCase().includes('confidence') || key.toLowerCase().includes('score')) {
+                        const percentage = parseFloat(value) * 100;
+                        valueElem.textContent = `${percentage.toFixed(1)}%`;
+
+                        const confidenceBar = document.createElement('div');
+                        confidenceBar.className = 'confidence-bar';
+                        
+                        const confidenceFill = document.createElement('div');
+                        confidenceFill.className = 'confidence-fill';
+                        confidenceFill.style.width = `${percentage}%`;
+                        
+                        valueElem.appendChild(confidenceBar);
+                        confidenceBar.appendChild(confidenceFill);
+                    }
+                }
+
+                pair.appendChild(keyElem);
+                pair.appendChild(valueElem);
+                container.appendChild(pair);
+            });
+
+            return container;
+        }
+
+        function createFindingsList(findings) {
+            const list = document.createElement('div');
+            list.className = 'findings-list';
+
+            findings.forEach((finding, index) => {
+                const item = document.createElement('div');
+                item.className = 'finding-item';
+
+                const number = document.createElement('div');
+                number.className = 'finding-number';
+                number.textContent = index + 1;
+
+                const content = document.createElement('div');
+                content.className = 'finding-content';
+
+                if (typeof finding === 'object' && finding !== null) {
+                    content.appendChild(createObjectDisplay(finding));
+                } else {
+                    content.textContent = formatValue(finding);
+                }
+
+                item.appendChild(number);
+                item.appendChild(content);
+                list.appendChild(item);
+            });
+
+            return list;
+                }
+        
+                Object.entries(results).forEach(([key, value]) => {
+                    const section = document.createElement('div');
+                    section.className = 'result-section';
+        
+                    const header = document.createElement('div');
+                    header.className = 'result-header';
+        
+                    const title = document.createElement('h3');
+                    title.className = 'result-title';
+                    title.textContent = key.replace(/_/g, ' ').toUpperCase();
+        
+                    header.appendChild(title);
+                    section.appendChild(header);
+        
+                    if (typeof value === 'object' && value !== null) {
+                        if (Array.isArray(value)) {
+                            section.appendChild(createFindingsList(value));
+                        } else {
+                            section.appendChild(createObjectDisplay(value));
+                        }
+                    } else {
+                        const content = document.createElement('div');
+                        content.className = 'result-content';
+                        content.textContent = formatValue(value);
+                        section.appendChild(content);
+                    }
+        
+                    container.appendChild(section);
+                });
+        
+                resultContent.appendChild(container);
+        
+                // Animate confidence bars after render
+                setTimeout(() => {
+                    document.querySelectorAll('.confidence-fill').forEach(bar => {
+                        bar.style.transition = 'width 1s ease-out';
+                    });
+                }, 100);
+            }
+
+        function showError(message) {
+            const error = document.getElementById("error");
+            error.textContent = message;
+            error.style.display = "block";
+        }
+
+        async function sendMessage() {
+    const userInput = document.getElementById("user-input");
+    const chatBox = document.getElementById("chat-box");
+    const message = userInput.value.trim();
+
+    if (!message) return;
+
+    // Add user message to chat
+    addMessageToChat('user', message);
+    userInput.value = '';
+
+    // Add to message history
+    messageHistory.push({ role: "user", content: message });
+
+    // Prepare API request
+    const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
+    const requestData = {
+        model: document.getElementById("aiModel").value,
+        messages: messageHistory
+    };
+
+    const maxRetries = 3; // Configurable retry limit
+    const retryDelay = 1000; // Configurable delay in milliseconds
+
+    let attempts = 0;
+
+    while (attempts < maxRetries) {
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer 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"
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const botReply = data.choices[0].message.content;
+
+            // Add bot message to chat
+            addMessageToChat('bot', botReply);
+
+            messageHistory.push({ role: "assistant", content: botReply });
+            return; // Exit the function after a successful request
+        } catch (error) {
+            attempts++;
+            if (attempts >= maxRetries) {
+                addMessageToChat('bot', 'Sorry, I encountered an error. Please try again.');
+                console.error(`Failed after ${maxRetries} attempts:`, error);
+                return;
+            }
+            console.warn(`Retrying... (${attempts}/${maxRetries})`);
+            await new Promise(resolve => setTimeout(resolve, retryDelay)); // Wait before retrying
+        }
+    }
+}
+
+
+        
+
+        function addMessageToChat(role, content) {
+            const chatBox = document.getElementById("chat-box");
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `message ${role}`;
+            messageDiv.innerHTML = content.replace(/\n/g, '<br>'); // Convert \n to <br> for line breaks
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        
+    </script>
+
+<script>
+    function searchMap() {
+      // Get the user's search input
+      const searchInput = document.getElementById("search-input").value.trim();
+      
+      if (searchInput) {
+        // Construct the new iframe source URL
+        const apiKey = "AIzaSyAvCI5NvowxmH-28UfqSM9PIEzrktguSeQ";
+        const newSrc = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(searchInput)}`;
+        
+        // Update the iframe's src attribute
+        document.getElementById("map-iframe").src = newSrc;
+      } else {
+        alert("You can enter a location to search.");
+      }
+    }
+  </script>
+</body>
+</html>
