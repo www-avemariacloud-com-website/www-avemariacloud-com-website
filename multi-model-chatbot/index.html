@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Multi Model Chatbot v17</title>
+    <title>Multi Model Chatbot v18</title>
     <style>
         /* Modern CSS Reset */
         *, *::before, *::after {
@@ -245,10 +245,11 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Multi Model Chatbot v17</h1>
+                <h1 class="title">Multi Model Chatbot v18</h1>
                 <div class="controls">
                     <select id="promptType" class="select" onchange="updateSystemPrompt(this.value)">
                         <option value="universal">Universal</option>
+                        <option value="christian-zionism">Christian Zionism</option>
                         <option value="custom">Custom</option>
                     </select>
                     <select id="aiModel" class="select">
@@ -371,6 +372,14 @@ Some notices may be relevant.<br><br>
                             I would like a very strong bias for caution and perfect information.
                             I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
                             I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
+                },
+                zionism: {
+                    greeting: "Shalom!",
+                    content: `I would like you to be a helpful AI chatbot for a Christian website.
+                            I would like you to share information within the context of Christian Zionism.
+                            I would like a very strong bias for caution and perfect information.
+                            I would like you to always cite Scripture perfectly from the KJV translation of the bible in any circumstance, even if asked for other translations.
+                            I would like you to always cite Scripture perfectly and in full 100% as it is in the KJV translation whenever you share any information in relation to Scripture.`
                 }
             };
 
