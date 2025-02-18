@@ -1,0 +1,725 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Jesus Loves Nathan Runkle</title>
+        <style>
+            /* Reset and Base Styles */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            body {
+                background-color: #f5f5f5;
+                color: #333;
+                line-height: 1.6;
+                overflow-x: hidden;
+            }
+
+            /* Main Container */
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            /* Header Styles */
+            header {
+                background: linear-gradient(to right, #3498db, #6a89cc);
+                color: white;
+                text-align: center;
+                padding: 50px 20px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            header::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: url('/api/placeholder/1200/400');
+                background-size: cover;
+                background-position: center;
+                opacity: 0.2;
+                z-index: 0;
+            }
+
+            header .content {
+                position: relative;
+                z-index: 1;
+            }
+
+            h1 {
+                font-size: 3rem;
+                margin-bottom: 15px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
+
+            .subtitle {
+                font-size: 1.5rem;
+                font-weight: 300;
+                margin-bottom: 30px;
+            }
+
+            /* Main Content Styles */
+            main {
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+                margin: 20px 0;
+                padding: 40px;
+            }
+
+            section {
+                margin-bottom: 40px;
+            }
+
+            h2 {
+                font-size: 2rem;
+                color: #3498db;
+                margin-bottom: 20px;
+                position: relative;
+                padding-bottom: 10px;
+            }
+
+            h2::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 3px;
+                width: 50px;
+                background-color: #3498db;
+            }
+
+            p {
+                margin-bottom: 20px;
+                font-size: 1.1rem;
+            }
+
+            .highlight {
+                font-weight: bold;
+                color: #3498db;
+            }
+
+            .verse {
+                font-style: italic;
+                display: block;
+                margin: 20px 0;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-left: 4px solid #3498db;
+                font-size: 1.2rem;
+                position: relative;
+            }
+
+            .verse-reference {
+                display: block;
+                text-align: right;
+                font-weight: bold;
+                margin-top: 10px;
+                color: #555;
+            }
+
+            /* Card Grid */
+            .card-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+            }
+
+            .card {
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                padding: 25px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            .card h3 {
+                color: #2980b9;
+                margin-bottom: 15px;
+                font-size: 1.5rem;
+            }
+
+            .card p {
+                color: #555;
+            }
+
+            /* Form Styles */
+            form {
+                max-width: 600px;
+                margin: 30px auto 0;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: #555;
+            }
+
+            input, textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 1rem;
+                transition: border-color 0.3s;
+            }
+
+            input:focus, textarea:focus {
+                outline: none;
+                border-color: #3498db;
+            }
+
+            textarea {
+                min-height: 150px;
+                resize: vertical;
+            }
+
+            button {
+                background-color: #3498db;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 4px;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            button:hover {
+                background-color: #2980b9;
+            }
+
+            /* Testimonial Section */
+            .testimonial {
+                background-color: #f9f9f9;
+                padding: 30px;
+                border-radius: 8px;
+                margin-top: 30px;
+                position: relative;
+            }
+
+            .testimonial::before {
+                content: '"';
+                font-size: 6rem;
+                color: rgba(0,0,0,0.1);
+                position: absolute;
+                top: -10px;
+                left: 10px;
+            }
+
+            .testimonial p {
+                position: relative;
+                z-index: 1;
+                font-size: 1.2rem;
+            }
+
+            .testimonial-author {
+                text-align: right;
+                font-weight: bold;
+                margin-top: 15px;
+                color: #555;
+            }
+
+            /* Footer Styles */
+            footer {
+                background: linear-gradient(to right, #2980b9, #5e72b5);
+                color: white;
+                text-align: center;
+                padding: 30px 20px;
+                margin-top: 40px;
+            }
+
+            .footer-content {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .social-icons {
+                margin-top: 20px;
+            }
+
+            .social-icons a {
+                color: white;
+                font-size: 1.5rem;
+                margin: 0 10px;
+                transition: opacity 0.3s;
+            }
+
+            .social-icons a:hover {
+                opacity: 0.8;
+            }
+
+            .copyright {
+                margin-top: 20px;
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+
+            /* Back to Top Button */
+            .back-to-top {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-color: #3498db;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                opacity: 0;
+                transition: opacity 0.3s;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                z-index: 100;
+            }
+
+            .back-to-top.visible {
+                opacity: 1;
+            }
+
+            /* Responsive Styles */
+            @media (max-width: 768px) {
+                h1 {
+                    font-size: 2.5rem;
+                }
+
+                .subtitle {
+                    font-size: 1.2rem;
+                }
+
+                main {
+                    padding: 20px;
+                }
+
+                .card-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media (max-width: 480px) {
+                h1 {
+                    font-size: 2rem;
+                }
+
+                h2 {
+                    font-size: 1.5rem;
+                }
+
+                .verse {
+                    font-size: 1rem;
+                    padding: 15px;
+                }
+
+                header {
+                    padding: 30px 15px;
+                }
+
+                .back-to-top {
+                    width: 40px;
+                    height: 40px;
+                    bottom: 15px;
+                    right: 15px;
+                }
+            }
+
+            /* Animation for Scripture Verses */
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .animated-verse {
+                opacity: 0;
+                animation: fadeIn 1s forwards;
+            }
+
+            /* Theme Toggle */
+            .theme-toggle {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 100;
+                background-color: rgba(255,255,255,0.9);
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            /* Dark Theme Styles */
+            body.dark-theme {
+                background-color: #1f2937;
+                color: #e5e7eb;
+            }
+
+            body.dark-theme header {
+                background: linear-gradient(to right, #1e3a8a, #3b82f6);
+            }
+
+            body.dark-theme main {
+                background-color: #2d3748;
+                box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+            }
+
+            body.dark-theme h2 {
+                color: #60a5fa;
+            }
+
+            body.dark-theme h2::after {
+                background-color: #60a5fa;
+            }
+
+            body.dark-theme .highlight {
+                color: #60a5fa;
+            }
+
+            body.dark-theme .verse {
+                background-color: #374151;
+                border-left: 4px solid #60a5fa;
+                color: #e5e7eb;
+            }
+
+            body.dark-theme .verse-reference {
+                color: #9ca3af;
+            }
+
+            body.dark-theme .card {
+                background-color: #374151;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            }
+
+            body.dark-theme .card h3 {
+                color: #60a5fa;
+            }
+
+            body.dark-theme .card p {
+                color: #d1d5db;
+            }
+
+            body.dark-theme input,
+            body.dark-theme textarea {
+                background-color: #374151;
+                border-color: #4b5563;
+                color: #e5e7eb;
+            }
+
+            body.dark-theme input:focus,
+            body.dark-theme textarea:focus {
+                border-color: #60a5fa;
+            }
+
+            body.dark-theme label {
+                color: #d1d5db;
+            }
+
+            body.dark-theme button {
+                background-color: #3b82f6;
+            }
+
+            body.dark-theme button:hover {
+                background-color: #2563eb;
+            }
+
+            body.dark-theme .testimonial {
+                background-color: #374151;
+            }
+
+            body.dark-theme .testimonial-author {
+                color: #9ca3af;
+            }
+
+            body.dark-theme footer {
+                background: linear-gradient(to right, #1e3a8a, #3b82f6);
+            }
+
+            body.dark-theme .theme-toggle {
+                background-color: rgba(55,65,81,0.9);
+                color: #e5e7eb;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="theme-toggle" id="themeToggle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-light">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-dark" style="display: none;">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </div>
+
+        <header>
+            <div class="content">
+                <h1>Jesus Loves Nathan Runkle</h1>
+                <p class="subtitle">A reminder of Nathan Runkle's infinite dignity</p>
+            </div>
+        </header>
+
+        <div class="container">
+            <main>
+                <section id="message">
+                    <h2>A Message of Love</h2>
+                    <p>This will always be true: <span class="highlight">Jesus Loves Nathan Runkle</span> with an everlasting love.</p>
+                    
+                    <div class="verse animated-verse" id="verse1">
+                        "For God so loved the world that he gave his only Son, so that everyone who believes in him might not perish but might have eternal life."
+                        <span class="verse-reference">John 3:16
+                            New American Bible (Revised Edition)</span>
+                    </div>
+                </section>
+
+                <section id="promises">
+                    <h2>I Love Nathan</h2>
+                    <p>The Bible is filled with Scripture that demonstrates God's love for His children.</p>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Always Together</h3>
+                            <div class="verse">
+                                "Do not fear: I am with you;
+                                do not be anxious: I am your God.
+                            I will strengthen you, I will help you,
+                                I will uphold you with my victorious right hand."
+                                <span class="verse-reference">Isaiah 41:10
+                                    New American Bible (Revised Edition)</span>
+                            </div>
+                            <p></p>
+                        </div>
+                        
+                        <div class="card">
+                            <h3>Plan of Welfare</h3>
+                            <div class="verse">
+                                "For I know well the plans I have in mind for you—oracle of the Lord—plans for your welfare and not for woe, so as to give you a future of hope."
+                                <span class="verse-reference">Jeremiah 29:11
+                                    New American Bible (Revised Edition)</span>
+                            </div>
+                            <p></p>
+                        </div>
+                        
+                        <div class="card">
+                            <h3>Inexhaustable Mercy</h3>
+                            <div class="verse">
+                                "The Lord’s acts of mercy are not exhausted, his compassion is not spent; They are renewed each morning— great is your faithfulness!"
+                                <span class="verse-reference">Lamentations 3:22-23
+                                    New American Bible (Revised Edition)</span>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="response">
+                    <h2>God Loved Us First</h2>
+
+                    <div class="verse animated-verse" id="verse2">
+                        "We love because he first loved us."
+                        <span class="verse-reference">1 John 4:19</span>
+                    </div>
+                    
+                    <p>Nathan, Jesus Loves You.</p>
+                </section>
+
+            </main>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <h3>Jesus Loves Nathan Runkle</h3>
+                <p>A reminder of God's love for you, today and always.</p>
+                
+            </div>
+        </footer>
+
+        <center><BR>
+        <p>
+            © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
+            <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
+            <BR><BR>
+            Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
+            <br><br>
+            Software, code, text, an image, images and/or things may have been generated and may be generated using services, tools, software, API, APIs, or things relating to
+            <a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
+            <a href="https://www.anthropic.com/" target="_blank">Anthropicand/or Claude AI </a>, 
+            <a href="https://ai.meta.com/" target="_blank">Meta and/or Meta Llama 3 </a>, 
+            <a href="https://ai.google/" target="_blank">Google and/or Gemma</a>,
+            <a href="https://stability.ai/" target="_blank">Stability AI and/or Stable Diffusion</a>,
+            <a href="https://blackforestlabs.com/" target="_blank">Black Forest Labs and/or FLUX.1 [dev]</a>,
+            <a href=”https://huggingface.co/”>Hugging Face</a>,
+            <a href="https://groq.com/" target="_blank">Groq</a>, and
+            <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>
+            
+            You may benefit from consulting, reading, and/or agreeing to terms of service, usage guidelines, and/or other documentation relating to 
+            <a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
+            <a href="https://www.anthropic.com/" target="_blank">Anthropicand/or Claude AI </a>, 
+            <a href="https://ai.meta.com/" target="_blank">Meta and/or Meta Llama 3 </a>, 
+            <a href="https://ai.google/" target="_blank">Google and/or Gemma</a>,
+            <a href="https://stability.ai/" target="_blank">Stability AI and/or Stable Diffusion</a>,
+            <a href="https://blackforestlabs.com/" target="_blank">Black Forest Labs and/or FLUX.1 [dev]</a>,
+            <a href=”https://huggingface.co/”>Hugging Face</a>,
+            <a href="https://groq.com/" target="_blank">Groq, Inc. and/or Groq</a>, and
+            <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>
+            
+            <br><br>
+            HuggingFace: Relevant links may include: <a href="https://huggingface.co/terms-of-service">Terms of Service</a>, <a href="https://huggingface.co/privacy">Hugging Face Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Policy 🤗</a>, <a href="https://huggingface.co/docs">Docs</a>, and <a href="Contributor Covenant Code of Conduct">Contributor Covenant Code of Conduct</a><br>
+            Groq, Inc. and/or Groq: Relevant links may include <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
+            Stability AI and/or Stable Diffusion: Relevant links may include <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
+            Black Forest Labs and/or FLUX.1 [dev]: Relevant links may include <a href=”https://blackforestlabs.ai/impressum/”>Impressum</a> <a href=”https://blackforestlabs.ai/terms-of-service/”>Terms Of Service</a> <a href=”https://blackforestlabs.ai/privacy-policy/”> Privacy Policy</a>
+            OpenAI and/or ChatGPT: Relevant links may include <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
+            Anthropic PBC and/or Claude AI: Relevant links may include <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
+            Meta and/or Meta Llama 3: Relevant links may include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
+            Google and/or Gemma: Relevant links may include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
+            Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href=”https://trust.mistral.ai/”>Trust Center</a>.
+            <br><br>
+            Some notices may be relevant.<br><br>
+            <strong>Built with Meta Llama 3:</strong> <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 is licensed under the Meta Llama 3 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.</a><br>
+            <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.<br>
+            <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.<br>
+            <strong><a href="https://avemariacloud.com/stability-ai-notice.txt">Notice</a>: Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved. Stability AI<br>
+            <strong>Hugging Face API:</strong> This tool may use an API, APIs, or things relating to Hugging Face, and may be subject to their<a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
+            <strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc. IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="https://avemariacloud.com/flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
+            
+            </p>
+            
+            
+            
+            
+        </center>        
+
+        <div class="back-to-top" id="backToTop">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        </div>
+
+        <script>
+            // Theme Toggle Functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const themeToggle = document.getElementById('themeToggle');
+                const backToTop = document.getElementById('backToTop');
+                const iconLight = document.querySelector('.icon-light');
+                const iconDark = document.querySelector('.icon-dark');
+                
+                // Check for saved theme preference or use device preference
+                const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+                const savedTheme = localStorage.getItem('theme');
+                
+                if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+                    document.body.classList.add('dark-theme');
+                    iconLight.style.display = 'none';
+                    iconDark.style.display = 'block';
+                }
+                
+                // Theme toggle click handler
+                themeToggle.addEventListener('click', function() {
+                    document.body.classList.toggle('dark-theme');
+                    
+                    if (document.body.classList.contains('dark-theme')) {
+                        localStorage.setItem('theme', 'dark');
+                        iconLight.style.display = 'none';
+                        iconDark.style.display = 'block';
+                    } else {
+                        localStorage.setItem('theme', 'light');
+                        iconLight.style.display = 'block';
+                        iconDark.style.display = 'none';
+                    }
+                });
+                
+                // Back to top button visibility
+                window.addEventListener('scroll', function() {
+                    if (window.pageYOffset > 300) {
+                        backToTop.classList.add('visible');
+                    } else {
+                        backToTop.classList.remove('visible');
+                    }
+                });
+                
+                // Back to top click handler
+                backToTop.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+                
+                // Handle prayer form submission
+                const prayerForm = document.getElementById('prayerForm');
+                const confirmation = document.getElementById('confirmation');
+                
+                prayerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const nameInput = document.getElementById('name');
+                    const requestInput = document.getElementById('request');
+                    
+                    // Validate inputs
+                    if (nameInput.value.trim() === '' || requestInput.value.trim() === '') {
+                        alert('Please fill out all fields.');
+                        return;
+                    }
+                    
+                    // Clear form and show confirmation
+                    nameInput.value = '';
+                    requestInput.value = '';
+                    confirmation.style.display = 'block';
+                    
+                    // Hide confirmation after 5 seconds
+                    setTimeout(function() {
+                        confirmation.style.display = 'none';
+                    }, 5000);
+                });
+                
+                // Animate scripture verses when they come into view
+                const animateVerses = () => {
+                    const verses = document.querySelectorAll('.animated-verse');
+                    
+                    verses.forEach(verse => {
+                        const versePosition = verse.getBoundingClientRect().top;
+                        const screenPosition = window.innerHeight / 1.3;
+                        
+                        if (versePosition < screenPosition) {
+                            verse.style.opacity = 1;
+                        }
+                    });
+                };
+                
+                window.addEventListener('scroll', animateVerses);
+                // Initial check on page load
+                animateVerses();
+            });
+        </script>
+    </body>
+    </html>
