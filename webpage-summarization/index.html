@@ -19,6 +19,8 @@
         // Get the key from the URL
         const dataKey = getQueryParam('data-key');
 
+        console.log(dataKey);
+        
         if (dataKey) {
             // Retrieve the data from chrome.storage.local
             chrome.storage.local.get(dataKey, (result) => {
