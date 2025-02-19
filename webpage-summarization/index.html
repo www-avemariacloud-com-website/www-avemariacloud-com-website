@@ -3,8 +3,8 @@
 const url = new URL(window.location.href);
 const urlParams = new URLSearchParams(url.search);
 
-// Extract the content parameter (assuming the format ?content=<base64data>)
-const encodedContent = urlParams.get('content'); // Gets the value after 'content='
+// Extract the content parameter (assuming the format ?web-page-contents=<base64data>)
+const encodedContent = urlParams.get('web-page-contents'); // Gets the value after 'content='
 
 // Decode the base64 content
 const decodedContent = decodeURIComponent(atob(encodedContent));
