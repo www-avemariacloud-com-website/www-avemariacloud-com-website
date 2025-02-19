@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Page Summarization</title>
+    <title>Web Page Summarization v1.1</title>
 </head>
 <body>
     <h1>Extracted Page Content</h1>
@@ -23,7 +23,7 @@
         
         if (dataKey) {
             // Retrieve the data from chrome.storage.local
-            chrome.storage.local.get(dataKey, (result) => {
+            chrome.storage.session.get(dataKey, (result) => {
                 if (result && result[dataKey]) {
                     document.getElementById("content").textContent = result[dataKey];
 
