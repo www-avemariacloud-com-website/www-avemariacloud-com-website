@@ -3,32 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Page Summarization v1.1</title>
+    <title>Web Page Summarization v1.2</title>
 </head>
 <body>
-    <h1>Extracted Page Content v1.1</h1>
+    <h1>Extracted Page Content v1.2</h1>
     <div id="content">Loading...</div>
 
     <script>
-        // Function to get the key from the URL parameters
+        // Function to get the key from the URL
         function getQueryParam(name) {
             const params = new URLSearchParams(window.location.search);
             return params.get(name);
         }
 
-        // Get the key from the URL
         const dataKey = getQueryParam('data-key');
 
-        console.log(dataKey);
-        
         if (dataKey) {
-            // Retrieve the data from chrome.storage.local
-            chrome.storage.session.get(dataKey, (result) => {
-                if (result && result[dataKey]) {
-                    document.getElementById("content").textContent = result[dataKey];
-
-                    // Optionally, remove the stored data after use
-                    chrome.storage.local.remove(dataKey);
+            // Send a message to the background script to fetch the data
+            chrome.runtime.sendMessage({ action: "getStoredData", key: dataKey }, (response) => {
+                if (response && response.data) {
+                    document.getElementById("content").textContent = response.data;
+                    // Optionally remove data after use
+                    chrome.runtime.sendMessage({ action: "clearStoredData", key: dataKey });
                 } else {
                     document.getElementById("content").textContent = "No data found.";
                 }
