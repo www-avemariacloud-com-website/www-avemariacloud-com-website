@@ -1,0 +1,29 @@
+<script>
+// Get the URL parameters
+const url = new URL(window.location.href);
+const urlParams = new URLSearchParams(url.search);
+
+// Extract the content parameter (assuming the format ?content=<base64data>)
+const encodedContent = urlParams.get('content'); // Gets the value after 'content='
+
+// Decode the base64 content
+const decodedContent = decodeURIComponent(atob(encodedContent));
+
+// Create and style a container for the text
+const container = document.createElement('div');
+container.style.cssText = `
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+`;
+
+// Add the decoded text to the container
+container.textContent = decodedContent;
+
+// Add the container to the page
+document.body.appendChild(container);
+  
+</script>
