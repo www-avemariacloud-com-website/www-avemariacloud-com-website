@@ -3,8 +3,6 @@
 chrome.storage.local.get(dataKey, (result) => {
   if (result && result[dataKey]) {
     console.log('Received content:', result[dataKey]);
-    // Optionally remove it after use
-    chrome.storage.local.remove(dataKey);
   } else {
     console.error('No data found for key', dataKey);
   }
