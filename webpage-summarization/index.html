@@ -1,11 +1,39 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Page Summarization</title>
+</head>
+<body>
+    <h1>Extracted Page Content</h1>
+    <div id="content">Loading...</div>
 
-chrome.storage.local.get(dataKey, (result) => {
-  if (result && result[dataKey]) {
-    console.log('Received content:', result[dataKey]);
-  } else {
-    console.error('No data found for key', dataKey);
-  }
-});
-  
-</script>
+    <script>
+        // Function to get the key from the URL parameters
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        // Get the key from the URL
+        const dataKey = getQueryParam('data-key');
+
+        if (dataKey) {
+            // Retrieve the data from chrome.storage.local
+            chrome.storage.local.get(dataKey, (result) => {
+                if (result && result[dataKey]) {
+                    document.getElementById("content").textContent = result[dataKey];
+
+                    // Optionally, remove the stored data after use
+                    chrome.storage.local.remove(dataKey);
+                } else {
+                    document.getElementById("content").textContent = "No data found.";
+                }
+            });
+        } else {
+            document.getElementById("content").textContent = "No key provided.";
+        }
+    </script>
+</body>
+</html>
