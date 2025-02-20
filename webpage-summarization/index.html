@@ -1,51 +1,48 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Webpage Summarization</title>
+    <title>Webpage Content</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
+        .error-message {
+            color: red;
+            padding: 20px;
+            text-align: center;
         }
-        #content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        pre {
-            white-space: pre-wrap;
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
+        .loading-message {
+            color: #666;
+            padding: 20px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div id="content">
-        <h1>Webpage Content</h1>
-        <pre id="extractedText"></pre>
+        <div class="loading-message">Loading content...</div>
     </div>
+    <script src="chrome-extension://EXTENSION_ID/content.js"></script>
     <script>
-        function b64_to_utf8(str) {
-            try {
-                return decodeURIComponent(atob(str).split('').map(function(c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-            } catch (e) {
-                console.error('Decoding error:', e);
-                return 'Error decoding text';
-            }
-        }
-
-        window.onload = function() {
+        window.onload = async function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const encodedText = urlParams.get('text');
-            if (encodedText) {
-                const decodedText = b64_to_utf8(encodedText);
-                document.getElementById('extractedText').textContent = decodedText;
+            const timestamp = urlParams.get('timestamp');
+            
+            if (timestamp) {
+                try {
+                    // Get content from chrome.storage
+                    const result = await chrome.storage.local.get(`webpage_content_${timestamp}`);
+                    const content = result[`webpage_content_${timestamp}`];
+                    
+                    if (content) {
+                        document.getElementById('content').innerHTML = content;
+                        // Clean up storage after successful retrieval
+                        chrome.storage.local.remove(`webpage_content_${timestamp}`);
+                    } else {
+                        document.getElementById('content').innerHTML = '<div class="error-message">Content not found</div>';
+                    }
+                } catch (e) {
+                    document.getElementById('content').innerHTML = '<div class="error-message">Error loading content</div>';
+                }
             } else {
-                document.getElementById('extractedText').textContent = 'No text provided';
+                document.getElementById('content').innerHTML = '<div class="error-message">No content identifier provided</div>';
             }
         }
     </script>
