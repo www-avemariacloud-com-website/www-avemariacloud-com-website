@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Page Summarization v1.4</title>
+    <title>Web Page Summarization v1.5</title>
 </head>
 <body>
-    <h1>Extracted Page Content v1.4</h1>
+    <h1>Extracted Page Content v1.5</h1>
     <div id="content">Loading...</div>
 
     <script>
@@ -25,7 +25,7 @@
                     // Display the extracted content
                     document.getElementById("content").textContent = decodeURIComponent(atob(response.data));
                     // Optionally, remove the data after use
-                    chrome.runtime.sendMessage({ action: "clearStoredData", key: dataKey });
+                    //chrome.runtime.sendMessage({ action: "clearStoredData", key: dataKey });
                 } else {
                     document.getElementById("content").textContent = "No data found.";
                 }
