@@ -1,7 +1,71 @@
+// manifest.json
+{
+  "manifest_version": 3,
+  "name": "Webpage Summarizer",
+  "version": "1.0",
+  "description": "Extracts and summarizes webpage content",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "action": {
+    "default_title": "Summarize Page"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
+
+// background.js
+function utf8_to_b64(str) {
+  try {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+      function toSolidBytes(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+  } catch (e) {
+    console.error('Encoding error:', e);
+    return '';
+  }
+}
+
+chrome.action.onClicked.addListener(async (tab) => {
+  // Execute script to extract text from the page
+  const [{ result }] = await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    func: () => {
+      // Function to get readable text from the page
+      function getReadableText() {
+        // Remove script and style elements
+        const scripts = document.querySelectorAll('script, style');
+        scripts.forEach(script => script.remove());
+        
+        // Get text from body
+        return document.body.innerText;
+      }
+      
+      return getReadableText();
+    }
+  });
+
+  // Store the extracted text
+  const web_page_text = result;
+  
+  // Convert to base64 with Unicode support
+  const web_page_text_encoded = utf8_to_b64(web_page_text);
+  
+  // Open new tab with the encoded text as a parameter
+  chrome.tabs.create({
+    url: `https://avemariacloud.com/webpage-summarization/index.html?text=${encodeURIComponent(web_page_text_encoded)}`
+  });
+});
+
+// index.html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Webpage Summarization v1.6</title>
+    <title>Webpage Summarization</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,15 +86,26 @@
 </head>
 <body>
     <div id="content">
-        <h1>Webpage Content v1.6</h1>
+        <h1>Webpage Content</h1>
         <pre id="extractedText"></pre>
     </div>
     <script>
+        function b64_to_utf8(str) {
+            try {
+                return decodeURIComponent(atob(str).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            } catch (e) {
+                console.error('Decoding error:', e);
+                return 'Error decoding text';
+            }
+        }
+
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const encodedText = urlParams.get('text');
             if (encodedText) {
-                const decodedText = atob(encodedText);
+                const decodedText = b64_to_utf8(encodedText);
                 document.getElementById('extractedText').textContent = decodedText;
             } else {
                 document.getElementById('extractedText').textContent = 'No text provided';
