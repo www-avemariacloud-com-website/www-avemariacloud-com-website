@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Web Page Content v3.6</title>
+    <title>Web Page Content v3.7</title>
     <style>
         .error-message {
             color: red;
@@ -42,6 +42,9 @@ function processInputData() {
     
     var plainText = extractVisibleText(inputHTML);
     
+    plainText = plainText.replace(/\n/g, `
+`);
+
     document.getElementById("plain_text").innerHTML = plainText;
 }
 
