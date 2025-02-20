@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Webpage Content v3.1</title>
+    <title>Webpage Content v3.2</title>
     <style>
         .error-message {
             color: red;
@@ -40,9 +40,21 @@ function extractVisibleText(htmlString) {
 function processInputData() {
     var inputHTML = document.getElementById("input_data").innerHTML
     
+    document.getElementById("input_data").innerHTML = "";
+    
     var plainText = extractVisibleText(inputHTML);
     
     document.getElementById("plain_text").innerHTML = plainText;
 }
+
+const interval = setInterval(() => {
+    if (document.getElementById("input_data").innerHTML != "") {
+        console.log("Input detected!");
+        clearInterval(interval); // Stop checking
+    } else {
+        console.log("Checking...");
+    }
+}, 100);
+
 
 </script>
