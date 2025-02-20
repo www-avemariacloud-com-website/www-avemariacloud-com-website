@@ -37,10 +37,28 @@ function extractVisibleText(htmlString) {
     return doc.body.innerText.trim();
 }
 
-var inputHTML = document.getElementById("input_data").innerHTML
+function processInputData() {
+    var inputHTML = document.getElementById("input_data").innerHTML
+    
+    var plainText = extractVisibleText(inputHTML);
+    
+    document.getElementById("plain_text").innerHTML = plainText;
+}
 
-var plainText = extractVisibleText(inputHTML);
+const targetNode = document.getElementById("input_data");
 
-document.getElementById("plain_text").innerHTML = plainText;
+const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+        if (mutation.type === "childList" || mutation.type === "characterData") {
+            processInputData();
+        }
+    }
+});
+
+const config = { childList: true, characterData: true, subtree: true };
+
+if (targetNode) {
+    observer.observe(targetNode, config);
+}
 
 </script>
