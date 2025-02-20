@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Multi Model Chatbot v22</title>
+    <title>Multi Model Chatbot v23</title>
     <style>
         /* Modern CSS Reset */
         *, *::before, *::after {
@@ -245,7 +245,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Multi Model Chatbot v22</h1>
+                <h1 class="title">Multi Model Chatbot v23</h1>
                 <div class="controls">
                     <select id="promptType" class="select" onchange="updateSystemPrompt(this.value)">
                         <option value="universal">Universal</option>
@@ -279,6 +279,30 @@
     </div>
 
 <center>
+
+    <BR>
+
+    <button id="topBtn" onclick="scrollToTop()" style="
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;">⬆ Top</button>
+
+    <script>
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    </script>
+    
     <BR>
 <p>
 © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
