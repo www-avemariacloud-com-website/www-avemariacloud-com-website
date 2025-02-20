@@ -45,20 +45,4 @@ function processInputData() {
     document.getElementById("plain_text").innerHTML = plainText;
 }
 
-const targetNode = document.getElementById("input_data");
-
-const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-        if (mutation.type === "childList" || mutation.type === "characterData") {
-            processInputData();
-        }
-    }
-});
-
-const config = { childList: true, characterData: true, subtree: true };
-
-if (targetNode) {
-    observer.observe(targetNode, config);
-}
-
 </script>
