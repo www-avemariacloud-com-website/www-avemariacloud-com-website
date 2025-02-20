@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "Webpage Extractor",
+    "version": "2.4",
+    "description": "Extracts webpage content",
+    "permissions": [
+      "activeTab",
+      "scripting",
+      "tabs"
+    ],
+    "host_permissions": [
+      "https://www.avemariacloud.com/*"
+    ],
+    "action": {
+      "default_title": "Webpage Extractor"
+    },
+    "background": {
+      "service_worker": "background.js"
+    }
+  }
