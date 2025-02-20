@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Webpage Content v2.1</title>
+    <title>Webpage Content v3.1</title>
     <style>
         .error-message {
             color: red;
@@ -9,7 +9,7 @@
             text-align: center;
         }
         .loading-message {
-            color: #666;
+            color: #777;
             padding: 20px;
             text-align: center;
         }
@@ -19,5 +19,28 @@
     <div id="input_data" style="visibility: hidden">
         <div class="loading-message"></div>
     </div>
+    <div id="plain_text"></div>
 </body>
 </html>
+
+<script>
+
+function extractVisibleText(htmlString) {
+    // Create a new DOM parser
+    let parser = new DOMParser();
+    let doc = parser.parseFromString(htmlString, "text/html");
+
+    // Remove all script and style elements
+    doc.querySelectorAll("script, style, meta, link, head, title").forEach(el => el.remove());
+
+    // Get the visible text
+    return doc.body.innerText.trim();
+}
+
+var inputHTML = document.getElementById("input_data").innerHTML
+
+var plainText = extractVisibleText(inputHTML);
+
+document.getElementById("plain_text").innerHTML = plainText;
+
+</script>
