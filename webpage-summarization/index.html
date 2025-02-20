@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Webpage Content v2</title>
+    <title>Webpage Content v2.1</title>
     <style>
         .error-message {
             color: red;
@@ -19,32 +19,5 @@
     <div id="content">
         <div class="loading-message">Loading content...</div>
     </div>
-    <script src="chrome-extension://EXTENSION_ID/content.js"></script>
-    <script>
-        window.onload = async function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const timestamp = urlParams.get('timestamp');
-            
-            if (timestamp) {
-                try {
-                    // Get content from chrome.storage
-                    const result = await chrome.storage.local.get(`webpage_content_${timestamp}`);
-                    const content = result[`webpage_content_${timestamp}`];
-                    
-                    if (content) {
-                        document.getElementById('content').innerHTML = content;
-                        // Clean up storage after successful retrieval
-                        chrome.storage.local.remove(`webpage_content_${timestamp}`);
-                    } else {
-                        document.getElementById('content').innerHTML = '<div class="error-message">Content not found</div>';
-                    }
-                } catch (e) {
-                    document.getElementById('content').innerHTML = '<div class="error-message">Error loading content</div>';
-                }
-            } else {
-                document.getElementById('content').innerHTML = '<div class="error-message">No content identifier provided</div>';
-            }
-        }
-    </script>
 </body>
 </html>
