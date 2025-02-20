@@ -1,37 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Page Summarization v1.5</title>
+    <title>Webpage Summarization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        #content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        pre {
+            white-space: pre-wrap;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Extracted Page Content v1.5</h1>
-    <div id="content">Loading...</div>
-
+    <div id="content">
+        <h1>Webpage Content</h1>
+        <pre id="extractedText"></pre>
+    </div>
     <script>
-        // Function to extract the 'data-key' parameter from the URL
-        function getQueryParam(name) {
-            const params = new URLSearchParams(window.location.search);
-            return params.get(name);
-        }
-
-        const dataKey = getQueryParam('data-key');
-
-        if (dataKey) {
-            // Send a message to the background script to retrieve the stored data using the dataKey
-            chrome.runtime.sendMessage({ action: "getStoredData", key: dataKey }, (response) => {
-                if (response && response.data) {
-                    // Display the extracted content
-                    document.getElementById("content").textContent = decodeURIComponent(atob(response.data));
-                    // Optionally, remove the data after use
-                    //chrome.runtime.sendMessage({ action: "clearStoredData", key: dataKey });
-                } else {
-                    document.getElementById("content").textContent = "No data found.";
-                }
-            });
-        } else {
-            document.getElementById("content").textContent = "No key provided.";
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedText = urlParams.get('text');
+            if (encodedText) {
+                const decodedText = atob(encodedText);
+                document.getElementById('extractedText').textContent = decodedText;
+            } else {
+                document.getElementById('extractedText').textContent = 'No text provided';
+            }
         }
     </script>
 </body>
