@@ -233,9 +233,9 @@
             }
 
             :root {
-                --font-size-small: 0.8125rem;
-                --font-size-base: 0.9375rem;
-                --font-size-large: 1.125rem;
+                --font-size-small: 1.6rem;
+                --font-size-base: 1.8rem;
+                --font-size-large: 2.5rem;
                 --spacing-base: 0.5rem;
             }
         }
@@ -556,7 +556,7 @@ function processInputData() {
 
     resetChat("Welcome to Web Page Summarization!", "I would like you to be a helpful AI chatbot that can summarize web page content and provide assistance relating to content");
 
-    var startMessage = "I am interested in summarizing a web page in three forms. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value. Here is the web page content: " + plainText;
+    var startMessage = "I am interested in summarizing a web page in three forms. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content: " + plainText;
     
     conversationHistory.push({ role: "user", content: startMessage });
 
