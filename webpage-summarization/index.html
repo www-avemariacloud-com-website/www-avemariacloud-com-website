@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Summarization v4.0</title>
+    <title>Web Page Summarization v5.0</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,7 +246,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Summarization v4.0</h1>
+                <h1 class="title">Web Page Summarization v5.0</h1>
                 <div class="controls">
                     <select id="summarization_type" class="select" onchange="sessionStorage.setItem('summarization_type', this.value);processInputData();">
                         <option value="standard">Standard</option>
@@ -254,6 +254,10 @@
                         <option value="christian_zionism">Christian Zionism</option>
                         <option value="democrat">Democrat</option>
                         <option value="republican">Republican</option>
+                        <option value="detect_secrets">Detect Secrets</option>
+                        <option value="detect_truth">Detect Truth</option>
+                        <option value="life_giving">Life Giving</option>
+                        <option value="elaborate">Elaborate</option>
                     </select>
                     <select id="aiModel" class="select">
                         <option value="gemma2-9b-it">Gemma 2 (9B)</option>
@@ -581,6 +585,42 @@ function processInputData() {
         $start_message = "I am interested in summarizing a web page in three forms in the context of Christian Zionism. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
     }
     
+    if (summarization_type == "democrat") {
+        $welcome_message = "Welcome to Web Page Summarization: Democrat Version!";
+        $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content in the context of giving life unto Democrats.";
+        $start_message = "I am interested in summarizing a web page in three forms in the context of of giving life unto Democrats. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
+    }
+    
+    if (summarization_type == "republican") {
+        $welcome_message = "Welcome to Web Page Summarization: Republican Version!";
+        $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content in the context of giving life unto Republicans.";
+        $start_message = "I am interested in summarizing a web page in three forms in the context of giving life unto Republicans. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
+    }
+
+    if (summarization_type == "detect_secrets") {
+        $welcome_message = "Welcome to Web Page Summarization: Detect Secrets Version!";
+        $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content in the context of detecting secrets.";
+        $start_message = "I am interested in summarizing a web page in three forms in the context of detecting secrets. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
+    }
+
+    if (summarization_type == "detect_truth") {
+        $welcome_message = "Welcome to Web Page Summarization: Detect Truth Version!";
+        $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content in the context of detecting truths.";
+        $start_message = "I am interested in summarizing a web page in three forms in the context of detecting truths. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
+    }
+
+    if (summarization_type == "life_giving") {
+        $welcome_message = "Welcome to Web Page Summarization: Life Giving Version!";
+        $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content in the context of giving life unto the world.";
+        $start_message = "I am interested in summarizing a web page in three forms in the context of giving life unto the world. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
+    }
+
+    if (summarization_type == "elaborate") {
+        $welcome_message = "Welcome to Web Page Summarization: Elaborate Version!";
+        $system_prompt = "I would like you to be a helpful AI chatbot that can elaborate web page content and can provide assistance relating to web page content.";
+        $start_message = "I am interested in elaborating a web page. Here is the web page content I would like you to elaborate and offer assistance with: " + plainText;
+    }
+    
     resetChat($welcome_message, $system_prompt);
 
     var startMessage = $start_message;
@@ -603,5 +643,8 @@ const interval = setInterval(() => {
         console.log("Checking...");
     }
 }, 0);
+
+    const selectElement = document.getElementById("summarization_type");
+    selectElement.value = sessionStorage.getItem("summarization_type"); // Change the selected option
     
 </script>
