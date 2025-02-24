@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Summarization v2.6</title>
+    <title>Web Page Summarization v2.7</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,7 +246,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Summarization v2.6</h1>
+                <h1 class="title">Web Page Summarization v2.7</h1>
                 <div class="controls">
                     <select id="aiModel" class="select">
                         <option value="gemma2-9b-it">Gemma 2 (9B)</option>
@@ -546,7 +546,7 @@ function extractVisibleText(htmlString) {
     return doc.body.innerText.trim();
 }
 
-function processInputData() {
+function processInputData($summarization_type) {
     var inputHTML = document.getElementById("input_data").innerHTML
     
     document.getElementById("input_data").innerHTML = "";
@@ -558,9 +558,19 @@ function processInputData() {
 
     //document.getElementById("plain_text").innerHTML = plainText;
 
-    resetChat("Welcome to Web Page Summarization!", "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content");
+    $welcome_message = "Welcome to Web Page Summarization!";
+    $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content";
+    $start_message = "I am interested in summarizing a web page in three forms. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
 
-    var startMessage = "I am interested in summarizing a web page in three forms. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
+    if ($summarization_type == "zionism_research") {
+        $welcome_message = "Welcome to Web Page Summarization: Zionism!";
+        $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content in the context of Zionism.";
+        $start_message = "I am interested in summarizing a web page in three forms in the context of Zionism. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
+    }
+    
+    resetChat($welcome_message, $system_prompt);
+
+    var startMessage = $start_message;
     
     conversationHistory.push({ role: "user", content: startMessage });
 
@@ -569,13 +579,28 @@ function processInputData() {
 
 const interval = setInterval(() => {
     if (document.getElementById("input_data").innerHTML != "") {
+
         console.log("Input detected!");
-        processInputData();
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const zionism_research = urlParams.get('zionism_research'); // Replace 'myVar' with the actual parameter name
+        
+        console.log(zionism_research); // Logs the value of 'myVar' if it exists
+
+        if (zionism_research == "true") {
+            processInputData("zionism_research");
+        }
+        else {
+            console.log("Input detected!");
+            processInputData();
+        }
+        
         clearInterval(interval); // Stop checking
+        
     } else {
         console.log("Checking...");
     }
-}, 100);
+}, 0);
 
 
 </script>
