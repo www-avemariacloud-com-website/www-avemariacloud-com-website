@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Creator v2.7</title>
+    <title>Image Creator v2.8</title>
     <link rel="icon" href="image-creator-icon.jpeg" type="image/jpeg">
 
 
@@ -130,7 +130,7 @@
             display: none;
         }
 
-        .generated-images {
+        .created-images {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
@@ -253,7 +253,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Image Creator v2.7</h1>
+        <h1>Image Creator v2.8</h1>
 
         <div class="model-selection">
             <label for="model-select">Image Creation Model</label>
@@ -285,14 +285,14 @@
             <div class="form-group">
                 <label for="description">Image Description (Use AI to Create Positive and Negative Prompts)</label>
                 <textarea id="description" placeholder="Enter a description for your image..."></textarea>
-                <button class="random-description-button" onclick="generateRandomDescription()" id="random-description-button">Create Random Image Description</button>
+                <button class="random-description-button" onclick="createRandomDescription()" id="random-description-button">Create Random Image Description</button>
             </div>
             
             <div class="form-group">
                 <label for="num-images">Number of Images:</label>
                 <input type="number" id="num-images" min="1" max="10" value="1">
             </div>
-            <button onclick="generateFromDescription()" id="description-button">Create Image(s)</button>
+            <button onclick="createFromDescription()" id="description-button">Create Image(s)</button>
         </div>
 
         <div id="prompt-tab" class="tab-content">
@@ -304,11 +304,11 @@
                 <label for="negative-prompt">"Negative" Prompt:</label>
                 <textarea id="negative-prompt" placeholder='Enter "negative" prompt...'></textarea>
             </div>
-            <button onclick="generateFromPrompts()" id="prompt-button">Create Image</button>
+            <button onclick="createFromPrompts()" id="prompt-button">Create Image</button>
         </div>
 
-        <div id="loading">Generating image, please wait...</div>
-        <div id="generated-images" class="generated-images"></div>
+        <div id="loading">Creating image, please wait...</div>
+        <div id="created-images" class="created-images"></div>
 
 <BR>
 
@@ -324,7 +324,7 @@
 <BR><BR>
 Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
 <br><br>
-Software, code, text, an image, images and/or things may have been generated and may be generated using services, tools, software, API, APIs, or things relating to
+Software, code, text, an image, images and/or things may have been created and may be created using services, tools, software, API, APIs, or things relating to
 <a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
 <a href="https://www.anthropic.com/" target="_blank">Anthropicand/or Claude AI </a>, 
 <a href="https://ai.meta.com/" target="_blank">Meta and/or Meta Llama 3 </a>, 
@@ -375,6 +375,10 @@ Some notices may be relevant.<br><br>
 
 
 
+
+
+
+
     </div>
 
     <script>
@@ -395,7 +399,7 @@ Some notices may be relevant.<br><br>
             },
             sd14: {
                 url: 'https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4',
-                description: 'May do well for general-purpose image generation with consistent results.',
+                description: 'May do well for general-purpose image creation with consistent results.',
                 requiresNegativePrompt: true
             }
         };
@@ -414,7 +418,7 @@ Some notices may be relevant.<br><br>
         
 
 
-        async function generateRandomDescription() {
+        async function createRandomDescription() {
     const randomDescButton = document.getElementById('random-description-button');
     const descriptionTextarea = document.getElementById('description');
     
@@ -436,11 +440,11 @@ Some notices may be relevant.<br><br>
                     messages: [
                         {
                             role: "system",
-                            content: "You are a creative assistant that generates random, detailed, loving and imaginative image descriptions for a Christian website. Focus on creating descriptions that would make interesting and visually appealing images. Include specific details about style, mood, lighting, and composition."
+                            content: "You are a creative assistant that creates random, detailed, loving and imaginative image descriptions for a Christian website. Focus on creating descriptions that would make interesting and visually appealing images. Include specific details about style, mood, lighting, and composition."
                         },
                         {
                             role: "user",
-                            content: "Generate a random, creative image description that would work well for AI image generation. Make it detailed and specific, but keep it to 2-3 sentences. Return only the description with no additional text or formatting."
+                            content: "Create a random, creative image description that would work well for AI image creation. Make it detailed and specific, but keep it to 2-3 sentences. Return only the description with no additional text or formatting."
                         }
                     ]
                 })
@@ -464,7 +468,7 @@ Some notices may be relevant.<br><br>
                 await fetchData(); // Retry fetching
             } else {
                 console.error('Error:', error);
-                showError(`Failed to generate random description after ${maxRetries} attempts: ${error.message}`);
+                showError(`Failed to create random description after ${maxRetries} attempts: ${error.message}`);
             }
         } finally {
             randomDescButton.disabled = false;
@@ -507,7 +511,7 @@ Some notices may be relevant.<br><br>
             document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
         }
 
-        async function generatePrompts(description) {
+        async function createPrompts(description) {
     const maxRetries = 6; // Configurable retry count
     let attempt = 0;
 
@@ -524,7 +528,7 @@ Some notices may be relevant.<br><br>
                     messages: [
                         {
                             role: "system",
-                            content: `I would like you to create a positive and negative prompt pair for stable-diffusion-3.5-large image generation. The image should be beautiful, loving, realistic, and perfect. The image should reflect the description that I provided in the user message.
+                            content: `I would like you to create a positive and negative prompt pair for stable-diffusion-3.5-large image creation. The image should be beautiful, loving, realistic, and perfect. The image should reflect the description that I provided in the user message.
 
 Respond in JSON with these keys: positive_prompt and negative_prompt.`
                         },
@@ -554,7 +558,7 @@ Respond in JSON with these keys: positive_prompt and negative_prompt.`
                 await new Promise(resolve => setTimeout(resolve, 61000)); // Optional delay between retries (61 seconds)
                 return await fetchData(); // Retry fetching
             } else {
-                throw new Error(`Failed to generate prompts after ${maxRetries} attempts: ${error.message}`);
+                throw new Error(`Failed to create prompts after ${maxRetries} attempts: ${error.message}`);
             }
         }
     };
@@ -563,7 +567,7 @@ Respond in JSON with these keys: positive_prompt and negative_prompt.`
 }
 
 
-async function generateImage(positivePrompt, negativePrompt) {
+async function createImage(positivePrompt, negativePrompt) {
     const maxRetries = 6; // Configurable retry count
     let attempt = 0;
 
@@ -612,7 +616,7 @@ async function generateImage(positivePrompt, negativePrompt) {
                 await new Promise(resolve => setTimeout(resolve, 2000)); // Optional delay between retries (2 seconds)
                 return await fetchData(); // Retry fetching
             } else {
-                throw new Error(`Failed to generate image after ${maxRetries} attempts: ${error.message}`);
+                throw new Error(`Failed to create image after ${maxRetries} attempts: ${error.message}`);
             }
         }
     };
@@ -631,7 +635,7 @@ async function generateImage(positivePrompt, negativePrompt) {
             const imageCard = document.createElement('div');
             imageCard.className = 'image-card';
             imageCard.innerHTML = `
-                <img src="${imageUrl}" alt="Generated Image">
+                <img src="${imageUrl}" alt="Created Image">
                 <p><strong>Model:</strong> ${selectedModelName}</p>
                 <p><strong>Positive Prompt:</strong> ${positivePrompt}</p>
                 <p><strong>Negative Prompt:</strong> ${negativePrompt}</p>
@@ -640,10 +644,10 @@ async function generateImage(positivePrompt, negativePrompt) {
                     <button class="action-button" onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
                 </div>
             `;
-            document.getElementById('generated-images').prepend(imageCard);
+            document.getElementById('created-images').prepend(imageCard);
         }
 
-        async function generateFromDescription() {
+        async function createFromDescription() {
             const description = document.getElementById('description').value;
             const numImages = parseInt(document.getElementById('num-images').value);
             
@@ -656,10 +660,10 @@ async function generateImage(positivePrompt, negativePrompt) {
 
             try {
                 for (let i = 0; i < numImages; i++) {
-                    document.getElementById('loading').textContent = `Generating image ${i + 1} of ${numImages}...`;
+                    document.getElementById('loading').textContent = `Creating image ${i + 1} of ${numImages}...`;
                     
-                    const prompts = await generatePrompts(description);
-                    const imageUrl = await generateImage(prompts.positive_prompt, prompts.negative_prompt);
+                    const prompts = await createPrompts(description);
+                    const imageUrl = await createImage(prompts.positive_prompt, prompts.negative_prompt);
                     
                     displayImage(imageUrl, prompts.positive_prompt, prompts.negative_prompt);
 
@@ -673,7 +677,7 @@ async function generateImage(positivePrompt, negativePrompt) {
             }
         }
 
-        async function generateFromPrompts() {
+        async function createFromPrompts() {
             const positivePrompt = document.getElementById('positive-prompt').value;
             const negativePrompt = document.getElementById('negative-prompt').value;
             
@@ -685,7 +689,7 @@ async function generateImage(positivePrompt, negativePrompt) {
             setLoading(true);
 
             try {
-                const imageUrl = await generateImage(positivePrompt, negativePrompt);
+                const imageUrl = await createImage(positivePrompt, negativePrompt);
                 displayImage(imageUrl, positivePrompt, negativePrompt);
             } catch (error) {
                 console.error('Error:', error);
@@ -711,7 +715,7 @@ function downloadImage(imageUrl) {
                 .then(blob => {
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = 'generated-image.png';
+                    link.download = 'created-image.png';
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
