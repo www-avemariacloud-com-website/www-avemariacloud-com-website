@@ -559,8 +559,10 @@ function extractVisibleText(htmlString) {
 
 function processInputData() {
     var inputHTML = document.getElementById("input_data").innerHTML
-    
-    //document.getElementById("input_data").innerHTML = "";
+
+    if (inputHTML == "") {
+        continue;
+    }
     
     var plainText = extractVisibleText(inputHTML);
     
