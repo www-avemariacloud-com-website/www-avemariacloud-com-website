@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Summarization v2.7</title>
+    <title>Web Page Summarization v2.8</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,7 +246,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Summarization v2.7</h1>
+                <h1 class="title">Web Page Summarization v2.8</h1>
                 <div class="controls">
                     <select id="aiModel" class="select">
                         <option value="gemma2-9b-it">Gemma 2 (9B)</option>
@@ -583,17 +583,11 @@ const interval = setInterval(() => {
         console.log("Input detected!");
         
         const urlParams = new URLSearchParams(window.location.search);
-        const zionism_research = urlParams.get('zionism_research'); // Replace 'myVar' with the actual parameter name
+        const summarization_type = urlParams.get('summarization_type'); // Replace 'myVar' with the actual parameter name
         
-        console.log(zionism_research); // Logs the value of 'myVar' if it exists
+        console.log(summarization_type); // Logs the value of 'myVar' if it exists
 
-        if (zionism_research == "true") {
-            processInputData("zionism_research");
-        }
-        else {
-            console.log("Input detected!");
-            processInputData();
-        }
+        processInputData(summarization_type);
         
         clearInterval(interval); // Stop checking
         
