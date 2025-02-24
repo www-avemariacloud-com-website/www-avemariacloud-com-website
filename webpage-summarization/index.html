@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Summarization v3.0</title>
+    <title>Web Page Summarization v3.1</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,9 +246,9 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Summarization v3.0</h1>
+                <h1 class="title">Web Page Summarization v3.1</h1>
                 <div class="controls">
-                    <select id="summarization_type" class="select" onchange="sessionStorage.setItem('summarization_type', this.value)">
+                    <select id="summarization_type" class="select" onchange="sessionStorage.setItem('summarization_type', this.value);processInputData();">
                         <option value="standard">Standard</option>
                         <option value="christian">Christian</option>
                         <option value="christian_zionism">Christian Zionism</option>
@@ -553,7 +553,7 @@ function extractVisibleText(htmlString) {
     return doc.body.innerText.trim();
 }
 
-function processInputData($summarization_type) {
+function processInputData() {
     var inputHTML = document.getElementById("input_data").innerHTML
     
     //document.getElementById("input_data").innerHTML = "";
@@ -569,7 +569,7 @@ function processInputData($summarization_type) {
     $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content";
     $start_message = "I am interested in summarizing a web page in three forms. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
 
-    if ($summarization_type == "christian_zionism") {
+    if ($summarization_type == "christian") {
         $welcome_message = "Welcome to Web Page Summarization: Christian Version!";
         $system_prompt = "I would like you to be a helpful AI chatbot that can summarize web page content and can provide assistance relating to web page content in the context of Christianity.";
         $start_message = "I am interested in summarizing a web page in three forms in the context of Christianity. (Nano: 1 Sentence, Small: 3 Sentences, Standard: Your Suggested Length). I would also like you to highlight which form you think offers the best value relating to read time. Here is the web page content I would like you to summarize and offer assistance with: " + plainText;
@@ -595,7 +595,7 @@ const interval = setInterval(() => {
 
         console.log("Input detected!");
         
-        processInputData(summarization_type);
+        processInputData();
         
         clearInterval(interval); // Stop checking
         
