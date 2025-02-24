@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Summarization v5.2</title>
+    <title>Web Page Summarization v5.3</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,7 +246,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Summarization v5.2</h1>
+                <h1 class="title">Web Page Summarization v5.3</h1>
                 <div class="controls">
                     <select id="summarization_type" class="select" onchange="localStorage.setItem('summarization_type', this.value);processInputData();">
                         <option value="standard">Standard</option>
@@ -631,6 +631,7 @@ function processInputData() {
 }
 
 const interval = setInterval(() => {
+
     if (document.getElementById("input_data").innerHTML != "") {
 
         console.log("Input detected!");
@@ -646,6 +647,5 @@ const interval = setInterval(() => {
 
     var selectElement = document.getElementById("summarization_type");
     selectElement.value = localStorage.getItem("summarization_type"); // Change the selected option
-    selectElement.dispatchEvent(new Event("change")); // Trigger the onchange event
-
+    
 </script>
