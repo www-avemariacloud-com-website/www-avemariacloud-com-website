@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Analyzer v8.2</title>
+    <title>Web Page Analyzer v8.5</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,7 +246,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Analyzer v8.2</h1>
+                <h1 class="title">Web Page Analyzer v8.5</h1>
                 <div class="controls">
                     <select id="summarization_type" class="select" onchange="localStorage.setItem('summarization_type', this.value);processInputData();">
                         <option value="standard">Standard</option>
@@ -560,11 +560,21 @@ function extractVisibleText(htmlString) {
 function processInputData() {
     var inputHTML = document.getElementById("input_data").innerHTML;
 
-    if (inputHTML == "") {
+    if (inputHTML == "" && sessionStorage.getItem("webpage_contents") == "") {
         return;
     }
     
-    var plainText = extractVisibleText(inputHTML);
+    inputHTML.innerHTML = "";
+
+    var textToAnalyze = inputHTML;
+    
+    if (sessionStorage.getItem("webpage_contents") != "") {
+        textToAnalyze = sessionStorage.getItem("webpage_contents");
+    }
+
+    sessionStorage.setItem("webpage_contents", textToAnalyze);
+    
+    var plainText = extractVisibleText(textToAnalyze);
     
     plainText = plainText.replace(/\n/g, `
 `);
