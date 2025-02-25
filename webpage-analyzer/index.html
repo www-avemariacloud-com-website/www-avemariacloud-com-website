@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Analyzer v9.0</title>
+    <title>Web Page Analyzer v9.1</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,7 +246,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Analyzer v9.0</h1>
+                <h1 class="title">Web Page Analyzer v9.1</h1>
                 <div class="controls">
                     <select id="summarization_type" class="select" onchange="localStorage.setItem('summarization_type', this.value);processInputData();">
                         <option value="standard">Standard</option>
@@ -565,7 +565,7 @@ function processInputData() {
         return;
     }
     
-    inputHTML.innerHTML = "";
+    document.getElementById("input_data").innerHTML = "";
 
     var textToAnalyze = inputHTML;
     
