@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Analyzer v9.2</title>
+    <title>Web Page Analyzer v9.3</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,10 +246,10 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Analyzer v9.2</h1>
+                <h1 class="title">Web Page Analyzer v9.3</h1>
                 <div class="controls">
                     <select id="summarization_type" class="select" onchange="localStorage.setItem('summarization_type', this.value);processInputData();">
-                        <option value="standard">Standard</option>
+                        <option value="standard" selected>Standard</option>
                         <option value="christian">Christian</option>
                         <option value="christian_zionism">Christian Zionism</option>
                         <option value="democrat">Democrat</option>
@@ -647,11 +647,22 @@ function processInputData() {
     sessionStorage.setItem("webpage_contents", "");
     
     var selectSummarizationTypeElement = document.getElementById("summarization_type");
-    selectSummarizationTypeElement.value = localStorage.getItem("summarization_type"); // Change the selected option
-
-    var selectModelElement = document.getElementById("aiModel");
-    selectModelElement.value = localStorage.getItem("model_type"); // Change the selected option
     
+    if (localStorageHasKey("summarization_type")) {
+        selectSummarizationTypeElement.value = localStorage.getItem("summarization_type"); // Change the selected option
+    }
+    else {
+        localStorage.setItem("summarization_type", selectSummarizationTypeElement.value); 
+    }
+    
+    var selectModelElement = document.getElementById("aiModel");
+    
+    if (localStorageHasKey("model_type")) {
+        selectModelElement.value = localStorage.getItem("model_type"); // Change the selected option
+    }
+    else {
+        localStorage.setItem("model_type", selectModelElement.value); 
+    }
     
 const interval = setInterval(() => {
 
