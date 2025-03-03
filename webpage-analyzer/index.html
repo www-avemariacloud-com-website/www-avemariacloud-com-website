@@ -648,7 +648,7 @@ function processInputData() {
     
     var selectSummarizationTypeElement = document.getElementById("summarization_type");
     
-    if (localStorageHasKey("summarization_type")) {
+    if ("summarization_type" in localStorage) {
         selectSummarizationTypeElement.value = localStorage.getItem("summarization_type"); // Change the selected option
     }
     else {
@@ -657,7 +657,7 @@ function processInputData() {
     
     var selectModelElement = document.getElementById("aiModel");
     
-    if (localStorageHasKey("model_type")) {
+    if ("model_type" in localStorage) {
         selectModelElement.value = localStorage.getItem("model_type"); // Change the selected option
     }
     else {
