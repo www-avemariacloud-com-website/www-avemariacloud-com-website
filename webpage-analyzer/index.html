@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Web Page Analyzer v9.4</title>
+    <title>Web Page Analyzer v9.5</title>
     <style>
         
         /* Modern CSS Reset */
@@ -246,7 +246,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Web Page Analyzer v9.4</h1>
+                <h1 class="title">Web Page Analyzer v9.5</h1>
                 <div class="controls">
                     <select id="summarization_type" class="select" onchange="localStorage.setItem('summarization_type', this.value);processInputData();">
                         <option value="standard" selected>Standard</option>
@@ -561,6 +561,8 @@ function processInputData() {
     
     var inputHTML = document.getElementById("input_data").innerHTML;
 
+    console.log("Input HTML: " + inputHTML);
+    
     if (inputHTML == "" && sessionStorage.getItem("webpage_contents") == "") {
         return;
     }
@@ -568,7 +570,7 @@ function processInputData() {
     document.getElementById("input_data").innerHTML = "";
 
     var textToAnalyze = inputHTML;
-    
+
     if (sessionStorage.getItem("webpage_contents") != "") {
         textToAnalyze = sessionStorage.getItem("webpage_contents");
     }
@@ -576,9 +578,13 @@ function processInputData() {
     sessionStorage.setItem("webpage_contents", textToAnalyze);
     
     var plainText = extractVisibleText(textToAnalyze);
-    
+
+    console.log("Plain Text: " + plainText);
+
     plainText = plainText.replace(/\n/g, `
 `);
+    
+    console.log("Plain Text Filtered: " + plainText);
 
     var summarization_type = localStorage.getItem("summarization_type");
 
