@@ -395,8 +395,8 @@
 
             <div class="grid">
                 <div class="input-group">
-                    <label for="aiModel">Select AI Model</label>
-                    <select id="aiModel" class="input-field">
+                    <label for="modelSelect">Select AI Model</label>
+                    <select id="modelSelect" class="input-field">
                         <option value="gemma2-9b-it">Gemma 2 9B</option>
                         <option value="llama-3.2-90b-vision-preview" selected>Llama 3.2 90B Vision</option>
                         <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
@@ -471,7 +471,7 @@
 async function analyzeText() {
             
         const inputText = document.getElementById("inputText").value;
-        const selectedModel = document.getElementById("aiModel").value;
+        const selectedModel = document.getElementById("modelSelect").value;
         const selectedPrompt = document.getElementById("aiPrompt").value;
     
         if (!inputText) {
@@ -751,7 +751,7 @@ Respond in JSON.`
         // Prepare API request
         const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
         const requestData = {
-            model: document.getElementById("aiModel").value,
+            model: document.getElementById("modelSelect").value,
             messages: messageHistory
         };
     
