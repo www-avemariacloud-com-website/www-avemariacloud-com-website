@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Create the modal structure
+
     const modalHTML = `
         <div id="myModal" class="modal">
             <div class="modal-content">
@@ -143,7 +142,6 @@ Some notices may be relevant.<br><br>
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
-            modal.style.display = "none";
+            window.location.href = "https://www.vatican.va/content/vatican/en.html";
         }
     }
-});
