@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Multi Model Chatbot v24</title>
+    <title>Multi Model Chatbot v25</title>
     <style>
         /* Modern CSS Reset */
         *, *::before, *::after {
@@ -245,7 +245,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Multi Model Chatbot v24</h1>
+                <h1 class="title">Multi Model Chatbot v25</h1>
                 <div class="controls">
                     <select id="promptType" class="select" onchange="updateSystemPrompt(this.value)">
                         <option value="universal">Universal</option>
@@ -434,7 +434,7 @@ Some notices may be relevant.<br><br>
             const formattedMessage = content.replace(/\n/g, "<br>");
             const message = document.createElement('div');
             message.className = `message ${role}`;
-            message.innerHTML = formattedMessage;
+            message.textContent = formattedMessage;
             chat.appendChild(message);
             chat.scrollTop = chat.scrollHeight;
         }
