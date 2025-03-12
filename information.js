@@ -79,9 +79,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Get the "Exit" button
     var exitBtn = document.getElementById("exitBtn");
 
-    // When the user clicks on <span> (x), close the modal
+    // When the user clicks on <span> (x), redirect to the specified URL
     span.onclick = function() {
-        modal.style.display = "none";
+        window.location.href = "https://www.vatican.va/content/vatican/en.html";
     }
 
     // When the user clicks "I Agree", close the modal
