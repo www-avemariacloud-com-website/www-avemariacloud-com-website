@@ -1,8 +1,8 @@
 
     const modalHTML = `
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
+        <div id="informationModal" class="informationModal">
+            <div class="informationModalContent">
+                <span class="informationClose">&times;</span>
                 <p>
 © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
 <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
@@ -50,8 +50,8 @@ Some notices may be relevant.<br><br>
 <strong>Hugging Face API:</strong> This tool may use an API, APIs, or things relating to Hugging Face, and may be subject to their<a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
 <strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc. IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="https://avemariacloud.com/flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
 </p>
-                <button id="agreeBtn">I Agree</button>
-                <button id="exitBtn">Exit</button>
+                <button id="informationagreeBtn">I Agree</button>
+                <button id="informationexitBtn">Exit</button>
             </div>
         </div>
     `;
@@ -61,7 +61,7 @@ Some notices may be relevant.<br><br>
 
     // CSS for the modal
     const modalCSS = `
-        .modal {
+        .informationModal {
             display: block; /* Visible upon loading */
             position: fixed; /* Stay in place */
             z-index: 1; /* Sit on top */
@@ -74,7 +74,7 @@ Some notices may be relevant.<br><br>
             background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
         }
 
-        .modal-content {
+        .informationModalContent {
             background-color: #fefefe;
             margin: 15% auto; /* 15% from the top and centered */
             padding: 20px;
@@ -82,27 +82,27 @@ Some notices may be relevant.<br><br>
             width: 80%; /* Could be more or less, depending on screen size */
         }
 
-        .close {
+        .informationClose {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
 
-        .close:hover,
-        .close:focus {
+        .informationClose:hover,
+        .informationClose:focus {
             color: black;
             text-decoration: none;
             cursor: pointer;
         }
 
-        #agreeBtn, #exitBtn {
+        #informationagreeBtn, #informationexitBtn {
             margin: 10px;
             padding: 10px 20px;
             cursor: pointer;
         }
 
-        #agreeBtn:hover, #exitBtn:hover {
+        #informationagreeBtn:hover, #informationexitBtn:hover {
             background-color: #ddd;
         }
     `;
@@ -113,16 +113,16 @@ Some notices may be relevant.<br><br>
     document.head.appendChild(style);
 
     // Get the modal
-    var modal = document.getElementById("myModal");
+    var modal = document.getElementById("informationModal");
 
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    var span = document.getElementsByClassName("informationClose")[0];
 
     // Get the "I Agree" button
-    var agreeBtn = document.getElementById("agreeBtn");
+    var agreeBtn = document.getElementById("informationagreeBtn");
 
     // Get the "Exit" button
-    var exitBtn = document.getElementById("exitBtn");
+    var exitBtn = document.getElementById("informationexitBtn");
 
     // When the user clicks on <span> (x), redirect to the specified URL
     span.onclick = function() {
