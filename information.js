@@ -46,7 +46,7 @@ Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.a
 DeepSeek: Relevant links may include <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.
 <br><br>
 Some notices may be relevant.<br><br>
-<strong>DeepSeek:</strong> DeepSeek models, including DeepSeek-R1-Distill-Llama-70B and DeepSeek-R1-Distill-Qwen-32B, may be subject to the <a href="https://www.deepseek.com/license" target="_blank">DeepSeek AI License</a>.<br>
+<strong>DeepSeek:</strong> DeepSeek models, including DeepSeek-R1-Distill-Llama-70B and DeepSeek-R1-Distill-Qwen-32B, may be subject to <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.<br>
 <strong>Built with Meta Llama 3:</strong> <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 is licensed under the Meta Llama 3 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.</a><br>
 <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.<br>
 <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.<br>
