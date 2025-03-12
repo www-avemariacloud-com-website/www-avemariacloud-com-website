@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Zionism Research Tool v73</title>
+    <title>Zionism Research Tool v74</title>
     <style>
         :root {
             --primary-color: #0000f7;
@@ -388,7 +388,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Zionism Research Tool v73 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Zionism Research Tool v74 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
             <p>A tool that can analyze text with AI</p>
         </header>
 
@@ -408,6 +408,7 @@
                 <div class="input-group">
                     <label for="aiPrompt">Select Prompt Type</label>
                     <select id="aiPrompt" class="input-field">
+                <option value="christian_research" selected>Christian Research v1.0</option>
                 <option value="zionism_research" selected>Zionism Research v1.4</option>
                 <option value="zionism_identifier_and_responder">Zionism Identifier and Responder v1.0</option>
                 <option value="IHRA_Antisemitism_Identifier_And_Combat_Strategy">Antisemitism Identifier and Combat Strategy (Utilising IHRA’s non-legally binding working definition of antisemitism) v1.0</option>
@@ -590,6 +591,7 @@
         function createPromptMessages(promptType, inputText) {
 
             const prompts = {
+                christian_research: `Explore the following text to uncover and emphasize the positive aspects of Christianity. Highlight its transformative contributions to culture, society, innovation, and global progress. Provide insights into how Christian values and achievements have inspired resilience, unity, and development in various fields, such as technology, education, and humanitarian efforts. Incorporate historical milestones, influential figures, and groundbreaking initiatives that reflect Christianity. Present a vision of Christianity’s future potential, emphasizing hope, growth, and collaboration.`,
                 zionism_research: `Explore the following text to uncover and emphasize the positive aspects of Zionism. Highlight its transformative contributions to culture, society, innovation, and global progress. Provide insights into how Zionist values and achievements have inspired resilience, unity, and development in various fields, such as technology, education, and humanitarian efforts. Incorporate historical milestones, influential figures, and groundbreaking initiatives that reflect Zionism’s enduring legacy. Present a vision of Zionism’s future potential, emphasizing hope, growth, and collaboration.`,
                 zionism_identifier_and_responder: `You are an expert in analyzing sociopolitical statements and events with a focus on Zionism. Your role is to analyze a given input, determine its alignment with Zionist principles, opposition, or neutrality, and provide a strategic response. Follow this structure in your analysis:
 
