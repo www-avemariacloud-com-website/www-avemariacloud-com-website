@@ -1,9 +1,5 @@
 
-    const modalHTML = `
-        <div id="informationModal" class="informationModal">
-            <div class="informationModalContent">
-                <span class="informationClose">&times;</span>
-                <p>
+    var informationText = `<p>
 © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
 <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
 <BR><BR>
@@ -53,7 +49,13 @@ Some notices may be relevant.<br><br>
 <strong><a href="https://avemariacloud.com/stability-ai-notice.txt">Notice</a>: Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved. Stability AI<br>
 <strong>Hugging Face API:</strong> This tool may use an API, APIs, or things relating to Hugging Face, and may be subject to their<a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
 <strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc. IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="https://avemariacloud.com/flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
-</p>
+</p>`;
+
+    const modalHTML = `
+        <div id="informationModal" class="informationModal">
+            <div class="informationModalContent">
+                <span class="informationClose">&times;</span>
+                ` + informationText + `
                 <button id="informationagreeBtn">I Agree</button>
                 <button id="informationexitBtn">Exit</button>
             </div>
@@ -155,3 +157,5 @@ Some notices may be relevant.<br><br>
             window.location.href = "https://www.vatican.va/content/vatican/en.html";
         }
     }
+
+    document.getElementById("informationFooter").innerText = informationText;
