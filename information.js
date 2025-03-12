@@ -56,8 +56,12 @@ Some notices may be relevant.<br><br>
         </div>
     `;
 
-    // Append the modal HTML to the body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    var agreedToInformation = sessionStorage.getItem("agreedToInformation");
+
+    if (agreedToInformation != "yes") {
+        // Append the modal HTML to the body
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
 
     // CSS for the modal
     const modalCSS = `
@@ -132,6 +136,7 @@ Some notices may be relevant.<br><br>
     // When the user clicks "I Agree", close the modal
     agreeBtn.onclick = function() {
         modal.style.display = "none";
+        sessionStorage.setItem("agreedToInformation", "yes");
     }
 
     // When the user clicks "Exit", redirect to the specified URL
