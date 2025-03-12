@@ -56,7 +56,7 @@ Some notices may be relevant.<br><br>
         </div>
     `;
 
-    var agreedToInformation = sessionStorage.getItem("agreedToInformation");
+    var agreedToInformation = localStorage.getItem("agreedToInformation");
 
     if (agreedToInformation != "yes") {
         // Append the modal HTML to the body
@@ -79,6 +79,7 @@ Some notices may be relevant.<br><br>
         }
 
         .informationModalContent {
+            color: black;
             background-color: #fefefe;
             margin: 15% auto; /* 15% from the top and centered */
             padding: 20px;
@@ -136,7 +137,7 @@ Some notices may be relevant.<br><br>
     // When the user clicks "I Agree", close the modal
     agreeBtn.onclick = function() {
         modal.style.display = "none";
-        sessionStorage.setItem("agreedToInformation", "yes");
+        localStorage.setItem("agreedToInformation", "yes");
     }
 
     // When the user clicks "Exit", redirect to the specified URL
