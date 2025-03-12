@@ -1,3 +1,5 @@
+//v2
+
 var models = [
 'allam-2-7b',
 'deepseek-r1-distill-llama-70b',
@@ -28,3 +30,16 @@ for (var model of models) {
   option.value = model; // Add theelement to the element 
   modelSelect.appendChild(option);
 }
+
+// Load the selected value from local storage
+window.addEventListener('load', () => {
+const selectedModel = localStorage.getItem('selectedModel');
+if (selectedModel) {
+modelSelect.value = selectedModel;
+}
+});
+
+// Save the selected value to local storage when the value changes
+modelSelect.addEventListener('change', () => {
+localStorage.setItem('selectedModel', modelSelect.value);
+});
