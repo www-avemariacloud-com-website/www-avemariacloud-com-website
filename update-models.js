@@ -1,4 +1,4 @@
-//v3
+//v4
 
 var models = [
 'deepseek-r1-distill-llama-70b',
@@ -26,7 +26,7 @@ for (var model of models) {
   modelSelect.appendChild(option);
 }
 
-var currentPath = var currentPath = window.location.pathname;
+var currentPath = window.location.pathname;
 var localStorageID = currentPath + "selectedModel";
 
 // Load the selected value from local storage
