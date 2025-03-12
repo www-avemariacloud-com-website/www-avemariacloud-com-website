@@ -1,7 +1,6 @@
-//v2
+//v3
 
 var models = [
-'allam-2-7b',
 'deepseek-r1-distill-llama-70b',
 'deepseek-r1-distill-qwen-32b',
 'gemma2-9b-it',
@@ -15,11 +14,7 @@ var models = [
 'llama-guard-3-8b',
 'llama3-70b-8192',
 'llama3-8b-8192',
-'mistral-saba-24b',
-'mixtral-8x7b-32768',
-'qwen-2.5-32b',
-'qwen-2.5-coder-32b',
-'qwen-qwq-32b'
+'mistral-saba-24b'
 ];
 
 const modelSelect = document.getElementById('modelSelect');
@@ -31,9 +26,12 @@ for (var model of models) {
   modelSelect.appendChild(option);
 }
 
+var currentPath = var currentPath = window.location.pathname;
+var localStorageID = currentPath + "selectedModel";
+
 // Load the selected value from local storage
 window.addEventListener('load', () => {
-const selectedModel = localStorage.getItem('selectedModel');
+const selectedModel = localStorage.getItem(localStorageID);
 if (selectedModel) {
 modelSelect.value = selectedModel;
 }
@@ -41,5 +39,5 @@ modelSelect.value = selectedModel;
 
 // Save the selected value to local storage when the value changes
 modelSelect.addEventListener('change', () => {
-localStorage.setItem('selectedModel', modelSelect.value);
+localStorage.setItem(localStorageID, modelSelect.value);
 });
