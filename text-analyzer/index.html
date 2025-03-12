@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
-    <title>Text Analyzer v7</title>
+    <title>Text Analyzer v8</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -388,7 +388,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Text Analyzer v7 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
+            <h1><img height="40em" src="favicon.png" style="position: relative; top: 6px;"> Text Analyzer v8 <img height="40em" src="favicon.png" style="position: relative; top: 6px;"></h1>
             <p>A tool that can analyze text with AI</p>
         </header>
 
@@ -400,14 +400,8 @@
 
             <div class="grid">
                 <div class="input-group">
-                    <label for="aiModel">Select AI Model</label>
-                    <select id="aiModel" class="input-field">
-                        <option value="gemma2-9b-it">gemma2-9b-it</option>
-                        <option value="llama-3.2-90b-vision-preview">llama-3.2-90b-vision-preview</option>
-                        <option value="mistral-saba-24b" selected>mistral-saba-24b</option>
-                        <option value="deepseek-r1-distill-llama-70b" selected>deepseek-r1-distill-llama-70b</option>
-                        <option value="deepseek-r1-distill-qwen-32b" selected>deepseek-r1-distill-qwen-32b</option>
-                        
+                    <label for="modelSelect">Select AI Model</label>
+                    <select id="modelSelect" class="input-field">
                     </select>
                 </div>
 
@@ -545,7 +539,7 @@
         async function analyzeText() {
             
         const inputText = document.getElementById("inputText").value;
-        const selectedModel = document.getElementById("aiModel").value;
+        const selectedModel = document.getElementById("modelSelect").value;
         const selectedPrompt = document.getElementById("aiPrompt").value;
     
         if (!inputText) {
@@ -794,7 +788,7 @@ Respond in JSON.`
         // Prepare API request
         const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
         const requestData = {
-            model: document.getElementById("aiModel").value,
+            model: document.getElementById("modelSelect").value,
             messages: messageHistory
         };
     
@@ -848,5 +842,7 @@ Respond in JSON.`
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
+
+    <script src="https://avemariacloud.com/update-models.js"></script>
 </body>
 </html>
