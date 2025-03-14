@@ -34,6 +34,8 @@ window.addEventListener('load', () => {
 const selectedModel = localStorage.getItem(localStorageID);
 if (selectedModel) {
 modelSelect.value = selectedModel;
+
+sessionStorage.setItem("localStorageModelSelected", "true");
 }
 });
 
