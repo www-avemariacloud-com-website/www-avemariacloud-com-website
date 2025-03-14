@@ -454,13 +454,18 @@
             e.preventDefault();
             const message = userInput.value.trim();
             if (!message) return;
-    
+            
+            sendMessageInput(message);
+
+        });
+
+        function sendMessageInput(message) {
             addMessage(message, 'user');
             conversationHistory.push({ role: "user", content: message });
             userInput.value = '';
             addLoadingIndicator();
             sendMessage(message);
-        });
+        }
     
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey && !(/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent))) {
@@ -470,9 +475,37 @@
         });
     
         userInput.focus();
+
+
     </script>
 
     <script src="https://avemariacloud.com/generic-loader.js"></script>
+
+    <script>
+
+
+
+
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    var checkModelSelectInterval = setInterval(() => {
+    var modelSelectElement = document.getElementById('modelSelect');
+    if (modelSelectElement && modelSelectElement.value) {
+        // Clear the interval when the value is available
+        clearInterval(checkModelSelectInterval);
+        // Log the value to the console
+
+        var startMessage = getQueryParam("startMessage");
+
+        console.log(startMessage);
+        sendMessageInput(getQueryParam("startMessage"));
+    }
+    }, 1); // Check
+
+    </script>
 
 </body>
 </html>
