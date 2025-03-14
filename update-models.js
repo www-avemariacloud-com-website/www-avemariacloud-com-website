@@ -1,5 +1,8 @@
 //v4
 
+sessionStorage.setItem("localStorageModelSelected", "false");
+
+
 var models = [
 'deepseek-r1-distill-llama-70b',
 'deepseek-r1-distill-qwen-32b',
@@ -34,7 +37,7 @@ window.addEventListener('load', () => {
 const selectedModel = localStorage.getItem(localStorageID);
 if (selectedModel) {
 modelSelect.value = selectedModel;
-
+console.log("Selected Model: " + selectedModel);
 sessionStorage.setItem("localStorageModelSelected", "true");
 }
 });
