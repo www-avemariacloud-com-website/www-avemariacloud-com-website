@@ -137,6 +137,9 @@
                 27 to a virgin betrothed to a man named Joseph, of the house of David, and the virgin's name was Mary. 
                 28 And coming to her, he said, "Hail, favored one! The Lord is with you."
             </blockquote>
+
+            <blockquote id="randomScripturePassage">
+            </blockquote>
         </div>
     </header>
 
@@ -159,4 +162,138 @@
 </html>
 
 <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
-    <script src="https://www.avemariacloud.com/generic-loader.js"></script>
+<script src="https://www.avemariacloud.com/generic-loader.js"></script>
+    
+<script>
+  
+  async function fetchRandomScripturePassage() {
+  
+  document.getElementById("randomScripturePassage").innerHTML = `Trying to download a verse...
+<BR>
+<button
+  onclick="fetchRandomScripturePassage();"
+  style="
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 0.4em; /* Some padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make the button inline-block */
+    font-size: 16px; /* Increase font size */
+    margin-top: 0.6em; /* Some margin */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+  "
+  onmouseover="this.style.backgroundColor='#45a049';"
+  onmouseout="this.style.backgroundColor='#4CAF50';">
+  Refresh
+</button></button>`;
+
+  const url = 'https://proxy.small-recipe-9582.workers.dev/';
+  const headers = {
+    'authorization': 'Bearer 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',
+    'content-type': 'application/json'
+  };
+
+  const now = new Date();
+
+  const body = {
+    "model": "llama-3.1-8b-instant",
+    "messages": [
+      {
+        "role": "system",
+        "content": "I am interested in a single verse of Scripture.\n\nPlease respond in JSON with these exact labels Book, Chapter, Verse_Number. Please use book names like this 'Psalms'."
+      },
+      {
+        "role": "user",
+        "content": now
+      }
+    ],
+    "response_format": {
+      "type": "json_object"
+    }
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    
+    var PassageInformation = JSON.parse(data['choices']['0']['message']['content']);
+
+    console.log(PassageInformation);
+  
+    console.log(PassageInformation['Book']);
+
+    console.log(PassageInformation['Chapter']);
+
+    console.log(PassageInformation['Verse_Number']);
+
+    fetch("https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles/en-kjv/books/" + PassageInformation['Book'].toLowerCase() + "/chapters/" + PassageInformation['Chapter'] + "/verses/" + PassageInformation['Verse_Number'] + ".json")
+    .then((response) => response.json())
+    .then((data) => document.getElementById("randomScripturePassage").innerHTML = PassageInformation['Book'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version
+<BR>
+` + data.text + `
+<BR>
+<button
+  onclick="fetchRandomScripturePassage();"
+  style="
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 0.4em; /* Some padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make the button inline-block */
+    font-size: 16px; /* Increase font size */
+    margin-top: 0.6em; /* Some margin */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+  "
+  onmouseover="this.style.backgroundColor='#45a049';"
+  onmouseout="this.style.backgroundColor='#4CAF50';">
+  Refresh
+</button>
+
+<button
+  onclick="window.location.href = 'https://www.avemariacloud.com/multi-model-chatbot/?startMessage=' + 'I would like to chat about this verse: ` + data.text + `';"
+  style="
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 0.4em; /* Some padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make the button inline-block */
+    font-size: 16px; /* Increase font size */
+    margin-top: 0.6em; /* Some margin */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+  "
+  onmouseover="this.style.backgroundColor='#45a049';"
+  onmouseout="this.style.backgroundColor='#4CAF50';">
+  Chat About This Verse
+</button>`);
+
+    return data;
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
+  }
+}
+
+// Call the function
+fetchRandomScripturePassage();
+
+</script>
