@@ -18,10 +18,10 @@ function loadScript(src) {
 }
 
 // Function to load multiple scripts in sequence
-function loadScripts(scripts) {
+async function loadScripts(scripts) {
     for (const script of scripts) {
         try {
-            loadScript(script);
+            await loadScript(script);
             console.log(`Loaded ${script}`);
         } catch (error) {
             console.error(error);
