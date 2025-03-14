@@ -165,31 +165,35 @@
 <script src="https://www.avemariacloud.com/generic-loader.js"></script>
     
 <script>
-  
-  async function fetchRandomScripturePassage() {
-  
+
+
+
+async function fetchRandomScripturePassage(retryCount = 5) {
+  const maxRetries = 5; // Maximum number of retries
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
   document.getElementById("randomScripturePassage").innerHTML = `Trying to download a verse...
 <BR>
 <button
   onclick="fetchRandomScripturePassage();"
   style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0.6em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 0.4em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 0.6em;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
   "
   onmouseover="this.style.backgroundColor='#45a049';"
   onmouseout="this.style.backgroundColor='#4CAF50';">
   Refresh
-</button></button>`;
+</button>`;
 
   const url = 'https://proxy.small-recipe-9582.workers.dev/';
   const headers = {
@@ -198,22 +202,34 @@
   };
 
   const now = new Date();
-
   const body = {
-    "model": "llama-3.1-8b-instant",
+    "model": "mistral-saba-24b",
     "messages": [
       {
         "role": "system",
-        "content": "I am interested in a single verse of Scripture.\n\nPlease respond in JSON with these exact labels Book, Chapter, Verse_Number. Please use book names like this 'Psalms'."
+        "content": `I am interested in a single verse of Scripture.
+
+Please respond in JSON with these exact labels: Book, Chapter, Verse_Number, Official_Book_Name.
+
+I am interested in the Official_Book_Name label using the official book name, spelling, and capitalization relating to the book that is returned.
+        
+Please use this list of strings to refer to a book within the book label.
+
+1chronicles, 1corinthians, 1esdras, 1john, 1kings, 1maccabees, 1peter, 1samuel, 1thessalonians, 1timothy,
+2chronicles, 2corinthians, 2esdras, 2john, 2kings, 2maccabees, 2peter, 2samuel, 2thessalonians, 2timothy,
+3john, acts, amos, baruch, belandthedragon, colossians, daniel, deuteronomy, ecclesiastes, ecclesiasticus,
+ephesians, esther(greek), esther, exodus, ezekiel, ezra, galatians, genesis, habakkuk, haggai, hebrews,
+hosea, isaiah, james, jeremiah, job, joel, john, jonah, joshua, jude, judges, judith, lamentations,
+leviticus, luke, malachi, manasseh, mark, matthew, micah, nahum, nehemiah, numbers, obadiah, philemon,
+philippians, proverbs, psalms, revelation, romans, ruth, songofsolomon, songofthethree, susanna, titus,
+tobit, wisdom, zechariah, zephaniah`
       },
       {
         "role": "user",
         "content": now
       }
     ],
-    "response_format": {
-      "type": "json_object"
-    }
+    "response_format": { "type": "json_object" }
   };
 
   try {
@@ -228,70 +244,83 @@
     }
 
     const data = await response.json();
-    
-    var PassageInformation = JSON.parse(data['choices']['0']['message']['content']);
+    var PassageInformation = JSON.parse(data['choices'][0]['message']['content']);
 
     console.log(PassageInformation);
-  
-    console.log(PassageInformation['Book']);
 
-    console.log(PassageInformation['Chapter']);
+    // Fetch the actual verse text
+    const verseUrl = `https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles/en-kjv/books/${PassageInformation['Book'].toLowerCase()}/chapters/${PassageInformation['Chapter']}/verses/${PassageInformation['Verse_Number']}.json`;
 
-    console.log(PassageInformation['Verse_Number']);
+    const verseResponse = await fetch(verseUrl);
+    if (!verseResponse.ok) {
+      throw new Error('Failed to fetch verse text');
+    }
+    
+    const verseData = await verseResponse.json();
 
-    fetch("https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles/en-kjv/books/" + PassageInformation['Book'].toLowerCase() + "/chapters/" + PassageInformation['Chapter'] + "/verses/" + PassageInformation['Verse_Number'] + ".json")
-    .then((response) => response.json())
-    .then((data) => document.getElementById("randomScripturePassage").innerHTML = PassageInformation['Book'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version
-<BR>
-` + data.text + `
-<BR>
-<button
-  onclick="fetchRandomScripturePassage();"
-  style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0.6em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  "
-  onmouseover="this.style.backgroundColor='#45a049';"
-  onmouseout="this.style.backgroundColor='#4CAF50';">
-  Refresh
-</button>
-
-<button
-  onclick="window.open('https://www.avemariacloud.com/multi-model-chatbot/?startMessage=' + 'I would like to chat about this verse: ` + data.text + `', '_blank');"
-  style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0.6em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  "
-  onmouseover="this.style.backgroundColor='#45a049';"
-  onmouseout="this.style.backgroundColor='#4CAF50';">
-  Chat About This Verse
-</button>`);
+    document.getElementById("randomScripturePassage").innerHTML = `
+      ${PassageInformation['Official_Book_Name']} ${PassageInformation['Chapter']}:${PassageInformation['Verse_Number']} (KJV)
+      <BR>
+      ${verseData.text}
+      <BR>
+      <button
+        onclick="fetchRandomScripturePassage();"
+        style="
+          background-color: #4CAF50;
+          border: none;
+          color: white;
+          padding: 0.4em;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin-top: 0.6em;
+          cursor: pointer;
+          border-radius: 12px;
+          transition: background-color 0.3s ease;
+        "
+        onmouseover="this.style.backgroundColor='#45a049';"
+        onmouseout="this.style.backgroundColor='#4CAF50';">
+        Refresh
+      </button>
+      
+      <button
+        onclick="window.open('https://www.avemariacloud.com/multi-model-chatbot/?startMessage=' + encodeURIComponent('I would like to chat about this verse: ${verseData.text}'), '_blank');"
+        style="
+          background-color: #4CAF50;
+          border: none;
+          color: white;
+          padding: 0.4em;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin-top: 0.6em;
+          cursor: pointer;
+          border-radius: 12px;
+          transition: background-color 0.3s ease;
+        "
+        onmouseover="this.style.backgroundColor='#45a049';"
+        onmouseout="this.style.backgroundColor='#4CAF50';">
+        Chat About This Verse
+      </button>`;
 
     return data;
+
   } catch (error) {
-    console.error('There was a problem with the fetch operation:', error);
+    console.error(`Attempt ${retryCount + 1}: ${error}`);
+
+    if (retryCount < maxRetries) {
+      let waitTime = Math.pow(2, retryCount) * 1000; // Exponential backoff (2^n * 1000ms)
+      console.log(`Retrying in ${waitTime / 1000} seconds...`);
+      await delay(waitTime);
+      return fetchRandomScripturePassage(retryCount + 1);
+    } else {
+      fetchRandomScripturePassage();
+    }
   }
 }
+
 
 // Call the function
 fetchRandomScripturePassage();
