@@ -33,4 +33,4 @@ async function loadScripts(scripts) {
 // Call the function to load scripts
 loadScripts(scripts);
 
-startScript();
+sessionStorage.setItem("genericLoaderComplete", "true");
