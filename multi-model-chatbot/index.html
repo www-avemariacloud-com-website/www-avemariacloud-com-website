@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Multi Model Chatbot v32</title>
+    <title>Multi Model Chatbot v33</title>
     <style>
         /* Modern CSS Reset */
         *, *::before, *::after {
@@ -247,7 +247,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Multi Model Chatbot v32</h1>
+                <h1 class="title">Multi Model Chatbot v33</h1>
                 <div class="controls">
                     <select id="promptType" class="select" onchange="updateSystemPrompt(this.value)">
                         <option value="universal">Universal</option>
@@ -491,11 +491,20 @@
         return urlParams.get(param);
     }
 
-    function startScript() {
+    var checkModelSelectInterval = setInterval(() => {
+    if (sessionStorage.getItem("genericLoaderComplete") == "true") {
+        // Clear the interval when the value is available
+        clearInterval(checkModelSelectInterval);
+        // Log the value to the console
+
         var startMessage = getQueryParam("startMessage");
+
         console.log(startMessage);
+
         sendMessageInput(getQueryParam("startMessage"));
+
     }
+    }, 100); // Check
 
     </script>
 
