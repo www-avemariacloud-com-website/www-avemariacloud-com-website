@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <title>Multi Model Chatbot v36</title>
+    <title>Multi Model Chatbot v37</title>
     <style>
         /* Modern CSS Reset */
         *, *::before, *::after {
@@ -247,7 +247,7 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <h1 class="title">Multi Model Chatbot v36</h1>
+                <h1 class="title">Multi Model Chatbot v37</h1>
                 <div class="controls">
                     <select id="promptType" class="select" onchange="updateSystemPrompt(this.value)">
                         <option value="universal">Universal</option>
@@ -320,9 +320,10 @@
             {
                 role: "system",
                 content: `I would like you to be a helpful AI chatbot for a Christian website.
-                        I would like a very strong bias for caution and perfect information.
-                        I would like you to always cite Scripture perfectly from the NIV translation of the bible in any circumstance, even if asked for other translations.
-                        I would like you to always cite Scripture perfectly and in full 100% as it is in the NIV translation whenever you share any information in relation to Scripture.`
+
+I would like a very strong bias for caution and perfect information.
+I would like you to always cite Scripture perfectly from a translation of the bible that you are 100% certain of in any circumstance, even if asked for other translations.
+I would like you to always cite Scripture perfectly and in full 100% as it is in the Bible whenever you share any information in relation to Scripture.`
             },
             {
                 role: "assistant",
