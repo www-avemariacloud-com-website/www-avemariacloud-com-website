@@ -12,7 +12,7 @@ Software, code, text, an image, images and/or things may have been created and m
 <a href="https://ai.google/" target="_blank">Google and/or Gemma</a>,
 <a href="https://stability.ai/" target="_blank">Stability AI and/or Stable Diffusion</a>,
 <a href="https://blackforestlabs.com/" target="_blank">Black Forest Labs and/or FLUX.1 [dev]</a>,
-<a href=”https://huggingface.co/”>Hugging Face</a>,
+<a href="https://huggingface.co/">Hugging Face</a>,
 <a href="https://groq.com/" target="_blank">Groq</a>,
 <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>, and
 <a href="https://www.deepseek.com/" target="_blank">DeepSeek and/or DeepSeek-R1</a>.
@@ -24,7 +24,7 @@ You may benefit from consulting, reading, and/or agreeing to terms of service, u
 <a href="https://ai.google/" target="_blank">Google and/or Gemma</a>,
 <a href="https://stability.ai/" target="_blank">Stability AI and/or Stable Diffusion</a>,
 <a href="https://blackforestlabs.com/" target="_blank">Black Forest Labs and/or FLUX.1 [dev]</a>,
-<a href=”https://huggingface.co/”>Hugging Face</a>,
+<a href="https://huggingface.co/">Hugging Face</a>,
 <a href="https://groq.com/" target="_blank">Groq, Inc. and/or Groq</a>,
 <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>, and
 <a href="https://www.deepseek.com/" target="_blank">DeepSeek and/or DeepSeek-R1</a>.
@@ -33,12 +33,12 @@ You may benefit from consulting, reading, and/or agreeing to terms of service, u
 HuggingFace: Relevant links may include: <a href="https://huggingface.co/terms-of-service">Terms of Service</a>, <a href="https://huggingface.co/privacy">Hugging Face Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Policy 🤗</a>, <a href="https://huggingface.co/docs">Docs</a>, and <a href="Contributor Covenant Code of Conduct">Contributor Covenant Code of Conduct</a><br>
 Groq, Inc. and/or Groq: Relevant links may include <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
 Stability AI and/or Stable Diffusion: Relevant links may include <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
-Black Forest Labs and/or FLUX.1 [dev]: Relevant links may include <a href=”https://blackforestlabs.ai/impressum/”>Impressum</a> <a href=”https://blackforestlabs.ai/terms-of-service/”>Terms Of Service</a> <a href=”https://blackforestlabs.ai/privacy-policy/”> Privacy Policy</a>
+Black Forest Labs and/or FLUX.1 [dev]: Relevant links may include <a href="https://blackforestlabs.ai/impressum/">Impressum</a> <a href="https://blackforestlabs.ai/terms-of-service/">Terms Of Service</a> <a href="https://blackforestlabs.ai/privacy-policy/"> Privacy Policy</a>
 OpenAI and/or ChatGPT: Relevant links may include <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
 Anthropic PBC and/or Claude AI: Relevant links may include <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
 Meta and/or Meta Llama 3: Relevant links may include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
 Google and/or Gemma: Relevant links may include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
-Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href=”https://trust.mistral.ai/”>Trust Center</a>.<br>
+Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href="https://trust.mistral.ai/">Trust Center</a>.<br>
 DeepSeek: Relevant links may include <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.
 <br><br>
 Some notices may be relevant.<br><br>
