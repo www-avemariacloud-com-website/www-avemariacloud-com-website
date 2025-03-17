@@ -5,6 +5,8 @@
 <BR><BR>
 Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
 <br><br>
+I am interested in this work being in the Public Domain.
+<BR><BR>
 Software, code, text, an image, images and/or things may have been created and may be created using services, tools, software, API, APIs, or things relating to
 <a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
 <a href="https://www.anthropic.com/" target="_blank">Anthropicand/or Claude AI </a>, 
