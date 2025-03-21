@@ -354,7 +354,8 @@ tobit, wisdom, zechariah, zephaniah`
         }
         return response.json();
     })
-    .then((data) => document.getElementById("randomScripturePassage").innerHTML = "<b>" + PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version</b>
+    .then((data) => {
+    document.getElementById("randomScripturePassage").innerHTML = "<b>" + PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version</b>
 <BR>
 ` + data.text + `
 <BR>
@@ -398,16 +399,18 @@ tobit, wisdom, zechariah, zephaniah`
   onmouseover="this.style.backgroundColor='#45a049';"
   onmouseout="this.style.backgroundColor='#4CAF50';">
   Chat About This Verse
-</button>`);
+</button>`;
 
 
-  fetchPrayer(PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version`);
+fetchPrayer(PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version`);
 
 
-  createFromDescription(PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version` 
-+ `
-` + data.text
-);
+createFromDescription(PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version` + `
+` + data.text);
+
+
+
+});
 
     return data;
 
