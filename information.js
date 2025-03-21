@@ -60,8 +60,10 @@ Some notices may be relevant.<br><br>
             <div class="informationModalContent">
                 <span class="informationClose">&times;</span>
                 ` + informationHTML + `
+<center>
                 <button id="informationagreeBtn">I Agree</button>
                 <button id="informationexitBtn">Exit</button>
+                </center>
             </div>
         </div>
     `;
