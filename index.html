@@ -1,956 +1,956 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ave Maria Cloud</title>
-    <link rel="icon" type="image/jpeg" href="Sassoferrato_-_Jungfrun_i_bön.jpg">
-    <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Ave Maria Cloud</title>
+      <link rel="icon" type="image/jpeg" href="Sassoferrato_-_Jungfrun_i_bön.jpg">
+      <style>
+          /* Reset and base styles */
+          * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+          }
 
 
-        .created-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
+          .created-images {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+              gap: 20px;
+              margin-top: 20px;
+          }
 
 
-        .image-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px;
-            background-color: white;
-        }
+          .image-card {
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              padding: 10px;
+              background-color: white;
+          }
 
-        .image-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
+          .image-card img {
+              width: 100%;
+              height: auto;
+              border-radius: 4px;
+          }
 
-        .image-card p {
-            margin: 10px 0;
-            font-size: 14px;
-        }
-
-
-
-        #loading {
-            text-align: center;
-            color: #0077cc;
-            display: none;
-        }
+          .image-card p {
+              margin: 10px 0;
+              font-size: 14px;
+          }
 
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
 
-        .modal-content {
-            max-width: 90%;
-            max-height: 90vh;
-            margin: auto;
-        }
+          #loading {
+              text-align: center;
+              color: #0077cc;
+              display: none;
+          }
 
-        .modal-content img {
-            max-width: 100%;
-            max-height: 90vh;
-            object-fit: contain;
-        }
 
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-        }
+          /* Modal styles */
+          .modal {
+              display: none;
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.8);
+              z-index: 1000;
+              justify-content: center;
+              align-items: center;
+          }
 
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+          .modal-content {
+              max-width: 90%;
+              max-height: 90vh;
+              margin: auto;
+          }
 
-        /* Header styles */
-        header {
-            background-color: #1e3a8a;
-            color: white;
-            padding-top: 2rem;
-            padding-bottom: 0em;
-            width: 100%;
-        }
+          .modal-content img {
+              max-width: 100%;
+              max-height: 90vh;
+              object-fit: contain;
+          }
 
-        .header-content {
-            width: 100%;
-            padding: 0 2rem;
-        }
+          .close-modal {
+              position: absolute;
+              top: 20px;
+              right: 30px;
+              color: white;
+              font-size: 30px;
+              cursor: pointer;
+          }
 
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
+          body {
+              font-family: Arial, sans-serif;
+              line-height: 1.6;
+              background-color: #f8f9fa;
+              min-height: 100vh;
+              display: flex;
+              flex-direction: column;
+          }
 
-        blockquote {
-            padding-left: 1rem;
-            margin: 1rem 0;
-            font-size: 1.1rem;
-            max-width: 1400px;
-        }
+          /* Header styles */
+          header {
+              background-color: #1e3a8a;
+              color: white;
+              padding-top: 2rem;
+              padding-bottom: 0em;
+              width: 100%;
+          }
 
-        /* Main content styles */
-        main {
-            flex-grow: 1;
-            width: 100%;
-            padding: 2rem;
-        }
+          .header-content {
+              width: 100%;
+              padding: 0 2rem;
+          }
 
-        /* Changed from grid to vertical stack */
-        .content-container {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            width: 100%;
-        }
+          h1 {
+              font-size: 2rem;
+              margin-bottom: 1.5rem;
+          }
 
-        section {
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
+          blockquote {
+              padding-left: 1rem;
+              margin: 1rem 0;
+              font-size: 1.1rem;
+              max-width: 1400px;
+          }
 
-        h2 {
-            color: #1e3a8a;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
+          /* Main content styles */
+          main {
+              flex-grow: 1;
+              width: 100%;
+              padding: 2rem;
+          }
 
-        /* Link styles */
-        .tools-list {
-            list-style: none;
-            display: grid;
-            gap: 1rem;
-        }
+          /* Changed from grid to vertical stack */
+          .content-container {
+              display: flex;
+              flex-direction: column;
+              gap: 2rem;
+              width: 100%;
+          }
 
-        .tools-list li {
-            margin: 0;
-        }
+          section {
+              background: white;
+              border-radius: 8px;
+              padding: 2rem;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              width: 100%;
+          }
 
-        .tools-list a {
-            color: #2563eb;
-            text-decoration: none;
-            display: block;
-            padding: 1rem;
-            background-color: #f8f9fa;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
+          h2 {
+              color: #1e3a8a;
+              font-size: 1.5rem;
+              margin-bottom: 1.5rem;
+          }
 
-        .tools-list a:hover {
-            color: #1e40af;
-            background-color: #e5e7eb;
-            transform: translateX(5px);
-        }
+          /* Link styles */
+          .tools-list {
+              list-style: none;
+              display: grid;
+              gap: 1rem;
+          }
 
-        /* Footer styles */
-        footer {
-            background-color: #1e3a8a;
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            width: 100%;
-        }
+          .tools-list li {
+              margin: 0;
+          }
 
-        footer a {
-            color: #93c5fd;
-            text-decoration: none;
-            margin-top: 0.5rem;
-            display: inline-block;
-            transition: color 0.2s;
-        }
+          .tools-list a {
+              color: #2563eb;
+              text-decoration: none;
+              display: block;
+              padding: 1rem;
+              background-color: #f8f9fa;
+              border-radius: 4px;
+              transition: all 0.2s;
+          }
 
-        footer a:hover {
-            color: #dbeafe;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="header-content">
-            <center>
-              <blockquote>
-                  <b>Luke 1:26-28 New American Bible (Revised Edition)</b><br>
-                  26 In the sixth month, the angel Gabriel was sent from God to a town of Galilee called Nazareth, 
-                  27 to a virgin betrothed to a man named Joseph, of the house of David, and the virgin's name was Mary. 
-                  28 And coming to her, he said, "Hail, favored one! The Lord is with you."
-              </blockquote>
-              
-              <HR>
+          .tools-list a:hover {
+              color: #1e40af;
+              background-color: #e5e7eb;
+              transform: translateX(5px);
+          }
 
-              <blockquote id="randomScripturePassage">
-              </blockquote>
+          /* Footer styles */
+          footer {
+              background-color: #1e3a8a;
+              color: white;
+              padding: 1.5rem;
+              text-align: center;
+              width: 100%;
+          }
 
-              <blockquote id="prayer_text">
-              </blockquote>
+          footer a {
+              color: #93c5fd;
+              text-decoration: none;
+              margin-top: 0.5rem;
+              display: inline-block;
+              transition: color 0.2s;
+          }
 
-              <div id="loading"><center>Creating image, please wait...</center></div>
+          footer a:hover {
+              color: #dbeafe;
+          }
+      </style>
+  </head>
+  <body>
+      <header>
+          <div class="header-content">
+              <center>
+                <blockquote>
+                    <b>Luke 1:26-28 New American Bible (Revised Edition)</b><br>
+                    26 In the sixth month, the angel Gabriel was sent from God to a town of Galilee called Nazareth, 
+                    27 to a virgin betrothed to a man named Joseph, of the house of David, and the virgin's name was Mary. 
+                    28 And coming to her, he said, "Hail, favored one! The Lord is with you."
+                </blockquote>
+                
+                <HR>
 
-              <blockquote>
-              <div id="displayed-image"></div>
-              </blockquote>
-              
-             </center>
-<div id="imageModal" class="modal" onclick="closeModal()">
-<span class="close-modal">&times;</span>
-<div class="modal-content">
-<img id="modalImage" src="" alt="Full Size Image">
-</div>
-</div>
-        </div>
-    </header>
+                <blockquote id="randomScripturePassage">
+                </blockquote>
 
-    <main>
-        <div class="content-container">
-            <section>
-                <ul class="tools-list">
-                    <li><a href="zionism-research-tool/">Zionism Research Tool</a></li>
-                    <li><a href="image-creator/">Image Creator</a></li>
-                    <li><a href="multi-model-chatbot/">Multi-Model Chatbot</a></li>
-                    <li><a href="love-translator/">Love Translator</a></li>
-                    <li><a href="text-analyzer/">Text Analyzer</a></li>
-                    <li><a href="miscellaneous-tools/">Miscellaneous Tools</a></li>
-                    <li><a href="multi-model-chatbot/system-and-user-message.html">AI Research Tool</a></li>
-                </ul>
-            </section>
-        </div>
-    </main>
-</body>
-</html>
+                <blockquote id="prayer_text">
+                </blockquote>
 
-<div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
-<script src="https://www.avemariacloud.com/generic-loader.js"></script>
+                <div id="loading"><center>Creating image, please wait...</center></div>
+
+                <blockquote>
+                <div id="displayed-image"></div>
+                </blockquote>
+                
+              </center>
+  <div id="imageModal" class="modal" onclick="closeModal()">
+  <span class="close-modal">&times;</span>
+  <div class="modal-content">
+  <img id="modalImage" src="" alt="Full Size Image">
+  </div>
+  </div>
+          </div>
+      </header>
+
+      <main>
+          <div class="content-container">
+              <section>
+                  <ul class="tools-list">
+                      <li><a href="zionism-research-tool/">Zionism Research Tool</a></li>
+                      <li><a href="image-creator/">Image Creator</a></li>
+                      <li><a href="multi-model-chatbot/">Multi-Model Chatbot</a></li>
+                      <li><a href="love-translator/">Love Translator</a></li>
+                      <li><a href="text-analyzer/">Text Analyzer</a></li>
+                      <li><a href="miscellaneous-tools/">Miscellaneous Tools</a></li>
+                      <li><a href="multi-model-chatbot/system-and-user-message.html">AI Research Tool</a></li>
+                  </ul>
+              </section>
+          </div>
+      </main>
+  </body>
+  </html>
+
+  <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
+  <script src="https://www.avemariacloud.com/generic-loader.js"></script>
+      
+  <script>
     
-<script>
-  
-  async function fetchRandomScripturePassage() {
-  
-  document.getElementById("randomScripturePassage").innerHTML = `Trying to download a verse...
-<BR>
-<button
-  onclick="fetchRandomScripturePassage();"
-  style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0.6em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  "
-  onmouseover="this.style.backgroundColor='#45a049';"
-  onmouseout="this.style.backgroundColor='#4CAF50';">
-  Refresh
-</button></button>`;
-
-  const url = 'https://proxy.small-recipe-9582.workers.dev/';
-  const headers = {
-    'authorization': 'Bearer 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',
-    'content-type': 'application/json'
-  };
-
-  const now = new Date();
-
-  const body = {
-    "model": "mistral-saba-24b",
-    "messages": [
-      {
-        "role": "system",
-        "content": `I am interested in a random and single verse of Scripture.
-
-Please respond in JSON with these exact labels: Book, Chapter, Verse_Number, Official_Book_Name.
-
-I am interested in the Official_Book_Name label using the official book name, spelling, and capitalization relating to the book that is returned.
-        
-Please use this list of strings to refer to a book within the book label.
-
-1chronicles, 1corinthians, 1esdras, 1john, 1kings, 1maccabees, 1peter, 1samuel, 1thessalonians, 1timothy,
-2chronicles, 2corinthians, 2esdras, 2john, 2kings, 2maccabees, 2peter, 2samuel, 2thessalonians, 2timothy,
-3john, acts, amos, baruch, belandthedragon, colossians, daniel, deuteronomy, ecclesiastes, ecclesiasticus,
-ephesians, esther(greek), esther, exodus, ezekiel, ezra, galatians, genesis, habakkuk, haggai, hebrews,
-hosea, isaiah, james, jeremiah, job, joel, john, jonah, joshua, jude, judges, judith, lamentations,
-leviticus, luke, malachi, manasseh, mark, matthew, micah, nahum, nehemiah, numbers, obadiah, philemon,
-philippians, proverbs, psalms, revelation, romans, ruth, songofsolomon, songofthethree, susanna, titus,
-tobit, wisdom, zechariah, zephaniah`
-      },
-      {
-        "role": "user",
-        "content": now
-      }
-    ],
-    "response_format": {
-      "type": "json_object"
-    }
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(body)
-    });
-
-    if (!response.ok) {
-      console.log("Retrying. There was an error with the AI-API.");
-      fetchRandomScripturePassage();
-    }
-
-    const data = await response.json();
+    async function fetchRandomScripturePassage() {
     
-    var PassageInformation = JSON.parse(data['choices']['0']['message']['content']);
+    document.getElementById("randomScripturePassage").innerHTML = `Trying to download a verse...
+  <BR>
+  <button
+    onclick="fetchRandomScripturePassage();"
+    style="
+      background-color: #4CAF50; /* Green background */
+      border: none; /* Remove borders */
+      color: white; /* White text */
+      padding: 0.4em; /* Some padding */
+      text-align: center; /* Centered text */
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Make the button inline-block */
+      font-size: 16px; /* Increase font size */
+      margin-top: 0.6em; /* Some margin */
+      cursor: pointer; /* Pointer/hand icon */
+      border-radius: 12px; /* Rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition */
+    "
+    onmouseover="this.style.backgroundColor='#45a049';"
+    onmouseout="this.style.backgroundColor='#4CAF50';">
+    Refresh
+  </button></button>`;
 
-    console.log(PassageInformation);
-  
-    console.log(PassageInformation['Official_Book_Name']);
-
-    console.log(PassageInformation['Book']);
-
-    console.log(PassageInformation['Chapter']);
-
-    console.log(PassageInformation['Verse_Number']);
-
-    fetch("https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles/en-kjv/books/" + PassageInformation['Book'].toLowerCase() + "/chapters/" + PassageInformation['Chapter'] + "/verses/" + PassageInformation['Verse_Number'] + ".json")
-    .then(response => {
-        if (!response.ok) {
-          console.log("Retrying. There was an error with the bible-api.");
-          fetchRandomScripturePassage();
-        }
-        return response.json();
-    })
-    .then((data) => {
-    document.getElementById("randomScripturePassage").innerHTML = "<b>" + PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version</b>
-<BR>
-` + data.text + `
-<BR>
-<button
-  onclick="fetchRandomScripturePassage();"
-  style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0.6em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  "
-  onmouseover="this.style.backgroundColor='#45a049';"
-  onmouseout="this.style.backgroundColor='#4CAF50';">
-  Refresh
-</button>
-
-<button
-  onclick="window.open('https://www.avemariacloud.com/multi-model-chatbot/?startMessage=' + 'I would like to chat about this verse: ` + data.text + `', '_blank');"
-  style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0.6em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  "
-  onmouseover="this.style.backgroundColor='#45a049';"
-  onmouseout="this.style.backgroundColor='#4CAF50';">
-  Chat About This Verse
-</button>`;
-
-
-fetchPrayer(PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version`);
-
-
-createFromDescription(PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version` + `
-` + data.text);
-
-
-
-});
-
-    return data;
-
-  } catch (error) {
-    console.log("Retrying. There was an error with the AI-api.");
-    fetchRandomScripturePassage();
-  }
-}
-
-// Call the function
-fetchRandomScripturePassage();
-
-async function fetchPrayer(bible_verse) {
-
-  const url = 'https://proxy.small-recipe-9582.workers.dev/';
+    const url = 'https://proxy.small-recipe-9582.workers.dev/';
     const headers = {
       'authorization': 'Bearer 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',
       'content-type': 'application/json'
     };
 
-  const now = new Date();
+    const now = new Date();
 
-  const body = {
-    "model": "mistral-saba-24b",
-    "messages": [
-      {
-        "role": "system",
-        "content": `I am interested in a prayer relating to a Bible verse.
+    const body = {
+      "model": "mistral-saba-24b",
+      "messages": [
+        {
+          "role": "system",
+          "content": `I am interested in a random and single verse of Scripture.
 
-Please don't use line breaks.
+  Please respond in JSON with these exact labels: Book, Chapter, Verse_Number, Official_Book_Name.
 
-I am interested in this prayer being intended for a universal audience in a production environment.
+  I am interested in the Official_Book_Name label using the official book name, spelling, and capitalization relating to the book that is returned.
+          
+  Please use this list of strings to refer to a book within the book label.
 
-I am interested in a prayer that may contain a reference and/or references to a verse, but not verse text.
-
-Please respond in JSON with the label: prayer_text`
-      },
-      {
-        "role": "user",
-        "content": bible_verse
+  1chronicles, 1corinthians, 1esdras, 1john, 1kings, 1maccabees, 1peter, 1samuel, 1thessalonians, 1timothy,
+  2chronicles, 2corinthians, 2esdras, 2john, 2kings, 2maccabees, 2peter, 2samuel, 2thessalonians, 2timothy,
+  3john, acts, amos, baruch, belandthedragon, colossians, daniel, deuteronomy, ecclesiastes, ecclesiasticus,
+  ephesians, esther(greek), esther, exodus, ezekiel, ezra, galatians, genesis, habakkuk, haggai, hebrews,
+  hosea, isaiah, james, jeremiah, job, joel, john, jonah, joshua, jude, judges, judith, lamentations,
+  leviticus, luke, malachi, manasseh, mark, matthew, micah, nahum, nehemiah, numbers, obadiah, philemon,
+  philippians, proverbs, psalms, revelation, romans, ruth, songofsolomon, songofthethree, susanna, titus,
+  tobit, wisdom, zechariah, zephaniah`
+        },
+        {
+          "role": "user",
+          "content": now
+        }
+      ],
+      "response_format": {
+        "type": "json_object"
       }
-    ],
-    "response_format": {
-      "type": "json_object"
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        console.log("Retrying. There was an error with the AI-API.");
+        fetchRandomScripturePassage();
+      }
+
+      const data = await response.json();
+      
+      var PassageInformation = JSON.parse(data['choices']['0']['message']['content']);
+
+      console.log(PassageInformation);
+    
+      console.log(PassageInformation['Official_Book_Name']);
+
+      console.log(PassageInformation['Book']);
+
+      console.log(PassageInformation['Chapter']);
+
+      console.log(PassageInformation['Verse_Number']);
+
+      fetch("https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles/en-kjv/books/" + PassageInformation['Book'].toLowerCase() + "/chapters/" + PassageInformation['Chapter'] + "/verses/" + PassageInformation['Verse_Number'] + ".json")
+      .then(response => {
+          if (!response.ok) {
+            console.log("Retrying. There was an error with the bible-api.");
+            fetchRandomScripturePassage();
+          }
+          return response.json();
+      })
+      .then((data) => {
+      document.getElementById("randomScripturePassage").innerHTML = "<b>" + PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version</b>
+  <BR>
+  ` + data.text + `
+  <BR>
+  <button
+    onclick="fetchRandomScripturePassage();"
+    style="
+      background-color: #4CAF50; /* Green background */
+      border: none; /* Remove borders */
+      color: white; /* White text */
+      padding: 0.4em; /* Some padding */
+      text-align: center; /* Centered text */
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Make the button inline-block */
+      font-size: 16px; /* Increase font size */
+      margin-top: 0.6em; /* Some margin */
+      cursor: pointer; /* Pointer/hand icon */
+      border-radius: 12px; /* Rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition */
+    "
+    onmouseover="this.style.backgroundColor='#45a049';"
+    onmouseout="this.style.backgroundColor='#4CAF50';">
+    Refresh
+  </button>
+
+  <button
+    onclick="window.open('https://www.avemariacloud.com/multi-model-chatbot/?startMessage=' + 'I would like to chat about this verse: ` + data.text + `', '_blank');"
+    style="
+      background-color: #4CAF50; /* Green background */
+      border: none; /* Remove borders */
+      color: white; /* White text */
+      padding: 0.4em; /* Some padding */
+      text-align: center; /* Centered text */
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Make the button inline-block */
+      font-size: 16px; /* Increase font size */
+      margin-top: 0.6em; /* Some margin */
+      cursor: pointer; /* Pointer/hand icon */
+      border-radius: 12px; /* Rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition */
+    "
+    onmouseover="this.style.backgroundColor='#45a049';"
+    onmouseout="this.style.backgroundColor='#4CAF50';">
+    Chat About This Verse
+  </button>`;
+
+
+  fetchPrayer(PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version`);
+
+
+  createFromDescription(PassageInformation['Official_Book_Name'] + ` ` + PassageInformation['Chapter'] + `:` + PassageInformation['Verse_Number'] + ` King James Version` + `
+  ` + data.text);
+
+
+
+  });
+
+      return data;
+
+    } catch (error) {
+      console.log("Retrying. There was an error with the AI-api.");
+      fetchRandomScripturePassage();
     }
-  };
+  }
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(body)
-    });
+  // Call the function
+  fetchRandomScripturePassage();
 
-    if (!response.ok) {
-      console.log("Retrying. There was an error with the AI-API.");
+  async function fetchPrayer(bible_verse) {
+
+    const url = 'https://proxy.small-recipe-9582.workers.dev/';
+      const headers = {
+        'authorization': 'Bearer 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',
+        'content-type': 'application/json'
+      };
+
+    const now = new Date();
+
+    const body = {
+      "model": "mistral-saba-24b",
+      "messages": [
+        {
+          "role": "system",
+          "content": `I am interested in a prayer relating to a Bible verse.
+
+  Please don't use line breaks.
+
+  I am interested in this prayer being intended for a universal audience in a production environment.
+
+  I am interested in a prayer that may contain a reference and/or references to a verse, but not verse text.
+
+  Please respond in JSON with the label: prayer_text`
+        },
+        {
+          "role": "user",
+          "content": bible_verse
+        }
+      ],
+      "response_format": {
+        "type": "json_object"
+      }
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        console.log("Retrying. There was an error with the AI-API.");
+        fetchRandomScripturePassage();
+      }
+
+      const data = await response.json();
+      
+      var prayerData = JSON.parse(data['choices']['0']['message']['content']);
+
+      console.log(prayerData);
+    
+      console.log(prayerData['prayer_text']);
+
+      document.getElementById("prayer_text").innerHTML = `<b>A Prayer Relating to ` + bible_verse + `</b>
+  <BR><HR>` + `
+  ` + prayerData['prayer_text'] + `<BR>
+  <button
+    onclick="fetchPrayer('`+bible_verse+`');"
+    style="
+      background-color: #4CAF50; /* Green background */
+      border: none; /* Remove borders */
+      color: white; /* White text */
+      padding: 0.4em; /* Some padding */
+      text-align: center; /* Centered text */
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Make the button inline-block */
+      font-size: 16px; /* Increase font size */
+      margin-top: 0.6em; /* Some margin */
+      cursor: pointer; /* Pointer/hand icon */
+      border-radius: 12px; /* Rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition */
+    "
+    onmouseover="this.style.backgroundColor='#45a049';"
+    onmouseout="this.style.backgroundColor='#4CAF50';">
+    Refresh
+  </button>
+
+
+  <button
+    onclick="window.open(\`https://www.avemariacloud.com/multi-model-chatbot/?startMessage=\` + \`I would like to chat about this prayer: ` + prayerData['prayer_text'] + `\`, '_blank');"
+    style="
+      background-color: #4CAF50; /* Green background */
+      border: none; /* Remove borders */
+      color: white; /* White text */
+      padding: 0.4em; /* Some padding */
+      text-align: center; /* Centered text */
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Make the button inline-block */
+      font-size: 16px; /* Increase font size */
+      margin-top: 0.6em; /* Some margin */
+      cursor: pointer; /* Pointer/hand icon */
+      border-radius: 12px; /* Rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition */
+    "
+    onmouseover="this.style.backgroundColor='#45a049';"
+    onmouseout="this.style.backgroundColor='#4CAF50';">
+    Chat About This Prayer
+  </button>
+  `; 
+
+      return data;
+    } catch (error) {
+      console.log("Retrying. There was an error with the AI-api.");
       fetchRandomScripturePassage();
     }
 
-    const data = await response.json();
+  }
+  </script>
+
+
+
+
+
+
+  <script>
+
+
+
+
+    const MODEL_CONFIGS = {
+        flux: {
+            url: 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev',
+            description: 'May do well in modern, artistic interpretations with strong attention to detail and creative styling.',
+            requiresNegativePrompt: true
+        },
+        sd35: {
+            url: 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3.5-large',
+            description: 'May do well at creating highly realistic images with improved composition and coherence.',
+            requiresNegativePrompt: true
+        },
+        sd14: {
+            url: 'https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4',
+            description: 'May do well for general-purpose image creation with consistent results.',
+            requiresNegativePrompt: true
+        }
+    };
+
+
     
-    var prayerData = JSON.parse(data['choices']['0']['message']['content']);
-
-    console.log(prayerData);
-  
-    console.log(prayerData['prayer_text']);
-
-    document.getElementById("prayer_text").innerHTML = `<b>A Prayer Relating to ` + bible_verse + `</b>
-<BR><HR>` + `
-` + prayerData['prayer_text'] + `<BR>
-<button
-  onclick="fetchPrayer('`+bible_verse+`');"
-  style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0.6em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  "
-  onmouseover="this.style.backgroundColor='#45a049';"
-  onmouseout="this.style.backgroundColor='#4CAF50';">
-  Refresh
-</button>
+    // Call this on page load to set initial description
+    updateModelDescription();
 
 
-<button
-  onclick="window.open(\`https://www.avemariacloud.com/multi-model-chatbot/?startMessage=\` + \`I would like to chat about this prayer: ` + prayerData['prayer_text'] + `\`, '_blank');"
-  style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0.6em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  "
-  onmouseover="this.style.backgroundColor='#45a049';"
-  onmouseout="this.style.backgroundColor='#4CAF50';">
-  Chat About This Prayer
-</button>
-`; 
-
-    return data;
-  } catch (error) {
-    console.log("Retrying. There was an error with the AI-api.");
-    fetchRandomScripturePassage();
-  }
-
-}
-</script>
+    function updateModelDescription() {
+        const modelSelect = document.getElementById('model-select');
+        const modelDescription = document.getElementById('model-description');
+        modelDescription.textContent = MODEL_CONFIGS[modelSelect.value].description;
+    }
+    
 
 
+    async function createRandomDescription() {
+  const randomDescButton = document.getElementById('random-description-button');
+  const descriptionTextarea = document.getElementById('description');
 
+  randomDescButton.disabled = true;
 
-
-
-<script>
-
-
-
-
-  const MODEL_CONFIGS = {
-      flux: {
-          url: 'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev',
-          description: 'May do well in modern, artistic interpretations with strong attention to detail and creative styling.',
-          requiresNegativePrompt: true
-      },
-      sd35: {
-          url: 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3.5-large',
-          description: 'May do well at creating highly realistic images with improved composition and coherence.',
-          requiresNegativePrompt: true
-      },
-      sd14: {
-          url: 'https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4',
-          description: 'May do well for general-purpose image creation with consistent results.',
-          requiresNegativePrompt: true
-      }
-  };
-
-
-  
-  // Call this on page load to set initial description
-  updateModelDescription();
-
-
-  function updateModelDescription() {
-      const modelSelect = document.getElementById('model-select');
-      const modelDescription = document.getElementById('model-description');
-      modelDescription.textContent = MODEL_CONFIGS[modelSelect.value].description;
-  }
-  
-
-
-  async function createRandomDescription() {
-const randomDescButton = document.getElementById('random-description-button');
-const descriptionTextarea = document.getElementById('description');
-
-randomDescButton.disabled = true;
-
-const maxRetries = 6; // Configurable retry count
-let attempt = 0;
-
-const fetchData = async () => {
-  try {
-      const response = await fetch('https://proxy.small-recipe-9582.workers.dev/', {
-          method: 'POST',
-          headers: {
-              'Authorization': `Bearer ${GROQ_API_KEY}`,
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              model: 'mistral-saba-24b',
-              messages: [
-                  {
-                      role: "system",
-                      content: "You are a creative assistant that creates random, detailed, loving and imaginative image descriptions for a Christian website. Focus on creating descriptions that would make interesting and visually appealing images. Include specific details about style, mood, lighting, and composition."
-                  },
-                  {
-                      role: "user",
-                      content: "Create a random, creative image description that would work well for AI image creation. Make it detailed and specific, but keep it to 2-3 sentences. Return only the description with no additional text or formatting."
-                  }
-              ]
-          })
-      });
-
-      if (!response.ok) {
-          throw new Error(`Groq API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (!data.choices || !data.choices[0].message.content) {
-          throw new Error('Invalid response from Groq API');
-      }
-
-      descriptionTextarea.value = data.choices[0].message.content.trim();
-  } catch (error) {
-      if (attempt < maxRetries) {
-          attempt++;
-          console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
-          await new Promise(resolve => setTimeout(resolve, 61000)); // Optional delay between retries (61 seconds)
-          await fetchData(); // Retry fetching
-      } else {
-          console.error('Error:', error);
-          showError(`Failed to create random description after ${maxRetries} attempts: ${error.message}`);
-      }
-  } finally {
-      randomDescButton.disabled = false;
-  }
-};
-
-await fetchData();
-}
-
-
-  
-  // API Configuration
-  const GROQ_API_KEY = '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';
-  const HF_API_KEY = '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';
-  
-  function showError(message) {
-      const errorDiv = document.getElementById('error-message');
-      errorDiv.textContent = message;
-      errorDiv.style.display = 'block';
-      setTimeout(() => {
-          errorDiv.style.display = 'none';
-      }, 5000);
-  }
-
-  function setLoading(isLoading) {
-      const descButton = document.getElementById('description-button');
-      const promptButton = document.getElementById('prompt-button');
-      const loadingDiv = document.getElementById('loading');
-      
-      //descButton.disabled = isLoading;
-      //promptButton.disabled = isLoading;
-      loadingDiv.style.display = isLoading ? 'block' : 'none';
-  }
-
-  function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
-      
-      document.getElementById(`${tabName}-tab`).classList.add('active');
-      document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
-  }
-
-  async function createPrompts(description) {
-
-var GROQ_API_KEY = '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';
-var HF_API_KEY = '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';
-  
-
-  
-  console.log(description);
   const maxRetries = 6; // Configurable retry count
   let attempt = 0;
 
-const fetchData = async () => {
-  try {
-      const response = await fetch('https://proxy.small-recipe-9582.workers.dev/', {
-          method: 'POST',
-          headers: {
-              'Authorization': `Bearer ` + GROQ_API_KEY,
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              model: 'llama-3.2-90b-vision-preview',
-              messages: [
-                  {
-                      role: "system",
-                      content: `I would like you to create a positive and negative prompt pair for stable-diffusion-3.5-large image creation. The image should be beautiful, loving, realistic, and perfect. The image should reflect the description that I provided in the user message.
+  const fetchData = async () => {
+    try {
+        const response = await fetch('https://proxy.small-recipe-9582.workers.dev/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${GROQ_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'mistral-saba-24b',
+                messages: [
+                    {
+                        role: "system",
+                        content: "You are a creative assistant that creates random, detailed, loving and imaginative image descriptions for a Christian website. Focus on creating descriptions that would make interesting and visually appealing images. Include specific details about style, mood, lighting, and composition."
+                    },
+                    {
+                        role: "user",
+                        content: "Create a random, creative image description that would work well for AI image creation. Make it detailed and specific, but keep it to 2-3 sentences. Return only the description with no additional text or formatting."
+                    }
+                ]
+            })
+        });
 
-I am interested in not having fingers or toes in the picture.
+        if (!response.ok) {
+            throw new Error(`Groq API error: ${response.status}`);
+        }
 
-I am interested in an image that is like scenery.
+        const data = await response.json();
+        if (!data.choices || !data.choices[0].message.content) {
+            throw new Error('Invalid response from Groq API');
+        }
 
-I am interested in not having text in the image.
+        descriptionTextarea.value = data.choices[0].message.content.trim();
+    } catch (error) {
+        if (attempt < maxRetries) {
+            attempt++;
+            console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
+            await new Promise(resolve => setTimeout(resolve, 61000)); // Optional delay between retries (61 seconds)
+            await fetchData(); // Retry fetching
+        } else {
+            console.error('Error:', error);
+            showError(`Failed to create random description after ${maxRetries} attempts: ${error.message}`);
+        }
+    } finally {
+        randomDescButton.disabled = false;
+    }
+  };
 
-Respond in JSON with these keys: positive_prompt and negative_prompt.`
-                  },
-                  {
-                      role: "user",
-                      content: description
-                  }
-              ],
-              response_format: { type: "json_object" }
-          })
-      });
-
-      if (!response.ok) {
-          throw new Error(`Groq API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (!data.choices || !data.choices[0].message.content) {
-          throw new Error('Invalid response from Groq API');
-      }
-
-      console.log(data.choices[0].message.content);
-
-      return JSON.parse(data.choices[0].message.content);
-  } catch (error) {
-    console.log(error);
-      if (attempt < maxRetries) {
-          attempt++;
-          console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
-          await new Promise(resolve => setTimeout(resolve, 61000)); // Optional delay between retries (61 seconds)
-          return await fetchData(); // Retry fetching
-      } else {
-          throw new Error(`Failed to create prompts after ${maxRetries} attempts: ${error.message}`);
-      }
-  }
-};
-
-return await fetchData();
-}
-
-
-async function createImage(positivePrompt, negativePrompt) {
-
-  console.log(positivePrompt);
-  console.log(negativePrompt);
-
-
-var GROQ_API_KEY = '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';
-var HF_API_KEY = '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';
-  
-
-
-const maxRetries = 6; // Configurable retry count
-let attempt = 0;
-
-const fetchData = async () => {
-  try {
-      const modelSelect = document.getElementById('model-select');
-      const selectedModel = MODEL_CONFIGS['sd35'];
-      
-      const requestBody = {
-          inputs: positivePrompt,
-          options: {
-              wait_for_model: true
-          }
-      };
-
-      // Only add negative prompt if the model supports it
-      if (selectedModel.requiresNegativePrompt && negativePrompt) {
-          requestBody.options.negative_prompt = negativePrompt;
-      }
-
-      const response = await fetch(selectedModel.url, {
-          method: 'POST',
-          headers: {
-              'Authorization': `Bearer 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`,
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody)
-      });
-
-      if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Hugging Face API error: ${response.status} - ${errorText}`);
-      }
-
-      const blob = await response.blob();
-      if (blob.type.startsWith('application/json')) {
-          const errorText = await blob.text();
-          throw new Error(`API returned JSON instead of image: ${errorText}`);
-      }
-
-      return URL.createObjectURL(blob);
-  } catch (error) {
-      if (attempt < maxRetries) {
-          attempt++;
-          console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
-          await new Promise(resolve => setTimeout(resolve, 2000)); // Optional delay between retries (2 seconds)
-          return await fetchData(); // Retry fetching
-      } else {
-          throw new Error(`Failed to create image after ${maxRetries} attempts: ${error.message}`);
-      }
-  }
-};
-
-return await fetchData();
-}
-
-
-
-
-
-  function displayImage(imageUrl, positivePrompt, negativePrompt) {
-
-      document.getElementById("displayed-image").innerHTML = `
-          <img width="460em" src="${imageUrl}" alt="Created Image">
-          <div class="image-actions">
-              <button style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  " onclick="downloadImage('${imageUrl}')">Download Image</button>
-              <button style="
-    background-color: #4CAF50; /* Green background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 0.4em; /* Some padding */
-    text-align: center; /* Centered text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make the button inline-block */
-    font-size: 16px; /* Increase font size */
-    margin-top: 0em; /* Some margin */
-    cursor: pointer; /* Pointer/hand icon */
-    border-radius: 12px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-  " onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
-          </div>
-      `;
-
-  }
-
-  async function createFromDescription(description) {
-
-
-
-var GROQ_API_KEY = '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';
-var HF_API_KEY = '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';
-  
-
-      const numImages = 1;
-      
-      if (!description) {
-          showError('Please enter a description');
-          return;
-      }
-
-      setLoading(true);
-
-      try {
-          for (let i = 0; i < numImages; i++) {
-              document.getElementById('loading').textContent = `Trying to create an image...`;
-              
-              const prompts = await createPrompts(description);
-              const imageUrl = await createImage(prompts.positive_prompt, prompts.negative_prompt);
-              
-              displayImage(imageUrl, prompts.positive_prompt, prompts.negative_prompt);
-
-              await sleep(2000); // Sleep for 1 second (1000ms)
-          }
-      } catch (error) {
-          console.error('Error:', error);
-          showError(error.message);
-      } finally {
-          setLoading(false);
-      }
-  }
-
-  async function createFromPrompts() {
-      const positivePrompt = document.getElementById('positive-prompt').value;
-      const negativePrompt = document.getElementById('negative-prompt').value;
-      
-      if (!positivePrompt) {
-          showError('Please enter a positive prompt');
-          return;
-      }
-
-      setLoading(true);
-
-      try {
-          const imageUrl = await createImage(positivePrompt, negativePrompt);
-          displayImage(imageUrl, positivePrompt, negativePrompt);
-      } catch (error) {
-          console.error('Error:', error);
-          showError(error.message);
-      } finally {
-          setLoading(false);
-      }
+  await fetchData();
   }
 
 
-  function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
+    
+    // API Configuration
+    const GROQ_API_KEY = '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';
+    const HF_API_KEY = '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';
+    
+    function showError(message) {
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    function setLoading(isLoading) {
+        const descButton = document.getElementById('description-button');
+        const promptButton = document.getElementById('prompt-button');
+        const loadingDiv = document.getElementById('loading');
+        
+        //descButton.disabled = isLoading;
+        //promptButton.disabled = isLoading;
+        loadingDiv.style.display = isLoading ? 'block' : 'none';
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+        
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+        document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
+    }
+
+    async function createPrompts(description) {
+
+  var GROQ_API_KEY = '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';
+  var HF_API_KEY = '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';
+    
+
+    
+    console.log(description);
+    const maxRetries = 6; // Configurable retry count
+    let attempt = 0;
+
+  const fetchData = async () => {
+    try {
+        const response = await fetch('https://proxy.small-recipe-9582.workers.dev/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ` + GROQ_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'llama-3.2-90b-vision-preview',
+                messages: [
+                    {
+                        role: "system",
+                        content: `I would like you to create a positive and negative prompt pair for stable-diffusion-3.5-large image creation. The image should be beautiful, loving, realistic, and perfect. The image should reflect the description that I provided in the user message.
+
+  I am interested in not having fingers or toes in the picture.
+
+  I am interested in an image that is like scenery.
+
+  I am interested in not having text in the image.
+
+  Respond in JSON with these keys: positive_prompt and negative_prompt.`
+                    },
+                    {
+                        role: "user",
+                        content: description
+                    }
+                ],
+                response_format: { type: "json_object" }
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Groq API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!data.choices || !data.choices[0].message.content) {
+            throw new Error('Invalid response from Groq API');
+        }
+
+        console.log(data.choices[0].message.content);
+
+        return JSON.parse(data.choices[0].message.content);
+    } catch (error) {
+      console.log(error);
+        if (attempt < maxRetries) {
+            attempt++;
+            console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
+            await new Promise(resolve => setTimeout(resolve, 61000)); // Optional delay between retries (61 seconds)
+            return await fetchData(); // Retry fetching
+        } else {
+            throw new Error(`Failed to create prompts after ${maxRetries} attempts: ${error.message}`);
+        }
+    }
+  };
+
+  return await fetchData();
+  }
+
+
+  async function createImage(positivePrompt, negativePrompt) {
+
+    console.log(positivePrompt);
+    console.log(negativePrompt);
+
+
+  var GROQ_API_KEY = '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';
+  var HF_API_KEY = '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';
+    
+
+
+  const maxRetries = 6; // Configurable retry count
+  let attempt = 0;
+
+  const fetchData = async () => {
+    try {
+        const modelSelect = document.getElementById('model-select');
+        const selectedModel = MODEL_CONFIGS['sd35'];
+        
+        const requestBody = {
+            inputs: positivePrompt,
+            options: {
+                wait_for_model: true
+            }
+        };
+
+        // Only add negative prompt if the model supports it
+        if (selectedModel.requiresNegativePrompt && negativePrompt) {
+            requestBody.options.negative_prompt = negativePrompt;
+        }
+
+        const response = await fetch(selectedModel.url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer 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`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Hugging Face API error: ${response.status} - ${errorText}`);
+        }
+
+        const blob = await response.blob();
+        if (blob.type.startsWith('application/json')) {
+            const errorText = await blob.text();
+            throw new Error(`API returned JSON instead of image: ${errorText}`);
+        }
+
+        return URL.createObjectURL(blob);
+    } catch (error) {
+        if (attempt < maxRetries) {
+            attempt++;
+            console.log(`Retrying... Attempt ${attempt} of ${maxRetries}`);
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Optional delay between retries (2 seconds)
+            return await fetchData(); // Retry fetching
+        } else {
+            throw new Error(`Failed to create image after ${maxRetries} attempts: ${error.message}`);
+        }
+    }
+  };
+
+  return await fetchData();
   }
 
 
 
 
 
+    function displayImage(imageUrl, positivePrompt, negativePrompt) {
 
-function downloadImage(imageUrl) {
-      fetch(imageUrl)
-          .then(response => response.blob())
-          .then(blob => {
-              const link = document.createElement('a');
-              link.href = URL.createObjectURL(blob);
-              link.download = 'created-image.png';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-          })
-          .catch(error => {
-              console.error('Error downloading image:', error);
-              showError('Failed to download image');
-          });
-  }
+        document.getElementById("displayed-image").innerHTML = `
+            <img width="460em" src="${imageUrl}" alt="Created Image">
+            <div class="image-actions">
+                <button style="
+      background-color: #4CAF50; /* Green background */
+      border: none; /* Remove borders */
+      color: white; /* White text */
+      padding: 0.4em; /* Some padding */
+      text-align: center; /* Centered text */
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Make the button inline-block */
+      font-size: 16px; /* Increase font size */
+      margin-top: 0em; /* Some margin */
+      cursor: pointer; /* Pointer/hand icon */
+      border-radius: 12px; /* Rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition */
+    " onclick="downloadImage('${imageUrl}')">Download Image</button>
+                <button style="
+      background-color: #4CAF50; /* Green background */
+      border: none; /* Remove borders */
+      color: white; /* White text */
+      padding: 0.4em; /* Some padding */
+      text-align: center; /* Centered text */
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Make the button inline-block */
+      font-size: 16px; /* Increase font size */
+      margin-top: 0em; /* Some margin */
+      cursor: pointer; /* Pointer/hand icon */
+      border-radius: 12px; /* Rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition */
+    " onclick="viewFullSize('${imageUrl}')">View Larger Size</button>
+            </div>
+        `;
 
-  function viewFullSize(imageUrl) {
-      const modal = document.getElementById('imageModal');
-      const modalImg = document.getElementById('modalImage');
-      modal.style.display = 'flex';
-      modalImg.src = imageUrl;
-  }
+    }
 
-  function closeModal() {
-      const modal = document.getElementById('imageModal');
-      modal.style.display = 'none';
-  }
+    async function createFromDescription(description) {
 
-  // Close modal when pressing Escape key
-  document.addEventListener('keydown', function(event) {
-      if (event.key === 'Escape') {
-          closeModal();
-      }
-  });
-</script>
+
+
+  var GROQ_API_KEY = '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';
+  var HF_API_KEY = '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';
+    
+
+        const numImages = 1;
+        
+        if (!description) {
+            showError('Please enter a description');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            for (let i = 0; i < numImages; i++) {
+                document.getElementById('loading').textContent = `Trying to create an image...`;
+                
+                const prompts = await createPrompts(description);
+                const imageUrl = await createImage(prompts.positive_prompt, prompts.negative_prompt);
+                
+                displayImage(imageUrl, prompts.positive_prompt, prompts.negative_prompt);
+
+                await sleep(2000); // Sleep for 1 second (1000ms)
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function createFromPrompts() {
+        const positivePrompt = document.getElementById('positive-prompt').value;
+        const negativePrompt = document.getElementById('negative-prompt').value;
+        
+        if (!positivePrompt) {
+            showError('Please enter a positive prompt');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const imageUrl = await createImage(positivePrompt, negativePrompt);
+            displayImage(imageUrl, positivePrompt, negativePrompt);
+        } catch (error) {
+            console.error('Error:', error);
+            showError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+
+
+
+
+
+  function downloadImage(imageUrl) {
+        fetch(imageUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'created-image.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => {
+                console.error('Error downloading image:', error);
+                showError('Failed to download image');
+            });
+    }
+
+    function viewFullSize(imageUrl) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = 'flex';
+        modalImg.src = imageUrl;
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('imageModal');
+        modal.style.display = 'none';
+    }
+
+    // Close modal when pressing Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+  </script>
