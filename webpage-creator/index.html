@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Page Creator v4.1</title>
+    <style>
+    /* CSS Reset and Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f8fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Main App Container */
+.app-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+}
+
+/* Header Styling */
+.header {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 10px;
+  border-bottom: 2px solid #ecf0f1;
+}
+
+/* Content Area */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form Elements */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+textarea#user-message {
+  width: 100%;
+  height: 150px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+textarea#user-message:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+select#modelSelect {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+select#modelSelect:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Button Styling */
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+#submit-button {
+  width: 100%;
+}
+
+/* Response Area */
+#response-text {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin-top: 20px;
+  min-height: 60px;
+  border-left: 4px solid #3498db;
+}
+
+/* HTML File Buttons */
+#htmlFileButtons {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  display: flex;
+  width: 100%;
+}
+
+#download, #openInNewTab {
+  width: 50%;
+  margin: 0;
+  border-radius: 0;
+}
+
+#download {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#openInNewTab {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Preview iframe */
+#myIframe {
+  width: 100%;
+  height: 75vh;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Information Footer */
+#informationFooter {
+  margin-top: 30px;
+  padding: 20px;
+  border-top: 1px solid #ecf0f1;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .app-container {
+    padding: 15px;
+  }
+  
+  .header {
+    font-size: 1.7rem;
+  }
+  
+  button {
+    padding: 10px 15px;
+  }
+  
+  #myIframe {
+    height: 400px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header {
+    font-size: 1.5rem;
+  }
+  
+  textarea#user-message {
+    height: 120px;
+  }
+  
+  #myIframe {
+    height: 300px;
+  }
+}
+
+/* Loading state animation */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+#response-text:contains("Loading...") {
+  animation: pulse 1.5s infinite;
+  background-color: #edf7fd;
+}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">Web Page Creator v4.1</div>
+        <div class="content">
+            <div>
+                <label for="user-message">Web Page Idea and/Or Information</label>
+                <textarea id="user-message">The Vatican</textarea>
+            </div>
+            <div>
+                <label for="modelSelect">Select Model</label>
+                <select id="modelSelect">
+                </select>
+            </div>
+            <button id="submit-button">Create Web Page</button>
+            
+            <div id="response-text">Ready for Creation...</div>
+            
+            <div id="htmlFileButtons">
+              
+              <button id="download" onclick="downloadHTML(sessionStorage.getItem('FILE_NAME'), sessionStorage.getItem('HTML_FILE'));">Download HTML File</button>
+              
+              <button id="openInNewTab" onclick="openTab(sessionStorage.getItem('HTML_FILE'));">Open In New Tab</button>
+
+            </div>
+            
+            <iframe id="myIframe"></iframe>
+
+            <div id="informationFooter"></div>
+         </div>
+    </div>
+
+    <script>
+        const apiKey = "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";
+        const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
+        const MAX_RETRIES = 6;
+        const RETRY_DELAY = 1000; // 1 second
+
+        async function makeApiRequest(retryCount = 0) {
+            const systemMessage = `I am interested in you creating a web page.
+
+I am interested in a complete web page in a single HTML file.
+
+I am interested in using vanilla HTML, vanilla CSS, and vanilla JS.
+
+I am interested in having full ownership of this code, and I am interested in releasing it into the public domain.
+
+I am interested in using standard coding practices and principles.
+
+I am interested in using well established code principles and designs.
+
+I am interested in this web page having a timeless design.
+
+I am interested in you filling this web page with truthful and relevant content.
+
+I am interested in content that is acceptable to a Christian audience.
+
+I am interested in this web page being usable in a production environment.
+
+I am interested in ensuring that the design and JS code functions perfectly. I am interested in the idea of reverting to something simpler to guarantee functionality when applicable.
+
+I am interested in requiring that this HTML code be included in the web page at the bottom of the web page: \`\`\`HTML
+<div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
+\`\`\`
+
+I am interested in requiring that this external Javascript file be run on this web page after the informationFooter: https://www.avemariacloud.com/generic-loader.js
+
+The Javascript code that I referenced earlier will populate the “informationFooter” div with some information that I have.
+
+Please respond in JSON with the labels HTML_FILE and FILE_NAME 
+
+Please place only HTML code within the label: "HTML_FILE"
+
+Please ensure that the FILE_NAME ends in .html`;
+            
+            const userMessage = "Web Page Idea and/Or Information: " + document.getElementById('user-message').value;
+            const selectedModel = document.getElementById('modelSelect').value;
+            const requestJson = true;
+            const responseText = document.getElementById('response-text');
+            
+            try {
+
+                responseText.innerHTML = "Loading...";
+                
+                const requestBody = {
+                    model: selectedModel,
+                    messages: [
+                        { role: 'system', content: systemMessage },
+                        { role: 'user', content: userMessage }
+                    ]
+                };
+
+                if (requestJson) {
+                    requestBody.response_format = {
+                        type: "json_object"
+                    };
+                }
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const content = data.choices[0]?.message?.content || "No response received.";
+
+                if (requestJson) {
+                    try {
+                        const jsonContent = JSON.parse(content);
+                        if (jsonContent.HTML_FILE) {
+                            
+                          sessionStorage.setItem("HTML_FILE", jsonContent.HTML_FILE);
+
+                          sessionStorage.setItem("FILE_NAME", jsonContent.FILE_NAME);
+                          
+                          console.log(jsonContent.FILE_NAME);
+                          console.log(jsonContent.HTML_FILE);
+
+                          const blob = new Blob([jsonContent.HTML_FILE], { type: 'text/html' });
+                          const iframe = document.getElementById('myIframe');
+                          iframe.src = URL.createObjectURL(blob);
+
+                          responseText.innerHTML = "Ready for input...";
+
+                          scrollToId("myIframe");
+                            
+                        } else {
+                            responseText.style.display = 'block';
+
+                            throw new Error(`API Error: ${response.statusText}`);
+                            //responseText.innerHTML = JSON.stringify(jsonContent, null, 2);
+                        }
+                    } catch (e) {
+                        responseText.style.display = 'block';
+
+                        throw new Error(`API Error: ${response.statusText}`);
+                        //responseText.innerHTML = content;
+                    }
+                } else {
+                    responseText.style.display = 'block';
+
+                    throw new Error(`API Error: ${response.statusText}`);
+                    //responseText.innerHTML = content;
+                }
+            } catch (error) {
+                if (retryCount < MAX_RETRIES) {
+                    responseText.innerHTML = `An error possibly occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
+                    await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+                    return makeApiRequest(retryCount + 1);
+                } else {
+                    responseText.innerHTML = `Error after ${MAX_RETRIES} attempts: ${error.message}`;
+                }
+            }
+        }
+
+        document.getElementById('submit-button').addEventListener('click', () => makeApiRequest());
+
+        function openTab(HTML_FILE) {
+          const newTab = window.open('', '_blank'); // Open a blank tab
+          newTab.document.open(); // Open the document for writing
+          newTab.document.write(HTML_FILE); // Write the HTML content
+          newTab.document.close(); // Close the document stream
+        }
+
+        function scrollToId(id) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+    }
+}
+
+function downloadHTML(filename, content) {
+    const blob = new Blob([content], { type: "text/html" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+    </script>
+
+
+    
+    <script src="https://avemariacloud.com/generic-loader.js"></script>
+
+</body>
+</html>
