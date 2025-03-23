@@ -34,7 +34,9 @@ async function fetchFileVersion(repoOwner, repoName) {
         const formattedTime = commitDate.toISOString().split('T')[1].split('Z')[0]; // Get time portion
 
         // Display the version as the formatted date and time
-        document.getElementById('version').textContent = `${formattedDate} ${formattedTime}<BR><BR>`;
+        document.getElementById('version').textContent = `Updated: ${formattedDate} ${formattedTime}
+
+`;
         
         console.log('v${formattedDate} ${formattedTime}');
         
