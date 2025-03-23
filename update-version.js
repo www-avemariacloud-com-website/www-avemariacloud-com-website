@@ -5,7 +5,11 @@ async function fetchFileVersion(repoOwner, repoName) {
         filePath = 'index.html'; // Default to index.html if it's the homepage
     }
 
+    console.log(filePath);
+
     const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${filePath}`;
+
+    console.log(apiUrl);
     
     try {
         const response = await fetch(apiUrl);
