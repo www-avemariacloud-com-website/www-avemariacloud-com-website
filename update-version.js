@@ -1,6 +1,3 @@
-const GITHUB_USERNAME = 'avemariacloudapi';
-const GITHUB_TOKEN = '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';
-
 async function fetchFileVersion(repoOwner, repoName) {
     let filePath = window.location.pathname.substring(1); // Remove leading "/"
     
@@ -8,14 +5,10 @@ async function fetchFileVersion(repoOwner, repoName) {
         filePath = 'index.html'; // Default to index.html if it's the homepage
     }
 
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${filePath}`;
+    const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${filePath}`;
     
     try {
-        const response = await fetch(apiUrl, {
-            headers: {
-                'Authorization': 'Basic ' + btoa(`${GITHUB_USERNAME}:${GITHUB_TOKEN}`)
-            }
-        });
+        const response = await fetch(apiUrl);
 
         if (!response.ok) throw new Error(`Failed to fetch version for ${filePath}`);
 
