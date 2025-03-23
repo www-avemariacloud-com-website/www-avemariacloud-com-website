@@ -3,7 +3,8 @@
 // Array of JavaScript files to be loaded
 const scripts = [
     'https://www.avemariacloud.com/information.js',
-    'https://www.avemariacloud.com/update-models.js'
+    'https://www.avemariacloud.com/update-models.js',
+    'https://www.avemariacloud.com/update-version.js'
 ];
 
 // Function to load a script
