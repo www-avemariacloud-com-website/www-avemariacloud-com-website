@@ -26,12 +26,15 @@ async function fetchFileVersion(repoOwner, repoName) {
         const data = await response.json();
         if (data.length === 0) throw new Error(`No commit data for ${filePath}`);
 
-        // Use the date of the latest commit for the version
+        // Use the date and time of the latest commit for the version
         const commitDate = new Date(data[0].commit.committer.date);
-        const formattedDate = commitDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
 
-        // Display the version as the formatted date
-        document.getElementById('version').textContent = `v${formattedDate}`;
+        // Format the date as YYYY-MM-DD and time as HH:MM:SS
+        const formattedDate = commitDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        const formattedTime = commitDate.toISOString().split('T')[1].split('Z')[0]; // Get time portion
+
+        // Display the version as the formatted date and time
+        document.getElementById('version').textContent = `v${formattedDate} ${formattedTime}`;
     } catch (error) {
         console.error(`Error fetching version for ${filePath}:`, error);
         document.getElementById('version').textContent = 'Version: Unknown';
