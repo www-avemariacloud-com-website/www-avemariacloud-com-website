@@ -3,248 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Page Creator v4.1</title>
+    <title>Web Page Creator v5.0</title>
     <style>
-    /* CSS Reset and Global Styles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+        /* Modern CSS Reset and Global Styles */
+        :root {
+            --primary: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary: #f72585;
+            --text-dark: #2b2d42;
+            --text-light: #8d99ae;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-light: #e9ecef;
+            --success: #38b000;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --font-main: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
 
-body {
-  background-color: #f5f8fa;
-  color: #333;
-  line-height: 1.6;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-/* Main App Container */
-.app-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  min-height: 100vh;
-}
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
 
-/* Header Styling */
-.header {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2c3e50;
-  text-align: center;
-  margin-bottom: 30px;
-  padding: 10px;
-  border-bottom: 2px solid #ecf0f1;
-}
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.5em;
+        }
 
-/* Content Area */
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
 
-/* Form Elements */
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #2c3e50;
-}
+        /* Card Styling */
+        .card {
+            background-color: var(--bg-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
 
-textarea#user-message {
-  width: 100%;
-  height: 150px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  resize: vertical;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
+        .card:hover {
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
+        }
 
-textarea#user-message:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
+        .card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-select#modelSelect {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  background-color: white;
-  cursor: pointer;
-}
+        .card-title {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
 
-select#modelSelect:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
+        .card-body {
+            padding: 2rem;
+        }
 
-/* Button Styling */
-button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-}
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
 
-button:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-}
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
 
-button:active {
-  transform: translateY(0);
-}
+        textarea, select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-family: inherit;
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
 
-#submit-button {
-  width: 100%;
-}
+        textarea {
+            height: 180px;
+            resize: vertical;
+        }
 
-/* Response Area */
-#response-text {
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  margin-top: 20px;
-  min-height: 60px;
-  border-left: 4px solid #3498db;
-}
+        textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
 
-/* HTML File Buttons */
-#htmlFileButtons {
-  margin-top: 20px;
-  margin-bottom: 20px;
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
 
-  display: flex;
-  width: 100%;
-}
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
 
-#download, #openInNewTab {
-  width: 50%;
-  margin: 0;
-  border-radius: 0;
-}
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
 
-#download {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
-}
+        .btn-primary:active {
+            transform: translateY(0);
+        }
 
-#openInNewTab {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border-left: 1px solid rgba(255, 255, 255, 0.3);
-}
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
 
-/* Preview iframe */
-#myIframe {
-  width: 100%;
-  height: 75vh;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
+        .btn-group {
+            display: flex;
+            gap: 0;
+            width: 100%;
+        }
 
-/* Information Footer */
-#informationFooter {
-  margin-top: 30px;
-  padding: 20px;
-  border-top: 1px solid #ecf0f1;
-  color: #7f8c8d;
-  font-size: 0.9rem;
-}
+        .btn-group .btn {
+            flex: 1;
+            border-radius: 0;
+        }
 
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-  .app-container {
-    padding: 15px;
-  }
-  
-  .header {
-    font-size: 1.7rem;
-  }
-  
-  button {
-    padding: 10px 15px;
-  }
-  
-  #myIframe {
-    height: 400px;
-  }
-}
+        .btn-group .btn:first-child {
+            border-top-left-radius: var(--radius-sm);
+            border-bottom-left-radius: var(--radius-sm);
+        }
 
-@media screen and (max-width: 480px) {
-  .header {
-    font-size: 1.5rem;
-  }
-  
-  textarea#user-message {
-    height: 120px;
-  }
-  
-  #myIframe {
-    height: 300px;
-  }
-}
+        .btn-group .btn:last-child {
+            border-top-right-radius: var(--radius-sm);
+            border-bottom-right-radius: var(--radius-sm);
+        }
 
-/* Loading state animation */
-@keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
-}
+        /* Status Area */
+        .status {
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            margin: 1.5rem 0;
+            background-color: var(--bg-light);
+            border-left: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+        }
 
-#response-text:contains("Loading...") {
-  animation: pulse 1.5s infinite;
-  background-color: #edf7fd;
-}
+        .status-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: var(--primary);
+        }
+
+        .status-text {
+            flex: 1;
+        }
+
+        /* Preview Area */
+        .preview-title {
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem;
+        }
+
+        .preview-title i {
+            margin-right: 0.5rem;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 600px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        /* Info Footer */
+        .info-footer {
+            margin-top: 3rem;
+            padding: 2rem;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 991px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .card-header, .card-body {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .card-header, .card-body {
+                padding: 1.25rem;
+            }
+            
+            .preview-frame {
+                height: 450px;
+            }
+            
+            .card-title {
+                font-size: 1.25rem;
+            }
+        }
+        
+        @media screen and (max-width: 576px) {
+            .container {
+                padding: 0.75rem;
+            }
+            
+            .card-header, .card-body {
+                padding: 1rem;
+            }
+            
+            .preview-frame {
+                height: 350px;
+            }
+            
+            textarea {
+                height: 150px;
+            }
+            
+            .btn {
+                padding: 0.625rem 1.25rem;
+            }
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            --primary: #4cc9f0;
+            --primary-hover: #3db8df;
+            --secondary: #f72585;
+            --text-dark: #e9ecef;
+            --text-light: #adb5bd;
+            --bg-light: #1a1a2e;
+            --bg-white: #16213e;
+            --border-light: #0f3460;
+        }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="header">Web Page Creator v4.1</div>
-        <div class="content">
-            <div>
-                <label for="user-message">Web Page Idea and/Or Information</label>
-                <textarea id="user-message">The Vatican</textarea>
-            </div>
-            <div>
-                <label for="modelSelect">Select Model</label>
-                <select id="modelSelect">
-                </select>
-            </div>
-            <button id="submit-button">Create Web Page</button>
-            
-            <div id="response-text">Ready for Creation...</div>
-            
-            <div id="htmlFileButtons">
-              
-              <button id="download" onclick="downloadHTML(sessionStorage.getItem('FILE_NAME'), sessionStorage.getItem('HTML_FILE'));">Download HTML File</button>
-              
-              <button id="openInNewTab" onclick="openTab(sessionStorage.getItem('HTML_FILE'));">Open In New Tab</button>
-
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Web Page Creator v5.0</h1>
             </div>
             
-            <iframe id="myIframe"></iframe>
-
-            <div id="informationFooter"></div>
-         </div>
+            <div class="card-body">
+                <form id="generator-form">
+                    <div class="form-group">
+                        <label for="user-message">
+                            <i class="fas fa-lightbulb"></i> Web Page Idea and/or Information
+                        </label>
+                        <textarea id="user-message" placeholder="Describe your web page idea here...">The Vatican</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modelSelect">
+                            <i class="fas fa-robot"></i> Select AI Model
+                        </label>
+                        <select id="modelSelect">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <button type="button" id="submit-button" class="btn btn-primary btn-block">
+                        <i class="fas fa-magic"></i> Create Web Page
+                    </button>
+                </form>
+                
+                <div id="response-text" class="status">
+                    <div class="status-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="status-text">Ready for creation...</div>
+                </div>
+                
+                <div id="htmlFileButtons" class="btn-group">
+                    <button id="download" class="btn btn-primary" onclick="downloadHTML(sessionStorage.getItem('FILE_NAME'), sessionStorage.getItem('HTML_FILE'));">
+                        <i class="fas fa-download"></i> Download HTML File
+                    </button>
+                    <button id="openInNewTab" class="btn btn-primary" onclick="openTab(sessionStorage.getItem('HTML_FILE'));">
+                        <i class="fas fa-external-link-alt"></i> Open In New Tab
+                    </button>
+                </div>
+                
+                <h2 class="preview-title">
+                    <i class="fas fa-eye"></i> Preview
+                </h2>
+                <iframe id="myIframe" class="preview-frame" title="Web Page Preview"></iframe>
+            </div>
+        </div>
+        
+        <div id="informationFooter" class="info-footer"></div>
     </div>
+
 
     <script>
         const apiKey = "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";
