@@ -1,3 +1,4 @@
+sessionStorage.setItem("informationLoaded", "false");
 
     var informationHTML = `<center><p>
 <div id="version" style="display: inline-block;">Version: Loading...</div><BR><BR>
@@ -164,4 +165,9 @@ Some notices may be relevant.<br><br>
             window.location.href = "https://www.vatican.va/content/vatican/en.html";
         }
     }
+
+
+sessionStorage.setItem("informationLoaded", "true");
+
+    
 
