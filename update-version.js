@@ -14,40 +14,24 @@ async function fetchFileVersion(repoOwner, repoName) {
     console.log("File Path:", filePath);
 
     // Construct the GitHub API URL to fetch commit information for this file
-    const baseApiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${filePath}`;
+    const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${filePath}`;
 
-    console.log("Base API URL:", baseApiUrl);
-
+    console.log("API URL:", apiUrl);
+    
     try {
-        let allCommits = [];
-        let page = 1;
-        let hasMoreCommits = true;
+        const response = await fetch(apiUrl);
 
-        while (hasMoreCommits) {
-            // Fetch the commits for the current page
-            const response = await fetch(`${baseApiUrl}&page=${page}`);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch version for ${filePath}, page ${page}`);
-            }
+        if (!response.ok) throw new Error(`Failed to fetch version for ${filePath}`);
 
-            const data = await response.json();
-            if (data.length === 0) {
-                hasMoreCommits = false; // No more commits left to fetch
-            } else {
-                allCommits = allCommits.concat(data); // Add the current page of commits to the allCommits array
-                page++; // Move to the next page
-            }
-        }
+        const data = await response.json();
+        if (data.length === 0) throw new Error(`No commit data for ${filePath}`);
 
-        if (allCommits.length === 0) {
-            throw new Error(`No commit data for ${filePath}`);
-        }
+        // Use the date of the latest commit for the version
+        const commitDate = new Date(data[0].commit.committer.date);
+        const formattedDate = commitDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
 
-        // Use the latest commit hash for the version
-        const latestCommitHash = allCommits[0].sha.substring(0, 7); // First 7 characters of the latest commit hash
-
-        // Display the version as the commit hash
-        document.getElementById('version').textContent = `v${latestCommitHash}`;
+        // Display the version as the formatted date
+        document.getElementById('version').textContent = `v${formattedDate}`;
     } catch (error) {
         console.error(`Error fetching version for ${filePath}:`, error);
         document.getElementById('version').textContent = 'Version: Unknown';
