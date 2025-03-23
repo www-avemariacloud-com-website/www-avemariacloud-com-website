@@ -1,7 +1,7 @@
 sessionStorage.setItem("informationLoaded", "false");
 
     var informationHTML = `<center><p>
-<div id="version" style="display: inline-block;">Version: Loading...</div><BR><BR>
+<div id="version" style="display: inline-block;"></div>
 © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
 <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
 <BR><BR>
@@ -56,6 +56,8 @@ Some notices may be relevant.<br><br>
 </p></center>`;
 
     document.getElementById("informationFooter").innerHTML = informationHTML;
+    
+    sessionStorage.setItem("informationLoaded", "true");
 
     const modalHTML = `
         <div id="informationModal" class="informationModal">
@@ -167,7 +169,6 @@ Some notices may be relevant.<br><br>
     }
 
 
-sessionStorage.setItem("informationLoaded", "true");
 
     
 
