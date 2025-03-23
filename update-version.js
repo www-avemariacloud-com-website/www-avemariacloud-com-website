@@ -25,7 +25,7 @@ async function fetchFileVersion(repoOwner, repoName) {
         const versionNumber = data.length; // Number of commits affecting this file
         const shortCommitHash = data[0].sha.substring(0, 7); // First 7 characters of latest commit hash
 
-        document.getElementById('version').textContent = `Version: ${versionNumber} (${shortCommitHash})`;
+        document.getElementById('version').textContent = `v${versionNumber}`;
     } catch (error) {
         console.error(`Error fetching version for ${filePath}:`, error);
         document.getElementById('version').textContent = 'Version: Unknown';
