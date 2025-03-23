@@ -5,6 +5,7 @@ async function fetchFileVersion(repoOwner, repoName) {
         filePath = 'index.html'; // Default to index.html if it's the homepage
     }
 
+    // Log the file path to check if it's correct
     console.log(filePath);
 
     const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${filePath}`;
@@ -22,7 +23,8 @@ async function fetchFileVersion(repoOwner, repoName) {
         const versionNumber = data.length; // Number of commits affecting this file
         const shortCommitHash = data[0].sha.substring(0, 7); // First 7 characters of latest commit hash
 
-        document.getElementById('version').textContent = `v${versionNumber}`;
+        // Display the version and short commit hash
+        document.getElementById('version').textContent = `v${versionNumber} (${shortCommitHash})`;
     } catch (error) {
         console.error(`Error fetching version for ${filePath}:`, error);
         document.getElementById('version').textContent = 'Version: Unknown';
