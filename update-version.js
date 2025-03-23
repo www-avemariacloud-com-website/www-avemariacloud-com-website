@@ -1,5 +1,5 @@
 const GITHUB_USERNAME = 'avemariacloudapi';
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = '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';
 
 async function fetchFileVersion(repoOwner, repoName) {
     let filePath = window.location.pathname.substring(1); // Remove leading "/"
