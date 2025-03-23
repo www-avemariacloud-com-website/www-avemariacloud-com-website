@@ -1,16 +1,23 @@
 async function fetchFileVersion(repoOwner, repoName) {
     let filePath = window.location.pathname.substring(1); // Remove leading "/"
-    
-    if (!filePath || filePath.endsWith('/')) {
-        filePath = 'index.html'; // Default to index.html if it's the homepage
+
+    // If the path ends with a slash (folder URL), default to 'index.html' inside that folder
+    if (filePath.endsWith('/')) {
+        filePath = filePath + 'index.html'; // Default to 'index.html' in the folder
+    }
+
+    // If there's no file path (e.g., homepage), default to 'index.html'
+    if (!filePath) {
+        filePath = 'index.html';
     }
 
     // Log the file path to check if it's correct
-    console.log(filePath);
+    console.log("File Path:", filePath);
 
+    // Construct the GitHub API URL to fetch commit information for this file
     const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${filePath}`;
 
-    console.log(apiUrl);
+    console.log("API URL:", apiUrl);
     
     try {
         const response = await fetch(apiUrl);
