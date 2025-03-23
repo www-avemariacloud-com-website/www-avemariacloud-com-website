@@ -44,5 +44,16 @@ async function fetchFileVersion(repoOwner, repoName) {
     }
 }
 
-// Your repository details
+
+var checkInformationLoaded = setInterval(() => {
+if (sessionStorage.getItem("informationLoaded") == "true") {
+// Clear the interval when the value is available
+clearInterval(checkInformationLoaded);
+// Log the value to the console
+
 fetchFileVersion('www-avemariacloud-com-website', 'www-avemariacloud-com-website');
+
+console.log("Updating Version Information");
+
+}
+}, 1); // Check
