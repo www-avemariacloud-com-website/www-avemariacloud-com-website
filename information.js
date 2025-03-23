@@ -1,7 +1,8 @@
 sessionStorage.setItem("informationLoaded", "false");
 
-    var informationHTML = `<center><div id="version" style="display: inline-block;"></div><BR><BR>
+    var informationHTML = `<center>
 <p>
+<div id="version" style="display: inline-block;"></div><BR><BR>
 © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
 <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
 <BR><BR>
