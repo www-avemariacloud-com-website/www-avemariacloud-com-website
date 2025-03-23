@@ -35,6 +35,9 @@ async function fetchFileVersion(repoOwner, repoName) {
 
         // Display the version as the formatted date and time
         document.getElementById('version').textContent = `v${formattedDate} ${formattedTime}`;
+        
+        console.log('v${formattedDate} ${formattedTime}');
+        
     } catch (error) {
         console.error(`Error fetching version for ${filePath}:`, error);
         document.getElementById('version').textContent = 'Version: Unknown';
