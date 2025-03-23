@@ -36,7 +36,7 @@ async function fetchFileVersion(repoOwner, repoName) {
         // Display the version as the formatted date and time
         document.getElementById('version').textContent = `Updated: ${formattedDate} ${formattedTime}
 
-`;
+<BR><BR>`;
         
         console.log('v${formattedDate} ${formattedTime}');
         
