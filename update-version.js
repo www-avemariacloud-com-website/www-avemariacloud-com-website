@@ -37,7 +37,7 @@ const versionNotifier = {
     const seconds = pad(date.getSeconds());
     const milliseconds = pad3(date.getMilliseconds());
     
-    return `${month}-${day}-${year} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+    return `${month}-${day}-${year} ${hours}:${minutes}:${seconds}`;
   },
   
   // Check for version updates
@@ -59,7 +59,7 @@ const versionNotifier = {
       const commitDate = new Date(commit.commit.committer.date);
       const formattedDate = this.formatCommitDate(commitDate);
       
-      const versionText = `Version: ${commitId} (Deployed @ ${formattedDate})`;
+      const versionText = `Version: ${commitId} (${formattedDate})`;
       const currentVersion = commit.sha; // Using full commit ID as version key
       
       // Update version display
