@@ -325,7 +325,8 @@
                         <label for="user-message">
                             <i class="fas fa-lightbulb"></i> Web Page Idea and/or Information
                         </label>
-                        <textarea id="user-message" placeholder="Describe your web page idea here...">Andrew Outreach Orphanage
+                        <div id="htmlFileButtons" class="btn-group">
+                            <button id="download" class="btn btn-primary" onclick="document.getElementById('user-message').value = `Andrew Outreach Orphanage
 
 Location: Bugiri district 
 P.o Box 78 (U)
@@ -339,15 +340,21 @@ I am interested in a placeholder for an image relating to a registration certifi
 
 I am interested in a placeholder for 6 images relating to children.
 
-I am interested in using these filenames for the images: Registration Certificate: 474663702_1961297890947709_5774887105836912620_n.jpg
+I am interested in using these filenames for the images: Registration Certificate: https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/474663702_1961297890947709_5774887105836912620_n.jpg
 
-Images of children: 475959075_486809424198316_5942271838188391739_n.jpg
-462645937_526882123505663_5047352384923728137_n.jpg
-473624869_1370452380993452_6921505269088550201_n.jpg
-475991653_9456989881025437_6678792483254816546_n.jpg
-476895237_9299211063455856_9188159984815553006_n.jpg
-486126991_2122833564811798_6412124356222377784_n.jpg
-</textarea>
+Images of children: https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/475959075_486809424198316_5942271838188391739_n.jpg
+https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/462645937_526882123505663_5047352384923728137_n.jpg
+https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/473624869_1370452380993452_6921505269088550201_n.jpg
+https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/475991653_9456989881025437_6678792483254816546_n.jpg
+https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/476895237_9299211063455856_9188159984815553006_n.jpg
+https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/486126991_2122833564811798_6412124356222377784_n.jpg`;">
+                                <i class="fas fa-download"></i> Example Web Page Idea
+                            </button>
+                            <a href="https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/" id="openInNewTab" class="btn btn-primary" onclick="openTab(sessionStorage.getItem('HTML_FILE'));">
+                                <i class="fas fa-external-link-alt"></i> Example Web Page Output
+                            </a>
+                        </div>
+                        <textarea id="user-message" placeholder="Describe your web page idea here..."></textarea>
                     </div>
                     
                     <div class="form-group">
