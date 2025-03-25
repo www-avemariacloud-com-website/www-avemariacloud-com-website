@@ -1,7 +1,7 @@
 // Version notification system
 const versionNotifier = {
   // LocalStorage key for storing the last seen version
-  storageKey: 'app_last_seen_version',
+  storageKey: 'app_last_seen_version_' + window.location.pathname,
   checkInterval: null,
   checkFrequency: 10000, // 10 seconds in milliseconds
   
@@ -24,6 +24,22 @@ const versionNotifier = {
     }
   },
   
+  // Format date in MM-DD-YYYY HH:MM:SS.mmm format
+  formatCommitDate(date) {
+    const pad = (num) => num.toString().padStart(2, '0');
+    const pad3 = (num) => num.toString().padStart(3, '0');
+    
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const year = date.getFullYear();
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+    const milliseconds = pad3(date.getMilliseconds());
+    
+    return `${month}-${day}-${year} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+  },
+  
   // Check for version updates
   async checkVersion(repoOwner, repoName) {
     const filePath = this.getFilePath();
@@ -38,14 +54,17 @@ const versionNotifier = {
       const data = await response.json();
       if (data.length === 0) throw new Error(`No commit data for ${filePath}`);
       
-      const commitDate = new Date(data[0].commit.committer.date);
-      const formattedDate = commitDate.toISOString().split('T')[0];
-      const formattedTime = commitDate.toISOString().split('T')[1].split('Z')[0];
-      const currentVersion = `${formattedDate} ${formattedTime}`;
+      const commit = data[0];
+      const commitId = commit.sha.substring(0, 7); // Short commit hash
+      const commitDate = new Date(commit.commit.committer.date);
+      const formattedDate = this.formatCommitDate(commitDate);
+      
+      const versionText = `Version: ${commitId} (Deployed @ ${formattedDate})`;
+      const currentVersion = commit.sha; // Using full commit ID as version key
       
       // Update version display
       if (document.getElementById('version')) {
-        document.getElementById('version').textContent = `Updated: ${currentVersion}`;
+        document.getElementById('version').textContent = versionText;
       }
       
       // Version check logic
@@ -57,7 +76,7 @@ const versionNotifier = {
       }
       
       if (lastSeenVersion !== currentVersion) {
-        this.showNotification();
+        this.showNotification(versionText);
         localStorage.setItem(this.storageKey, currentVersion);
         this.stopVersionChecking(); // Stop checking after update is detected
       }
@@ -83,7 +102,7 @@ const versionNotifier = {
   },
   
   // Show update notification to user
-  showNotification() {
+  showNotification(versionText) {
     // Prevent multiple notifications
     if (document.getElementById('version-update-notification')) return;
     
@@ -99,13 +118,16 @@ const versionNotifier = {
     notification.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
     notification.style.zIndex = '1000';
     notification.style.display = 'flex';
-    notification.style.alignItems = 'center';
-    notification.style.justifyContent = 'space-between';
+    notification.style.flexDirection = 'column';
+    notification.style.gap = '10px';
     
     notification.innerHTML = `
-      <span>A new version is available! Please refresh the page.</span>
-      <button id="refresh-btn" style="margin-left: 15px; background: white; color: #4CAF50; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Refresh</button>
-      <button id="dismiss-btn" style="margin-left: 5px; background: transparent; color: white; border: 1px solid white; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Dismiss</button>
+      <div style="font-weight: bold;">A new version is available!</div>
+      <div style="font-size: 0.9em;">${versionText}</div>
+      <div style="display: flex; gap: 10px; margin-top: 5px;">
+        <button id="refresh-btn" style="background: white; color: #4CAF50; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; flex: 1;">Refresh</button>
+        <button id="dismiss-btn" style="background: transparent; color: white; border: 1px solid white; padding: 5px 10px; border-radius: 3px; cursor: pointer; flex: 1;">Dismiss</button>
+      </div>
     `;
     
     document.body.appendChild(notification);
