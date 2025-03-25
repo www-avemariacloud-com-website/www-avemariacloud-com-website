@@ -46,7 +46,7 @@ const versionNotifier = {
     console.log(`Checking for updates to ${filePath}...`);
     
     try {
-      const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/deployments?path=${filePath}`;
+      const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/commits?path=${filePath}`;
       const response = await fetch(apiUrl);
       
       if (!response.ok) throw new Error(`Failed to fetch version for ${filePath}`);
