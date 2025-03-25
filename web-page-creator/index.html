@@ -326,7 +326,18 @@
                             <i class="fas fa-lightbulb"></i> Web Page Idea and/or Information
                         </label>
                         <div id="htmlFileButtons" class="btn-group">
-                            <button id="exampleIdea" class="btn btn-primary" href="#" onclick="document.getElementById('user-message').value = `Andrew Outreach Orphanage
+                            <button id="exampleIdea" class="btn btn-primary" href="#" onclick="exampleWebPageIdea();">
+                                <i class="fas fa-download"></i> Example Web Page Idea
+                            </button>
+                            <a href="https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/" id="openInNewTab" class="btn btn-primary" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> Example Web Page Output
+                            </a>
+                        </div>
+                        <textarea id="user-message" placeholder="Describe your web page idea here..."></textarea>
+                    </div>
+                    <script>
+                        function exampleWebPageIdea() {
+                            document.getElementById('user-message').value = `Andrew Outreach Orphanage
 
 Location: Bugiri district 
 P.o Box 78 (U)
@@ -347,15 +358,9 @@ https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/462645937_52
 https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/473624869_1370452380993452_6921505269088550201_n.jpg
 https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/475991653_9456989881025437_6678792483254816546_n.jpg
 https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/476895237_9299211063455856_9188159984815553006_n.jpg
-https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/486126991_2122833564811798_6412124356222377784_n.jpg`;">
-                                <i class="fas fa-download"></i> Example Web Page Idea
-                            </button>
-                            <a href="https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/" id="openInNewTab" class="btn btn-primary" target="_blank">
-                                <i class="fas fa-external-link-alt"></i> Example Web Page Output
-                            </a>
-                        </div>
-                        <textarea id="user-message" placeholder="Describe your web page idea here..."></textarea>
-                    </div>
+https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/486126991_2122833564811798_6412124356222377784_n.jpg`;
+                        }
+                    </script>
                     
                     <div class="form-group">
                         <label for="modelSelect">
