@@ -1,7 +1,7 @@
 // Version notification system using GitHub Deployments
 const versionNotifier = {
   // LocalStorage key for storing the last seen version
-  storageKey: 'app_last_seen_deployment_' + window.location.pathname,
+  storageKey: 'app_last_seen_deployment',
   checkInterval: null,
   checkFrequency: 10000, // 10 seconds in milliseconds
   
@@ -41,10 +41,10 @@ const versionNotifier = {
   // Check for version updates using deployments
   async checkVersion(repoOwner, repoName) {
     const filePath = this.getFilePath();
-    console.log(`Checking for deployments to ${filePath}...`);
+    console.log(`Checking for deployments...`);
     
     try {
-      const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/deployments?path=${filePath}`;
+      const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/deployments`;
       const response = await fetch(apiUrl);
       
       if (!response.ok) throw new Error(`Failed to fetch deployments for ${filePath}`);
