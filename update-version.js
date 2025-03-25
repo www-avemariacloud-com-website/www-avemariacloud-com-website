@@ -59,7 +59,7 @@ const versionNotifier = {
       const formattedDate = this.formatDeploymentDate(deploymentDate);
       
       // Construct version text
-      const versionText = `Deployment ${deploymentId} (${formattedDate})`;
+      const versionText = `Deployment ID: ${deploymentId} (${formattedDate})`;
       
       // Update version display
       if (document.getElementById('version')) {
