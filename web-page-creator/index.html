@@ -333,6 +333,7 @@
                                 <i class="fas fa-external-link-alt"></i>Example Web Page Creation
                             </a>
                         </div>
+                        <BR>
                         <textarea id="user-message" placeholder="Describe your web page idea here..."></textarea>
                     </div>
                     <script>
@@ -371,6 +372,19 @@ https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/486126991_21
                         </select>
                     </div>
                     
+                    <div class="form-group">
+                        <label for="webPageTemplate">
+                            <i class="fas fa-robot"></i> Select Web Page Template
+                        </label>
+                        <select id="webPageTemplate">
+                            <option value="timeless">Timeless</option>
+                            <option value="modern">Modern</option>
+                            <option value="experimental">Experimental</option>
+                            <option value="lots_of_content">Lots of Content</option>
+                            <option value="animations">Animations</option>
+                        </select>
+                    </div>
+
                     <button type="button" id="submit-button" class="btn btn-primary btn-block">
                         <i class="fas fa-magic"></i> Create Web Page
                     </button>
@@ -410,7 +424,8 @@ https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/486126991_21
         const RETRY_DELAY = 1000; // 1 second
 
         async function makeApiRequest(retryCount = 0) {
-            const systemMessage = `I am interested in you creating a web page.
+
+            var webPageTemplateBase = `I am interested in you creating a web page.
 
 I am interested in a complete web page in a single HTML file.
 
@@ -418,11 +433,7 @@ I am interested in using vanilla HTML, vanilla CSS, and vanilla JS.
 
 I am interested in having full ownership of this code, and I am interested in releasing it into the public domain.
 
-I am interested in using standard coding practices and principles.
-
 I am interested in using well established code principles and designs.
-
-I am interested in this web page having a timeless design.
 
 I am interested in you filling this web page with truthful and relevant content.
 
@@ -445,7 +456,23 @@ Please respond in JSON with the labels HTML_FILE and FILE_NAME
 Please place only HTML code within the label: "HTML_FILE"
 
 Please ensure that the FILE_NAME ends in .html`;
-            
+
+            const webPageTemplate = {
+
+            "timeless": `I am interested in this web page having a safe and timeless design.`,
+            "modern": `I am interested in this web page having a modern design.`,
+            "experimental": `I am interested in this web page having an experimental design.`,
+            "lots_of_content": `I am interested in this web page having a lot of content.`,
+            "animations": `I am interested in this web page having animations.`
+
+            };
+
+            const systemMessage = webPageTemplateBase + `
+
+` + webPageTemplate[document.getElementById("webPageTemplate").value];
+
+            console.log(systemMessage);
+
             const userMessage = "Web Page Idea and/Or Information: " + document.getElementById('user-message').value;
             const selectedModel = document.getElementById('modelSelect').value;
             const requestJson = true;
