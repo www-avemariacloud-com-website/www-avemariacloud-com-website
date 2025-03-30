@@ -17,7 +17,10 @@ var models = [
 'llama-guard-3-8b',
 'llama3-70b-8192',
 'llama3-8b-8192',
-'mistral-saba-24b'
+'mistral-saba-24b',
+'qwen-2.5-32b',
+'qwen-2.5-coder-32b',
+'qwen-qwq-32b'
 ];
 
 const modelSelect = document.getElementById('modelSelect');
