@@ -46,11 +46,11 @@ Anthropic PBC and/or Claude AI: Relevant links may include <a href="https://www.
 Meta and/or Meta Llama 3: Relevant links may include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
 Google and/or Gemma: Relevant links may include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
 Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href="https://trust.mistral.ai/">Trust Center</a>.<br>
-DeepSeek: Relevant links may include <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.
+DeepSeek: Relevant links may include <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.<br>
 Qwen: Relevant links may include <a href="https://choosealicense.com/licenses/apache-2.0/">License</a> and <a href="https://github.com/QwenLM/Qwen2.5-Coder">Qwen 2.5-Coder GitHub Page</a>
 <br><br>
 Some notices may be relevant.<br><br>
-<strong>Qwen:</strong>Qwen models, including Qwen2.5-Coder, may be subject to <a href="https://choosealicense.com/licenses/apache-2.0/">Apache License 2.0</a>
+<strong>Qwen:</strong> Qwen models, including Qwen2.5-Coder, may be subject to <a href="https://choosealicense.com/licenses/apache-2.0/">Apache License 2.0</a><br>
 <strong>DeepSeek:</strong> DeepSeek models, including DeepSeek-R1-Distill-Llama-70B and DeepSeek-R1-Distill-Qwen-32B, may be subject to <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.<br>
 <strong>Built with Meta Llama 3:</strong> <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 is licensed under the Meta Llama 3 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.</a><br>
 <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.<br>
