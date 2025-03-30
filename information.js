@@ -21,8 +21,7 @@ Software, code, text, an image, images and/or things may have been created and m
 <a href="https://groq.com/" target="_blank">Groq</a>,
 <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>,
 <a href="https://www.deepseek.com/" target="_blank">DeepSeek and/or DeepSeek-R1</a>, and
-<a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen and/or Qwen2.5-Coder</a>.
-
+<a href="https://qwen.ai" target="_blank">Qwen</a> and/or <a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen2.5-Coder</a>.
 
 You may benefit from consulting, reading, and/or agreeing to terms of service, usage guidelines, and/or other documentation relating to 
 <a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
@@ -35,7 +34,7 @@ You may benefit from consulting, reading, and/or agreeing to terms of service, u
 <a href="https://groq.com/" target="_blank">Groq, Inc. and/or Groq</a>,
 <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>,
 <a href="https://www.deepseek.com/" target="_blank">DeepSeek and/or DeepSeek-R1</a>, and
-<a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen and/or Qwen2.5-Coder</a>.
+<a href="https://qwen.ai" target="_blank">Qwen</a> and/or <a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen2.5-Coder</a>.
 
 <br><br>
 HuggingFace: Relevant links may include: <a href="https://huggingface.co/terms-of-service">Terms of Service</a>, <a href="https://huggingface.co/privacy">Hugging Face Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Policy 🤗</a>, <a href="https://huggingface.co/docs">Docs</a>, and <a href="Contributor Covenant Code of Conduct">Contributor Covenant Code of Conduct</a><br>
@@ -48,7 +47,7 @@ Meta and/or Meta Llama 3: Relevant links may include <a href="https://www.llama.
 Google and/or Gemma: Relevant links may include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
 Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href="https://trust.mistral.ai/">Trust Center</a>.<br>
 DeepSeek: Relevant links may include <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.
-Qwen: Relevant links may include <a href="https://choosealicense.com/licenses/apache-2.0/">License</a> and <a href="https://github.com/QwenLM/Qwen2.5-Coder">GitHub Page</a>
+Qwen: Relevant links may include <a href="https://choosealicense.com/licenses/apache-2.0/">License</a> and <a href="https://github.com/QwenLM/Qwen2.5-Coder">Qwen 2.5-Coder GitHub Page</a>
 <br><br>
 Some notices may be relevant.<br><br>
 <strong>Qwen:</strong>Qwen models, including Qwen2.5-Coder, may be subject to <a href="https://choosealicense.com/licenses/apache-2.0/">Apache License 2.0</a>
