@@ -35,7 +35,7 @@
     </select>
 
     <label>AI Analysis Time Delay</label>
-    <select id="modelSelect" class="select" width="100%">
+    <select id="analysis_time_delay" class="select" width="100%">
     <option value="1000">10 Seconds</option>
     <option value="30000" selected>30 Seconds</option>
     <option value="60000">1 Minute</option>
@@ -111,7 +111,7 @@
                 transcriptArea.value += transcript;
         
                 const currentTime = new Date().getTime();
-                if (currentTime - lastRequestTime > 10000) { // 10-second delay before sending to AI
+                if (currentTime - lastRequestTime > document.getElementById('analysis_time_delay').value) { // 10-second delay before sending to AI
                     lastRequestTime = currentTime;
                     sendToAI(transcriptArea.value);
                 }
