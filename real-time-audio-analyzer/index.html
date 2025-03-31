@@ -31,7 +31,6 @@
     
     <label>Model Selector</label>
     <select id="modelSelect" class="select" width="100%">
-    
     </select>
 
     |
@@ -48,8 +47,6 @@
     <textarea id="transcript" readonly></textarea>
     
     <h2>AI Analysis</h2>
-
-
     <button onclick="sendToAI(document.getElementById('transcript').value);">Analyze Now</button>
 
     <BR>
@@ -85,7 +82,29 @@
             copyText.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(copyText.value);
         }
-        
+
+        function detectRepeatedPhrases(transcript) {
+            const phrases = transcript.split('\n').filter(Boolean); // Split by newlines and filter out empty strings
+            const phraseCounts = {};
+            let repeatedPhrases = [];
+
+            phrases.forEach(phrase => {
+                if (phraseCounts[phrase]) {
+                    phraseCounts[phrase]++;
+                } else {
+                    phraseCounts[phrase] = 1;
+                }
+            });
+
+            // Collect phrases that appear more than once
+            for (const phrase in phraseCounts) {
+                if (phraseCounts[phrase] > 1) {
+                    repeatedPhrases.push(phrase);
+                }
+            }
+            return repeatedPhrases;
+        }
+
         const startButton = document.getElementById('startButton');
         const stopButton = document.getElementById('stopButton');
         const transcriptArea = document.getElementById('transcript');
@@ -105,38 +124,58 @@
             recognition.interimResults = true;
             recognition.lang = 'en-US';
         
-            recognition.onresult = function (event) {
-                let transcript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    transcript += event.results[i][0].transcript + '\n';
-                }
-                transcriptArea.value += transcript;
-        
-                const currentTime = new Date().getTime();
-                if (currentTime - lastRequestTime > document.getElementById('analysis_time_delay').value) { // 10-second delay before sending to AI
-                    lastRequestTime = currentTime;
-                    sendToAI(transcriptArea.value);
-                }
-            };
-        
+            recognition.onresult = function(event) {
+    let newTranscript = ''; // New transcript that we'll append to the textarea
+    let currentTime = new Date().getTime();
+    
+    // Store the current value of the transcript
+    lastTranscript = transcriptArea.value.trim();
+
+    // Loop through all the results from the event object
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+        let recognizedPhrase = event.results[i][0].transcript.trim();
+
+        // Skip if the recognized phrase is empty or has been recognized before
+        if (!recognizedPhrase || lastTranscript.includes(recognizedPhrase)) {
+            continue;
+        }
+
+        // Append the new phrase to the transcript string
+        newTranscript += recognizedPhrase + '\n';
+
+        // Optional: Log the recognized phrase for debugging
+        console.log('Recognized:', recognizedPhrase);
+    }
+
+    // Update the textarea with the new transcript if there is one
+    if (newTranscript) {
+        transcriptArea.value += newTranscript;
+    }
+
+    // Check if enough time has passed to send the transcript for processing (AI, etc.)
+    if (currentTime - lastRequestTime > document.getElementById('analysis_time_delay').value) {
+        lastRequestTime = currentTime;
+        sendToAI(transcriptArea.value); // Send to AI function
+    }
+};
             recognition.onerror = function (event) {
                 console.error('Speech recognition error detected: ' + event.error);
         
                 if (event.error === 'network' || event.error === 'audio-capture') {
                     alert("Please check your internet connection or microphone.");
-                    stopTranscription(); // Stop if there's a fundamental issue
+                    stopTranscription();
                     return;
                 }
         
                 if (isRecognizing) {
-                    setTimeout(() => recognition.start(), 1000); // Retry after a second
+                    setTimeout(() => recognition.start(), 1000);
                 }
             };
         
             recognition.onend = function () {
                 if (isRecognizing) {
                     console.log('Restarting speech recognition...');
-                    setTimeout(() => recognition.start(), 500); // Restart after a short delay
+                    setTimeout(() => recognition.start(), 500);
                 }
             };
         
@@ -199,11 +238,9 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
         }
 
         function displayResponse(data) {
-
             console.log(data);
 
             data = data['choices'][0]['message']['content'];
-
             console.log(data);
 
             document.getElementById("aiAPIResponse").value = data;
@@ -243,8 +280,6 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
 
     <BR>
     <BR>
-
-
 
 <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
 <script src="https://www.avemariacloud.com/generic-loader.js"></script>
