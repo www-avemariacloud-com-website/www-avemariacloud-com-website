@@ -88,11 +88,14 @@
             recognition.lang = 'en-US';
         
             recognition.onresult = function (event) {
-                const transcript = event.results[event.results.length - 1][0].transcript;
-                transcriptArea.value += transcript + '\n';
-                
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript + '\n';
+                }
+                transcriptArea.value += transcript;
+        
                 const currentTime = new Date().getTime();
-                if (currentTime - lastRequestTime > 10000) { // 10-second delay
+                if (currentTime - lastRequestTime > 10000) { // 10-second delay before sending to AI
                     lastRequestTime = currentTime;
                     sendToAI(transcriptArea.value);
                 }
@@ -100,15 +103,22 @@
         
             recognition.onerror = function (event) {
                 console.error('Speech recognition error detected: ' + event.error);
+        
+                if (event.error === 'network' || event.error === 'audio-capture') {
+                    alert("Please check your internet connection or microphone.");
+                    stopTranscription(); // Stop if there's a fundamental issue
+                    return;
+                }
+        
                 if (isRecognizing) {
-                    setTimeout(() => recognition.start(), 1000); // Restart after 1 second if an error occurs
+                    setTimeout(() => recognition.start(), 1000); // Retry after a second
                 }
             };
         
             recognition.onend = function () {
                 if (isRecognizing) {
                     console.log('Restarting speech recognition...');
-                    recognition.start(); // Restart unless stopped manually
+                    setTimeout(() => recognition.start(), 500); // Restart after a short delay
                 }
             };
         
@@ -117,8 +127,7 @@
             startButton.disabled = true;
             stopButton.disabled = false;
         }
-    
-            
+        
         function stopTranscription() {
             recognition.stop();
             isRecognizing = false;
