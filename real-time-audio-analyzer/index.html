@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-time Audio Analzyer</title>
+    <title>Real-time Audio Analyzer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,29 +19,72 @@
             padding: 10px 20px;
             font-size: 16px;
         }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-indicator.active {
+            background-color: #FF0000;
+            animation: pulse 1.5s infinite;
+        }
+        .status-indicator.inactive {
+            background-color: #CCCCCC;
+        }
+        #permissionInfo {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
-    <h1>Real-time Audio Analzyer</h1>
-    <button id="startButton">Start Transcription</button>
-    <button id="stopButton" disabled>Stop Transcription</button>
-    <button onclick="copyTranscript()">Copy Transcript</button>
-    <button onclick="document.getElementById('transcript').value='';">Clear Transcript</button>
+    <h1>Real-time Audio Analyzer</h1>
+    
+    <div id="permissionInfo">
+        <p><strong>Microphone access is required.</strong> Please allow microphone access when prompted.</p>
+        <p>If you denied permission previously and want to enable it:</p>
+        <ol>
+            <li>Click the lock/info icon in your browser's address bar</li>
+            <li>Find the microphone settings and change to "Allow"</li>
+            <li>Refresh this page</li>
+        </ol>
+    </div>
+    
+    <div>
+        <button id="startButton">Start Transcription</button>
+        <button id="stopButton" disabled>Stop Transcription</button>
+        <button onclick="copyTranscript()">Copy Transcript</button>
+        <button onclick="document.getElementById('transcript').value='';">Clear Transcript</button>
+        <span id="status">
+            <span class="status-indicator inactive" id="statusIndicator"></span>
+            <span id="statusText">Not recording</span>
+        </span>
+    </div>
     <BR><BR>
     
-        <div class="control-group">
-            <label for="showInterim">Show Interim Results:</label>
-            <input type="checkbox" id="showInterim" checked>
-            <span class="tooltip">Showing interim results provides immediate feedback but may be less accurate</span>
-        </div>
-        
-        <div class="control-group">
-            <label for="confidenceThreshold">Confidence Threshold:</label>
-            <input type="range" id="confidenceThreshold" min="-1" max="1" step="0.00" value="0.05">
-            <span id="confidenceValue">0.00</span>
-            <span class="tooltip">Higher values mean only more confident transcriptions are shown</span>
-        </div>
-        <BR>
+    <div class="control-group">
+        <label for="showInterim">Show Interim Results:</label>
+        <input type="checkbox" id="showInterim" checked>
+        <span class="tooltip">Showing interim results provides immediate feedback but may be less accurate</span>
+    </div>
+    
+    <div class="control-group">
+        <label for="confidenceThreshold">Confidence Threshold:</label>
+        <input type="range" id="confidenceThreshold" min="0.00" max="1" step="0.05" value="0.00">
+        <span id="confidenceValue">0.00</span>
+        <span class="tooltip">Higher values mean only more confident transcriptions are shown</span>
+    </div>
+    <BR>
     <label>AI Model</label>
     <select id="modelSelect" class="select" width="100%">
     </select>
@@ -146,7 +189,7 @@
     <button onclick="sendToAI(document.getElementById('transcript').value);">Analyze Now</button>
 
     <BR>
-        <BR>
+    <BR>
     <label>AI API Response</label>
     <textarea id="aiAPIResponse" class="response-area" readonly></textarea>
     <BR>
@@ -172,6 +215,54 @@
     <textarea id="reward" class="response-area" readonly></textarea>
     
     <script>
+        // Global variables for speech recognition
+        let recognition;
+        let isRecognizing = false;
+        let lastRequestTime = 0;
+        let recognitionPaused = false;
+        let lastTranscript = '';
+        let restartAttempts = 0;
+        let maxRestartAttempts = 10; // Increased max attempts
+        let restartDelay = 1000; // Base delay in ms
+        let watchdogTimer = null;
+        
+        // Create a permission state variable
+        let micPermissionState = 'unknown'; // 'unknown', 'granted', 'denied', 'prompt'
+        
+        // Check if the browser supports speech recognition
+        const supportsSpeechRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+        
+        if (!supportsSpeechRecognition) {
+            alert('Your browser does not support the Web Speech API. Please use Chrome, Edge, or Safari.');
+            document.getElementById('startButton').disabled = true;
+        }
+
+        // Watchdog function to monitor if speech recognition is still active
+        function startWatchdog() {
+            if (watchdogTimer) {
+                clearInterval(watchdogTimer);
+            }
+            
+            // Check every 10 seconds if recognition is still active
+            watchdogTimer = setInterval(() => {
+                if (isRecognizing && !recognitionPaused) {
+                    // If we haven't received results in a while, force restart
+                    const timeSinceLastActivity = Date.now() - lastRequestTime;
+                    if (timeSinceLastActivity > 30000) { // 30 seconds of inactivity
+                        console.log('Watchdog detected inactivity, restarting recognition');
+                        restartRecognition(true); // Force restart
+                    }
+                }
+            }, 10000);
+        }
+
+        function stopWatchdog() {
+            if (watchdogTimer) {
+                clearInterval(watchdogTimer);
+                watchdogTimer = null;
+            }
+        }
+
         function copyTranscript() {
             var copyText = document.getElementById("transcript");
             copyText.select();
@@ -201,193 +292,337 @@
             return repeatedPhrases;
         }
 
-        const startButton = document.getElementById('startButton');
-        const stopButton = document.getElementById('stopButton');
-        const transcriptArea = document.getElementById('transcript');
-        
-        let recognition;
-        let isRecognizing = false;
-        let lastRequestTime = 0;
+        // Check microphone permission when the page loads
+        async function checkMicrophonePermission() {
+            try {
+                const permissionStatus = await navigator.permissions.query({ name: 'microphone' });
+                
+                micPermissionState = permissionStatus.state;
+                
+                // Set up listener for permission changes
+                permissionStatus.onchange = function() {
+                    micPermissionState = this.state;
+                    updatePermissionUI();
+                    
+                    // If permission was just granted and we were trying to record, start recording
+                    if (this.state === 'granted' && recognitionPaused) {
+                        recognitionPaused = false;
+                        startTranscription();
+                    }
+                };
+                
+                updatePermissionUI();
+                return micPermissionState;
+            } catch (error) {
+                console.error('Error checking microphone permission:', error);
+                // Fallback - we'll need to try to access the microphone to know the permission
+                return 'unknown';
+            }
+        }
+
+        function updatePermissionUI() {
+            const permissionInfo = document.getElementById('permissionInfo');
+            
+            switch(micPermissionState) {
+                case 'granted':
+                    permissionInfo.style.display = 'none';
+                    document.getElementById('startButton').disabled = false;
+                    break;
+                case 'denied':
+                    permissionInfo.style.display = 'block';
+                    document.getElementById('startButton').disabled = true;
+                    break;
+                case 'prompt':
+                    permissionInfo.style.display = 'block';
+                    document.getElementById('startButton').disabled = false;
+                    break;
+                default:
+                    permissionInfo.style.display = 'none';
+                    document.getElementById('startButton').disabled = false;
+            }
+        }
 
         function startTranscription() {
-    if (!('webkitSpeechRecognition' in window)) {
-        alert('Your browser does not support the Web Speech API.');
-        return;
-    }
-
-    // Stop any existing recognition instance
-    if (recognition) {
-        recognition.stop();
-    }
-
-    recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true; // Always get interim results from the API
-    recognition.lang = document.getElementById('language').value;
-
-    // Get the interim results display preference
-    const showInterim = document.getElementById('showInterim').checked;
-    // Get confidence threshold if available
-    const confidenceThreshold = parseFloat(document.getElementById('confidenceThreshold')?.value || 0);
-
-    recognition.onresult = function(event) {
-        console.log(event);
-        
-        let newTranscript = ''; // New transcript that we'll append to the textarea
-        let interimTranscript = ''; // For storing interim results separately
-        let currentTime = new Date().getTime();
-        
-        // Store the current value of the transcript
-        lastTranscript = transcriptArea.value.trim();
-
-        // Loop through all the results from the event object
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-            const result = event.results[i];
-            const confidence = result[0].confidence;
-            
-            // Skip results with confidence below threshold
-            if (confidence < confidenceThreshold) {
-                continue;
+            if (!supportsSpeechRecognition) {
+                alert('Your browser does not support the Web Speech API.');
+                return;
             }
-            
-            if (result.isFinal) {
-                // This is a final result
-                let recognizedPhrase = result[0].transcript.trim();
 
-                // Skip if the recognized phrase is empty
-                if (!recognizedPhrase) {
-                    continue;
-                }
+            // Try to get microphone permission first
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    // Permission granted, clean up the stream and start recognition
+                    stream.getTracks().forEach(track => track.stop());
+                    micPermissionState = 'granted';
+                    updatePermissionUI();
+                    initializeRecognition();
+                })
+                .catch(error => {
+                    console.error('Microphone permission error:', error);
+                    
+                    if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                        micPermissionState = 'denied';
+                    } else {
+                        micPermissionState = 'prompt';
+                    }
+                    
+                    updatePermissionUI();
+                    recognitionPaused = true;
+                    
+                    if (micPermissionState === 'prompt') {
+                        // We can still try to start recognition, which will trigger the permission prompt
+                        initializeRecognition();
+                    }
+                });
+        }
 
-                // Check if this phrase has already been added
-                const lastFewLines = lastTranscript.split('\n').slice(-3).join('\n');
-                if (!lastFewLines.includes(recognizedPhrase)) {
-                    // Append the new phrase to the transcript string
-                    newTranscript += recognizedPhrase + '\n';
-
-                    // Optional: Log the recognized phrase for debugging
-                    console.log('Recognized (Final):', recognizedPhrase, 'Confidence:', confidence);
-                }
-            } else if (showInterim) {
-                // This is an interim result, only add if user opted to show interim results
-                let recognizedPhrase = result[0].transcript.trim();
-                if (recognizedPhrase) {
-                    interimTranscript += recognizedPhrase + ' ';
-                    console.log('Interim:', recognizedPhrase, 'Confidence:', confidence);
-                }
+        function initializeRecognition() {
+            // Stop any existing recognition instance
+            if (recognition) {
+                recognition.stop();
             }
-        }
 
-        // Update the textarea with the new transcript if there is one
-        if (newTranscript) {
-            transcriptArea.value += newTranscript;
-        }
-        
-        // Display interim results in a separate element if enabled
-        if (showInterim && document.getElementById('interimDisplay')) {
-            document.getElementById('interimDisplay').textContent = interimTranscript;
-        }
+            // Reset state
+            isRecognizing = false;
+            
+            // Create the recognition object
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = document.getElementById('language').value;
 
-        // Auto-scroll to the bottom
-        transcriptArea.scrollTop = transcriptArea.scrollHeight;
+            // Get the interim results display preference
+            const showInterim = document.getElementById('showInterim').checked;
+            // Get confidence threshold if available
+            const confidenceThreshold = parseFloat(document.getElementById('confidenceThreshold').value || 0);
 
-        // Check if enough time has passed to send the transcript for processing (AI, etc.)
-        if (currentTime - lastRequestTime > parseInt(document.getElementById('analysis_time_delay').value)) {
-            lastRequestTime = currentTime;
-            sendToAI(transcriptArea.value); // Send to AI function
-        }
-    };
+            recognition.onresult = function(event) {
+                console.log('Recognition result received', event);
+                
+                // Update the last activity time
+                lastRequestTime = Date.now();
+                
+                let newTranscript = ''; // New transcript that we'll append to the textarea
+                let interimTranscript = ''; // For storing interim results separately
+                
+                // Store the current value of the transcript
+                lastTranscript = document.getElementById('transcript').value.trim();
 
-    // Rest of the function remains the same as before
-    // Error handling, restart logic, etc.
-    
-    // Handle errors more gracefully with backoff retry
-    let restartAttempts = 0;
-    const maxRestartAttempts = 5;
-    
-    recognition.onerror = function(event) {
-        console.error('Speech recognition error:', event.error);
-        
-        // Different handling based on error type
-        if (event.error === 'no-speech') {
-            // No speech detected - just restart
-            restartRecognition();
-        } else if (event.error === 'audio-capture') {
-            alert('Microphone error. Please check your microphone connection.');
-            stopTranscription();
-        } else if (event.error === 'network') {
-            // Network error - try to restart with backoff
-            if (restartAttempts < maxRestartAttempts) {
-                setTimeout(() => {
+                // Loop through all the results from the event object
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const result = event.results[i];
+                    const confidence = result[0].confidence;
+                    
+                    // Skip results with confidence below threshold
+                    if (confidence < confidenceThreshold) {
+                        continue;
+                    }
+                    
+                    if (result.isFinal) {
+                        // This is a final result
+                        let recognizedPhrase = result[0].transcript.trim();
+
+                        // Skip if the recognized phrase is empty
+                        if (!recognizedPhrase) {
+                            continue;
+                        }
+
+                        // Check if this phrase has already been added
+                        const lastFewLines = lastTranscript.split('\n').slice(-3).join('\n');
+                        if (!lastFewLines.includes(recognizedPhrase)) {
+                            // Append the new phrase to the transcript string
+                            newTranscript += recognizedPhrase + '\n';
+
+                            // Optional: Log the recognized phrase for debugging
+                            console.log('Recognized (Final):', recognizedPhrase, 'Confidence:', confidence);
+                        }
+                    } else if (showInterim) {
+                        // This is an interim result, only add if user opted to show interim results
+                        let recognizedPhrase = result[0].transcript.trim();
+                        if (recognizedPhrase) {
+                            interimTranscript += recognizedPhrase + ' ';
+                            console.log('Interim:', recognizedPhrase, 'Confidence:', confidence);
+                        }
+                    }
+                }
+
+                // Update the textarea with the new transcript if there is one
+                if (newTranscript) {
+                    document.getElementById('transcript').value += newTranscript;
+                    
+                    // Reset restart attempts counter since we're receiving results
+                    restartAttempts = 0;
+                    restartDelay = 1000; // Reset the base delay
+                }
+                
+                // Display interim results in a separate element if enabled
+                if (showInterim && document.getElementById('interimDisplay')) {
+                    document.getElementById('interimDisplay').textContent = interimTranscript;
+                }
+
+                // Auto-scroll to the bottom
+                document.getElementById('transcript').scrollTop = document.getElementById('transcript').scrollHeight;
+
+                // Check if enough time has passed to send the transcript for processing (AI, etc.)
+                if (Date.now() - lastRequestTime > parseInt(document.getElementById('analysis_time_delay').value)) {
+                    lastRequestTime = Date.now();
+                    sendToAI(document.getElementById('transcript').value); // Send to AI function
+                }
+            };
+
+            // Handle errors more gracefully with backoff retry
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                
+                // Different handling based on error type
+                if (event.error === 'no-speech') {
+                    // No speech detected - just restart
                     restartRecognition();
-                }, Math.pow(2, restartAttempts) * 1000); // Exponential backoff
-                restartAttempts++;
-            } else {
-                alert('Network issues persistent. Please check your connection and try again.');
-                stopTranscription();
-            }
-        } else if (event.error === 'not-allowed') {
-            alert('Microphone access denied. Please allow microphone access to use transcription.');
-            stopTranscription();
-        } else {
-            // Other errors - attempt to restart
-            restartRecognition();
-        }
-    };
+                } else if (event.error === 'audio-capture') {
+                    updateStatus('Microphone error', false);
+                    // Try to restart recognition after a delay
+                    setTimeout(() => {
+                        restartRecognition();
+                    }, restartDelay);
+                } else if (event.error === 'network') {
+                    updateStatus('Network error, retrying...', false);
+                    // Network error - try to restart with backoff
+                    setTimeout(() => {
+                        restartRecognition();
+                    }, restartDelay);
+                    
+                    // Increase backoff delay for next attempt
+                    restartDelay = Math.min(restartDelay * 2, 30000); // Max 30 seconds
+                } else if (event.error === 'not-allowed') {
+                    updateStatus('Microphone access denied', false);
+                    micPermissionState = 'denied';
+                    updatePermissionUI();
+                    recognitionPaused = true;
+                } else {
+                    // Other errors - attempt to restart
+                    restartRecognition();
+                }
+            };
 
-    // Automatically restart when recognition ends
-    recognition.onend = function() {
-        console.log('Speech recognition ended');
-        if (isRecognizing) {
-            restartRecognition();
-        }
-    };
+            // Automatically restart when recognition ends
+            recognition.onend = function() {
+                console.log('Speech recognition ended');
+                
+                // Only try to restart if we're still supposed to be recognizing
+                if (isRecognizing && !recognitionPaused) {
+                    restartRecognition();
+                } else {
+                    updateStatus('Not recording', false);
+                }
+            };
 
-    function restartRecognition() {
-        if (isRecognizing) {
+            // Start the recognition
             try {
+                recognition.start();
+                console.log('Speech recognition started');
+                isRecognizing = true;
+                recognitionPaused = false;
+                
+                // Update UI
+                document.getElementById('startButton').disabled = true;
+                document.getElementById('stopButton').disabled = false;
+                updateStatus('Recording...', true);
+                
+                // Reset counters
+                restartAttempts = 0;
+                restartDelay = 1000;
+                
+                // Start the watchdog timer
+                startWatchdog();
+                
+                // Initialize the last request time
+                lastRequestTime = Date.now();
+            } catch (e) {
+                console.error('Error starting recognition:', e);
+                alert('Failed to start speech recognition. Please reload the page and try again.');
+                updateStatus('Error starting', false);
+            }
+        }
+
+        function restartRecognition(force = false) {
+            if (!isRecognizing || recognitionPaused) {
+                return;
+            }
+            
+            // If we've exceeded the max attempts and it's not a forced restart
+            if (restartAttempts >= maxRestartAttempts && !force) {
+                console.log('Max restart attempts reached, stopping recognition');
+                updateStatus('Too many restarts, stopped', false);
+                stopTranscription();
+                return;
+            }
+            
+            restartAttempts++;
+            console.log(`Restarting recognition, attempt ${restartAttempts}`);
+            
+            try {
+                // Make sure the old recognition instance is stopped
+                if (recognition) {
+                    recognition.stop();
+                }
+                
+                // Small delay before restarting
                 setTimeout(() => {
-                    recognition.start();
-                    console.log('Restarted speech recognition');
-                }, 500); // Small delay before restarting
+                    // Create a new recognition instance and start it
+                    initializeRecognition();
+                }, 500);
             } catch (e) {
                 console.error('Error restarting recognition:', e);
-                stopTranscription();
+                
+                // If we can't restart, try again with a longer delay
+                setTimeout(() => {
+                    restartRecognition();
+                }, restartDelay);
+                
+                // Increase the delay for the next attempt
+                restartDelay = Math.min(restartDelay * 2, 30000); // Max 30 seconds
             }
         }
-    }
 
-    try {
-        recognition.start();
-        isRecognizing = true;
-        startButton.disabled = true;
-        stopButton.disabled = false;
-        restartAttempts = 0; // Reset restart attempts counter
-        
-        // Add a visual indicator that recording is active
-        document.getElementById('status').textContent = 'Recording...';
-        document.getElementById('status').style.color = 'red';
-    } catch (e) {
-        console.error('Error starting recognition:', e);
-        //alert('Failed to start speech recognition. Please reload the page and try again.');
-    }
-}
+        function stopTranscription() {
+            if (recognition) {
+                recognition.stop();
+            }
+            
+            isRecognizing = false;
+            recognitionPaused = false;
+            
+            // Update UI
+            document.getElementById('startButton').disabled = false;
+            document.getElementById('stopButton').disabled = true;
+            updateStatus('Not recording', false);
+            
+            // Stop the watchdog
+            stopWatchdog();
+        }
 
-// Add a proper stop function
-function stopTranscription() {
-    if (recognition) {
-        recognition.stop();
-    }
-    isRecognizing = false;
-    startButton.disabled = false;
-    stopButton.disabled = true;
-    
-    // Update status indicator
-    document.getElementById('status').textContent = 'Not recording';
-    document.getElementById('status').style.color = 'black';
-}
+        function updateStatus(message, isActive) {
+            const statusText = document.getElementById('statusText');
+            const statusIndicator = document.getElementById('statusIndicator');
+            
+            statusText.textContent = message;
+            
+            if (isActive) {
+                statusIndicator.classList.remove('inactive');
+                statusIndicator.classList.add('active');
+            } else {
+                statusIndicator.classList.remove('active');
+                statusIndicator.classList.add('inactive');
+            }
+        }
 
         function sendToAI(transcript) {
+            if (!transcript.trim()) {
+                return; // Don't send empty transcripts
+            }
+            
+            updateStatus('Sending to AI...', true);
+            
             fetch("https://proxy.small-recipe-9582.workers.dev/", {
                 method: "POST",
                 headers: {
@@ -428,12 +663,17 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
                 mode: "cors"
             })
             .then(response => response.json())
-            .then(data => displayResponse(data))
-            .catch(error => console.error('Error:', error));
+            .then(data => {
+                displayResponse(data);
+                updateStatus(isRecognizing ? 'Recording...' : 'Not recording', isRecognizing);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                updateStatus(isRecognizing ? 'Recording...' : 'Not recording', isRecognizing);
+            });
         }
 
         function displayResponse(data) {
-
             const now = new Date();
             const hours = now.getHours().toString().padStart(2, '0');
             const minutes = now.getMinutes().toString().padStart(2, '0');
@@ -478,8 +718,39 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
 ` + document.getElementById("reward").value;
         }
 
-        startButton.addEventListener('click', startTranscription);
-        stopButton.addEventListener('click', stopTranscription);
+        // Set up event listeners when the page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check microphone permission
+            checkMicrophonePermission();
+            
+            // Set up event listeners for buttons
+            document.getElementById('startButton').addEventListener('click', startTranscription);
+            document.getElementById('stopButton').addEventListener('click', stopTranscription);
+            
+            // Set confidence value display
+            document.getElementById('confidenceValue').textContent = document.getElementById('confidenceThreshold').value;
+            
+            // Update confidence value when slider changes
+            document.getElementById('confidenceThreshold').addEventListener('input', function() {
+                document.getElementById('confidenceValue').textContent = this.value;
+            });
+            
+            // Load previously selected language
+            const selectedLanguage = localStorage.getItem('selectedLanguage');
+            if (selectedLanguage) {
+                document.getElementById('language').value = selectedLanguage;
+            }
+            
+            // Save language selection
+            document.getElementById('language').addEventListener('change', function() {
+                localStorage.setItem('selectedLanguage', this.value);
+                
+                // If currently recognizing, restart with new language
+                if (isRecognizing) {
+                    restartRecognition(true);
+                }
+            });
+        });
     </script>
 
     <BR>
@@ -487,28 +758,6 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
 
 <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
 <script src="https://www.avemariacloud.com/generic-loader.js"></script>
-
-<script>
-
-document.getElementById('language').addEventListener('change', function() {
-    localStorage.setItem('selectedLanguage', this.value);
-});
-
-window.addEventListener('load', function() {
-    const selectedLanguage = localStorage.getItem('selectedLanguage');
-    if (selectedLanguage) {
-        document.getElementById('language').value = selectedLanguage;
-    }
-});
-
-</script>
-
-<script>
-    // Add this script to update the confidence threshold display
-    document.getElementById('confidenceThreshold').addEventListener('input', function() {
-        document.getElementById('confidenceValue').textContent = this.value;
-    });
-</script>
 
 </body>
 </html>
