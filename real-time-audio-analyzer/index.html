@@ -316,6 +316,15 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
         }
 
         function displayResponse(data) {
+
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            console.log(timeString);
+
             console.log(data);
 
             data = data['choices'][0]['message']['content'];
@@ -327,27 +336,27 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
 
             document.getElementById("fullTranscript").value = data.Full_Transcript;
 
-            document.getElementById("summary").value = data.Summary + `
+            document.getElementById("summary").value = "[" + timeString + "] " + data.Summary + `
 
 ` + document.getElementById("summary").value;
 
-            document.getElementById("secrets").value = data.Secrets + `
+            document.getElementById("secrets").value = "[" + timeString + "] " + data.Secrets + `
 
 ` + document.getElementById("secrets").value;
 
-            document.getElementById("contradictions").value = data.Contradictions + `
+            document.getElementById("contradictions").value = "[" + timeString + "] " + data.Contradictions + `
 
 ` + document.getElementById("contradictions").value;
 
-            document.getElementById("intent").value = data.Intent + `
+            document.getElementById("intent").value = "[" + timeString + "] " + data.Intent + `
 
 ` + document.getElementById("intent").value;
 
-            document.getElementById("expectedResponse").value = data.Expected_Response + `
+            document.getElementById("expectedResponse").value = "[" + timeString + "] " + data.Expected_Response + `
 
 ` + document.getElementById("expectedResponse").value;
 
-            document.getElementById("reward").value = data.Reward + `
+            document.getElementById("reward").value = "[" + timeString + "] " + data.Reward + `
 
 ` + document.getElementById("reward").value;
         }
@@ -361,6 +370,21 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
 
 <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
 <script src="https://www.avemariacloud.com/generic-loader.js"></script>
+
+<script>
+
+document.getElementById('language').addEventListener('change', function() {
+    localStorage.setItem('selectedLanguage', this.value);
+});
+
+window.addEventListener('load', function() {
+    const selectedLanguage = localStorage.getItem('selectedLanguage');
+    if (selectedLanguage) {
+        document.getElementById('language').value = selectedLanguage;
+    }
+});
+
+</script>
 
 </body>
 </html>
