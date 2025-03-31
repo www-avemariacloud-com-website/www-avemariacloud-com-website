@@ -28,14 +28,30 @@
     <button onclick="copyTranscript()">Copy Transcript</button>
     <button onclick="document.getElementById('transcript').value='';">Clear Transcript</button>
     <BR><BR>
+    
+    <label>Model Selector</label>
     <select id="modelSelect" class="select" width="100%">
     
+    </select>
+
+    <label>AI Analysis Time Delay</label>
+    <select id="modelSelect" class="select" width="100%">
+    <option value="1000">10 Seconds</option>
+    <option value="30000" selected>30 Seconds</option>
+    <option value="60000">1 Minute</option>
+    <option value="3600000">1 Hour</option>
     </select>
     <BR><BR>
     Raw Transcript
     <textarea id="transcript" readonly></textarea>
     
     <h2>AI Analysis</h2>
+
+
+    <button onclick="sendToAI(document.getElementById('transcript').value);">Analyze Now</button>
+
+    <BR>
+        <BR>
     <label>AI API Response</label>
     <textarea id="aiAPIResponse" class="response-area" readonly></textarea>
     <BR>
