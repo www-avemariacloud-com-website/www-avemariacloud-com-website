@@ -75,18 +75,18 @@
         let recognition;
         let isRecognizing = false;
         let lastRequestTime = 0;
-        
+
         function startTranscription() {
             if (!('webkitSpeechRecognition' in window)) {
                 alert('Your browser does not support the Web Speech API.');
                 return;
             }
-
+        
             recognition = new webkitSpeechRecognition();
             recognition.continuous = true;
             recognition.interimResults = true;
             recognition.lang = 'en-US';
-
+        
             recognition.onresult = function (event) {
                 const transcript = event.results[event.results.length - 1][0].transcript;
                 transcriptArea.value += transcript + '\n';
@@ -97,17 +97,28 @@
                     sendToAI(transcriptArea.value);
                 }
             };
-
+        
             recognition.onerror = function (event) {
                 console.error('Speech recognition error detected: ' + event.error);
+                if (isRecognizing) {
+                    setTimeout(() => recognition.start(), 1000); // Restart after 1 second if an error occurs
+                }
             };
-
+        
+            recognition.onend = function () {
+                if (isRecognizing) {
+                    console.log('Restarting speech recognition...');
+                    recognition.start(); // Restart unless stopped manually
+                }
+            };
+        
             recognition.start();
             isRecognizing = true;
             startButton.disabled = true;
             stopButton.disabled = false;
         }
-
+    
+            
         function stopTranscription() {
             recognition.stop();
             isRecognizing = false;
