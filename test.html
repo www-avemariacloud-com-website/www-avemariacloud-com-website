@@ -1,536 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Page Creator</title>
-    <style>
-        /* Modern CSS Reset and Global Styles */
-        :root {
-            --primary: #4361ee;
-            --primary-hover: #3a56d4;
-            --secondary: #f72585;
-            --text-dark: #2b2d42;
-            --text-light: #8d99ae;
-            --bg-light: #f8f9fa;
-            --bg-white: #ffffff;
-            --border-light: #e9ecef;
-            --success: #38b000;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
-            --radius: 12px;
-            --radius-sm: 8px;
-            --font-main: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+<button id="startRecording">Start Recording</button>
+<button id="stopRecording" disabled>Stop Recording</button>
+<textarea id="transcript" rows="10" cols="50" placeholder="Transcription will appear here..."></textarea>
+
+<script>
+let mediaRecorder;
+let audioChunks = [];
+let isRecording = false;
+let intervalId;
+const API_KEY = "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";
+
+document.getElementById('startRecording').addEventListener('click', async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    isRecording = true;
+
+    mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+            sendToGroqAPI(event.data);
         }
+    };
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+    mediaRecorder.start();
+
+    // Capture & send audio every 5 seconds
+    intervalId = setInterval(() => {
+        if (isRecording) {
+            mediaRecorder.requestData(); // Get current audio data
         }
+    }, 5000);
 
-        body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            font-family: var(--font-main);
-            line-height: 1.6;
-            padding: 0;
-            margin: 0;
+    document.getElementById('startRecording').disabled = true;
+    document.getElementById('stopRecording').disabled = false;
+});
+
+document.getElementById('stopRecording').addEventListener('click', () => {
+    isRecording = false;
+    clearInterval(intervalId);
+    mediaRecorder.stop();
+
+    document.getElementById('startRecording').disabled = false;
+    document.getElementById('stopRecording').disabled = true;
+});
+
+async function sendToGroqAPI(audioBlob) {
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'audio.webm');
+    formData.append('model', 'whisper-large-v3');
+
+    try {
+        const response = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${API_KEY}` },
+            body: formData
+        });
+
+        const data = await response.json();
+        if (data.text) {
+            document.getElementById('transcript').value += data.text + "\n";
         }
-
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 0.5em;
-        }
-
-        /* Layout */
-        .container {
-            width: 100%;
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0;
-        }
-
-        /* Card Styling */
-        .card {
-            background-color: var(--bg-white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            margin-bottom: 2rem;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border-light);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .card-title {
-            margin: 0;
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .card-body {
-            padding: 2rem;
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--text-dark);
-            font-size: 1rem;
-        }
-
-        textarea, select {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-family: inherit;
-            background-color: var(--bg-white);
-            color: var(--text-dark);
-            transition: var(--transition);
-        }
-
-        textarea {
-            height: 180px;
-            resize: vertical;
-        }
-
-        textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
-        }
-
-        /* Button Styling */
-        .btn {
-            display: inline-block;
-            font-weight: 600;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: middle;
-            user-select: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 0;
-            width: 100%;
-        }
-
-        .btn-group .btn {
-            flex: 1;
-            border-radius: 0;
-        }
-
-        .btn-group .btn:first-child {
-            border-top-left-radius: var(--radius-sm);
-            border-bottom-left-radius: var(--radius-sm);
-        }
-
-        .btn-group .btn:last-child {
-            border-top-right-radius: var(--radius-sm);
-            border-bottom-right-radius: var(--radius-sm);
-        }
-
-        /* Status Area */
-        .status {
-            padding: 1.5rem;
-            border-radius: var(--radius-sm);
-            margin: 1.5rem 0;
-            background-color: var(--bg-light);
-            border-left: 4px solid var(--primary);
-            display: flex;
-            align-items: center;
-        }
-
-        .status-icon {
-            font-size: 1.5rem;
-            margin-right: 1rem;
-            color: var(--primary);
-        }
-
-        .status-text {
-            flex: 1;
-        }
-
-        /* Preview Area */
-        .preview-title {
-            margin: 2rem 0 1rem 0;
-            display: flex;
-            align-items: center;
-            font-size: 1.25rem;
-        }
-
-        .preview-title i {
-            margin-right: 0.5rem;
-        }
-
-        .preview-frame {
-            width: 100%;
-            height: 600px;
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-        }
-
-        /* Info Footer */
-        .info-footer {
-            margin-top: 3rem;
-            padding: 2rem;
-            border-top: 1px solid var(--border-light);
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        /* Loading Animation */
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-
-        .loading {
-            animation: pulse 1.5s infinite;
-        }
-
-        /* Responsive Design */
-        @media screen and (max-width: 991px) {
-            .container {
-                padding: 1.5rem;
-            }
-            
-            .card-header, .card-body {
-                padding: 1.5rem;
-            }
-        }
-        
-        @media screen and (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .card-header, .card-body {
-                padding: 1.25rem;
-            }
-            
-            .preview-frame {
-                height: 450px;
-            }
-            
-            .card-title {
-                font-size: 1.25rem;
-            }
-        }
-        
-        @media screen and (max-width: 576px) {
-            .container {
-                padding: 0.75rem;
-            }
-            
-            .card-header, .card-body {
-                padding: 1rem;
-            }
-            
-            .preview-frame {
-                height: 350px;
-            }
-            
-            textarea {
-                height: 150px;
-            }
-            
-            .btn {
-                padding: 0.625rem 1.25rem;
-            }
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: 0.25rem;
-        }
-
-        /* Dark Mode */
-        .dark-mode {
-            --primary: #4cc9f0;
-            --primary-hover: #3db8df;
-            --secondary: #f72585;
-            --text-dark: #e9ecef;
-            --text-light: #adb5bd;
-            --bg-light: #1a1a2e;
-            --bg-white: #16213e;
-            --border-light: #0f3460;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h1 class="card-title">Web Page Creator <div id="version" style="display: inline-block;">Version: Loading...</div></h1>
-            </div>
-            
-            <div class="card-body">
-                <form id="generator-form">
-                    <div class="form-group">
-                        <label for="user-message">
-                            <i class="fas fa-lightbulb"></i> Web Page Idea and/or Information
-                        </label>
-                        <textarea id="user-message" placeholder="Describe your web page idea here...">The Vatican</textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="modelSelect">
-                            <i class="fas fa-robot"></i> Select AI Model
-                        </label>
-                        <select id="modelSelect">
-                            <!-- Options will be populated by JavaScript -->
-                        </select>
-                    </div>
-                    
-                    <button type="button" id="submit-button" class="btn btn-primary btn-block">
-                        <i class="fas fa-magic"></i> Create Web Page
-                    </button>
-                </form>
-                
-                <div id="response-text" class="status">
-                    <div class="status-icon">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
-                    <div class="status-text">Ready for creation...</div>
-                </div>
-                
-                <div id="htmlFileButtons" class="btn-group">
-                    <button id="download" class="btn btn-primary" onclick="downloadHTML(sessionStorage.getItem('FILE_NAME'), sessionStorage.getItem('HTML_FILE'));">
-                        <i class="fas fa-download"></i> Download HTML File
-                    </button>
-                    <button id="openInNewTab" class="btn btn-primary" onclick="openTab(sessionStorage.getItem('HTML_FILE'));">
-                        <i class="fas fa-external-link-alt"></i> Open In New Tab
-                    </button>
-                </div>
-                
-                <h2 class="preview-title">
-                    <i class="fas fa-eye"></i> Preview
-                </h2>
-                <iframe id="myIframe" class="preview-frame" title="Web Page Preview"></iframe>
-            </div>
-        </div>
-        
-        <div id="informationFooter" class="info-footer"></div>
-    </div>
-
-
-    <script>
-        const apiKey = "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";
-        const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
-        const MAX_RETRIES = 6;
-        const RETRY_DELAY = 1000; // 1 second
-
-        async function makeApiRequest(retryCount = 0) {
-            const systemMessage = `I am interested in you creating a web page.
-
-I am interested in a complete web page in a single HTML file.
-
-I am interested in using vanilla HTML, vanilla CSS, and vanilla JS.
-
-I am interested in having full ownership of this code, and I am interested in releasing it into the public domain.
-
-I am interested in using standard coding practices and principles.
-
-I am interested in using well established code principles and designs.
-
-I am interested in this web page having a timeless design.
-
-I am interested in you filling this web page with truthful and relevant content.
-
-I am interested in content that is acceptable to a Christian audience.
-
-I am interested in this web page being usable in a production environment.
-
-I am interested in ensuring that the design and JS code functions perfectly. I am interested in the idea of reverting to something simpler to guarantee functionality when applicable.
-
-I am interested in requiring that this HTML code be included in the web page at the bottom of the web page: \`\`\`HTML
-<div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
-\`\`\`
-
-I am interested in requiring that this external Javascript file be run on this web page after the informationFooter: https://www.avemariacloud.com/generic-loader.js
-
-The Javascript code that I referenced earlier will populate the “informationFooter” div with some information that I have.
-
-Please respond in JSON with the labels HTML_FILE and FILE_NAME 
-
-Please place only HTML code within the label: "HTML_FILE"
-
-Please ensure that the FILE_NAME ends in .html`;
-            
-            const userMessage = "Web Page Idea and/Or Information: " + document.getElementById('user-message').value;
-            const selectedModel = document.getElementById('modelSelect').value;
-            const requestJson = true;
-            const responseText = document.getElementById('response-text');
-            
-            try {
-
-                responseText.innerHTML = "Loading...";
-                
-                const requestBody = {
-                    model: selectedModel,
-                    messages: [
-                        { role: 'system', content: systemMessage },
-                        { role: 'user', content: userMessage }
-                    ]
-                };
-
-                if (requestJson) {
-                    requestBody.response_format = {
-                        type: "json_object"
-                    };
-                }
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                const content = data.choices[0]?.message?.content || "No response received.";
-
-                if (requestJson) {
-                    try {
-                        const jsonContent = JSON.parse(content);
-                        if (jsonContent.HTML_FILE) {
-                            
-                          sessionStorage.setItem("HTML_FILE", jsonContent.HTML_FILE);
-
-                          sessionStorage.setItem("FILE_NAME", jsonContent.FILE_NAME);
-                          
-                          console.log(jsonContent.FILE_NAME);
-                          console.log(jsonContent.HTML_FILE);
-
-                          const blob = new Blob([jsonContent.HTML_FILE], { type: 'text/html' });
-                          const iframe = document.getElementById('myIframe');
-                          iframe.src = URL.createObjectURL(blob);
-
-                          responseText.innerHTML = "Ready for input...";
-
-                          scrollToId("myIframe");
-                            
-                        } else {
-                            responseText.style.display = 'block';
-
-                            throw new Error(`API Error: ${response.statusText}`);
-                            //responseText.innerHTML = JSON.stringify(jsonContent, null, 2);
-                        }
-                    } catch (e) {
-                        responseText.style.display = 'block';
-
-                        throw new Error(`API Error: ${response.statusText}`);
-                        //responseText.innerHTML = content;
-                    }
-                } else {
-                    responseText.style.display = 'block';
-
-                    throw new Error(`API Error: ${response.statusText}`);
-                    //responseText.innerHTML = content;
-                }
-            } catch (error) {
-                if (retryCount < MAX_RETRIES) {
-                    responseText.innerHTML = `An error possibly occurred. Retrying... (Attempt ${retryCount + 1}/${MAX_RETRIES})`;
-                    await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-                    return makeApiRequest(retryCount + 1);
-                } else {
-                    responseText.innerHTML = `Error after ${MAX_RETRIES} attempts: ${error.message}`;
-                }
-            }
-        }
-
-        document.getElementById('submit-button').addEventListener('click', () => makeApiRequest());
-
-        function openTab(HTML_FILE) {
-          const newTab = window.open('', '_blank'); // Open a blank tab
-          newTab.document.open(); // Open the document for writing
-          newTab.document.write(HTML_FILE); // Write the HTML content
-          newTab.document.close(); // Close the document stream
-        }
-
-        function scrollToId(id) {
-    const element = document.getElementById(id);
-    if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+    } catch (error) {
+        console.error("Transcription Error:", error);
     }
 }
-
-function downloadHTML(filename, content) {
-    const blob = new Blob([content], { type: "text/html" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-    </script>
-
-
-    
-    <script src="https://avemariacloud.com/generic-loader.js"></script>
-
-</body>
-</html>
+</script>
