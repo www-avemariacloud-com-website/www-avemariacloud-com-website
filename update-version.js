@@ -3,7 +3,7 @@ const versionNotifier = {
   // LocalStorage key for storing the last seen version
   storageKey: 'app_last_seen_deployment',
   checkInterval: null,
-  checkFrequency: 10000, // 10 seconds in milliseconds
+  checkFrequency: 30000, // 10 seconds in milliseconds
   
   // Initialize version checking
   startVersionChecking(repoOwner, repoName) {
