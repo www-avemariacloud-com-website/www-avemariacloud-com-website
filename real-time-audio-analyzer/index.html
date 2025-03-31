@@ -237,24 +237,12 @@
                 }
             };
             recognition.onerror = function (event) {
-                console.error('Speech recognition error detected: ' + event.error);
-        
-                if (event.error === 'network' || event.error === 'audio-capture') {
-                    alert("Please check your internet connection or microphone.");
-                    stopTranscription();
-                    return;
-                }
-        
-                if (isRecognizing) {
-                    setTimeout(() => recognition.start(), 1000);
-                }
+                stopTranscription();
+                startTranscription();
+                return;
             };
         
             recognition.onend = function () {
-                if (isRecognizing) {
-                    console.log('Restarting speech recognition...');
-                    setTimeout(() => recognition.start(), 500);
-                }
             };
         
             recognition.start();
