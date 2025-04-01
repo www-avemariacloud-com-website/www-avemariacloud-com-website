@@ -624,6 +624,17 @@
         }
 
         function sendToAI(transcript) {
+
+            function estimateTokens(message) {
+                return Math.ceil(message.split(/\s+/).length / 1.33);
+            }
+
+            while (estimateTokens(transcript) > 1000) {
+                transcript = transcript.substring(1);
+            }
+
+            console.log("Trimmed Transcript: " + transcript);
+            
             if (!transcript.trim()) {
                 return; // Don't send empty transcripts
             }
