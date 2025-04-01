@@ -243,15 +243,14 @@
             if (watchdogTimer) {
                 clearInterval(watchdogTimer);
             }
-            
-            // Check every 10 seconds if recognition is still active
-            watchdogTimer = setInterval(() => {
+
+            watchdogTimer = setInterval(async () => {
                 if (isRecognizing && !recognitionPaused) {
-                    // If we haven't received results in a while, force restart
                     const timeSinceLastActivity = Date.now() - lastChatTime;
                     if (timeSinceLastActivity > 7000) { // 7 seconds of inactivity
                         lastChatTime = Date.now();
                         console.log('Watchdog detected inactivity, restarting recognition');
+
                         stopTranscription();
                         await sleep(2000);
                         startTranscription();
@@ -259,6 +258,7 @@
                 }
             }, 1000);
         }
+
 
         function sleep(ms) {
             new Promise(resolve => setTimeout(resolve, ms));
