@@ -253,9 +253,8 @@
                         lastChatTime = Date.now();
                         console.log('Watchdog detected inactivity, restarting recognition');
                         stopTranscription();
-                        sleep(2000).then(() => {
-                            startTranscription();
-                        });
+                        await sleep(2000);
+                        startTranscription();
                     }
                 }
             }, 1000);
@@ -559,7 +558,13 @@
             }
         }
 
-        function restartRecognition(force = false) {
+        async function restartRecognition(force = false) {
+
+            stopTranscription();
+            await sleep(2000);
+            startTranscription();
+
+            /*
             if (!isRecognizing || recognitionPaused) {
                 return;
             }
@@ -597,6 +602,7 @@
                 // Increase the delay for the next attempt
                 restartDelay = Math.min(restartDelay * 2, 30000); // Max 30 seconds
             }
+            */
         }
 
         function stopTranscription() {
