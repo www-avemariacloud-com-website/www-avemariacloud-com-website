@@ -239,7 +239,7 @@
         }
 
         // Watchdog function to monitor if speech recognition is still active
-        function startWatchdog() {
+        async function startWatchdog() {
             if (watchdogTimer) {
                 clearInterval(watchdogTimer);
             }
@@ -249,12 +249,14 @@
                 if (isRecognizing && !recognitionPaused) {
                     // If we haven't received results in a while, force restart
                     const timeSinceLastActivity = Date.now() - lastChatTime;
-                    if (timeSinceLastActivity > 30000) { // 30 seconds of inactivity
+                    if (timeSinceLastActivity > 7000) { // 7 seconds of inactivity
+                        lastChatTime = Date.now();
                         console.log('Watchdog detected inactivity, restarting recognition');
-                        restartRecognition(true); // Force restart
+                        stopTranscription();
+                        startTranscription();
                     }
                 }
-            }, 10000);
+            }, 1000);
         }
 
         function stopWatchdog() {
@@ -608,7 +610,7 @@
             stopWatchdog();
         }
 
-        function updateStatus(message, isActive) {
+        async function updateStatus(message, isActive) {
             const statusText = document.getElementById('statusText');
             const statusIndicator = document.getElementById('statusIndicator');
             
@@ -623,7 +625,7 @@
             }
         }
 
-        function sendToAI(transcript) {
+        async function sendToAI(transcript) {
 
             function estimateTokens(message) {
                 return Math.ceil(message.split(/\s+/).length / 1.33);
@@ -634,7 +636,7 @@
             }
 
             console.log("Trimmed Transcript: " + transcript);
-            
+
             if (!transcript.trim()) {
                 return; // Don't send empty transcripts
             }
