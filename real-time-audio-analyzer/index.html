@@ -253,10 +253,16 @@
                         lastChatTime = Date.now();
                         console.log('Watchdog detected inactivity, restarting recognition');
                         stopTranscription();
-                        startTranscription();
+                        sleep(2000).then(() => {
+                            startTranscription();
+                        });
                     }
                 }
             }, 1000);
+        }
+
+        function sleep(ms) {
+            new Promise(resolve => setTimeout(resolve, ms));
         }
 
         function stopWatchdog() {
