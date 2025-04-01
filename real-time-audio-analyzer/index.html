@@ -91,7 +91,7 @@
      
     <label>AI Analysis Time Delay</label>
     <select id="analysis_time_delay" class="select" width="100%">
-        <option value="1000">10 Seconds</option>
+        <option value="10000">10 Seconds</option>
         <option value="30000" selected>30 Seconds</option>
         <option value="60000">1 Minute</option>
         <option value="3600000">1 Hour</option>
@@ -225,6 +225,7 @@
         let maxRestartAttempts = 10; // Increased max attempts
         let restartDelay = 1000; // Base delay in ms
         let watchdogTimer = null;
+        let lastChatTime = Date.now();
         
         // Create a permission state variable
         let micPermissionState = 'unknown'; // 'unknown', 'granted', 'denied', 'prompt'
@@ -247,7 +248,7 @@
             watchdogTimer = setInterval(() => {
                 if (isRecognizing && !recognitionPaused) {
                     // If we haven't received results in a while, force restart
-                    const timeSinceLastActivity = Date.now() - lastRequestTime;
+                    const timeSinceLastActivity = Date.now() - lastChatTime;
                     if (timeSinceLastActivity > 30000) { // 30 seconds of inactivity
                         console.log('Watchdog detected inactivity, restarting recognition');
                         restartRecognition(true); // Force restart
@@ -397,10 +398,13 @@
             const confidenceThreshold = parseFloat(document.getElementById('confidenceThreshold').value || 0);
 
             recognition.onresult = function(event) {
+
+                lastChatTime = Date.now();
+
                 console.log('Recognition result received', event);
                 
                 // Update the last activity time
-                lastRequestTime = Date.now();
+                //lastRequestTime = Date.now();
                 
                 let newTranscript = ''; // New transcript that we'll append to the textarea
                 let interimTranscript = ''; // For storing interim results separately
@@ -464,9 +468,12 @@
                 document.getElementById('transcript').scrollTop = document.getElementById('transcript').scrollHeight;
 
                 // Check if enough time has passed to send the transcript for processing (AI, etc.)
-                if (Date.now() - lastRequestTime > parseInt(document.getElementById('analysis_time_delay').value)) {
+                if (Date.now() - lastRequestTime > document.getElementById('analysis_time_delay').value) {
                     lastRequestTime = Date.now();
                     sendToAI(document.getElementById('transcript').value); // Send to AI function
+                }
+                else{
+                    console.log(Date.now() - lastRequestTime);
                 }
             };
 
