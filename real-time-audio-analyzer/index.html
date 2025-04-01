@@ -196,6 +196,9 @@
     <label>Analyzed Transcript</label>
     <textarea id="fullTranscript" class="response-area" readonly></textarea>
     <BR>
+    <label>Current Idea</label>
+    <textarea id="current_idea" class="response-area" readonly></textarea>
+    <BR>
     <label>Summary</label>
     <textarea id="summary" class="response-area" readonly></textarea>
     <BR>
@@ -673,7 +676,9 @@
 
 I am interested in creating a full word for word transcript, not a summary or analysis, of what has been said based on the transcription data.
 
-I am interested in a single sentence summary of the topic currently being discussed as well as a three sentence summary of the entire transcript.
+I am interested in a single sentence summary of the most important idea currently being discussed (Current_Idea).
+
+I am interested in a three sentence summary of the entire transcript (Full_Summary).
 
 I am interested in detecting secrets and/or contradictions. I am interested in a single sentence response.
 
@@ -683,7 +688,7 @@ I am interested in detecting the ideal response that this person is expecting. I
 
 I am interested in some sort of intellectual reward from this speech. I am interested in a single sentence response.
 
-Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictions, Intent, Expected_Response, Reward.`
+Respond in JSON with the labels: Full_Transcript, Current_Idea, Full_Summary, Secrets, Contradictions, Intent, Expected_Response, Reward.`
                         },
                         {
                             role: "user",
@@ -725,7 +730,11 @@ Respond in JSON with the labels: Full_Transcript, Summary, Secrets, Contradictio
 
             document.getElementById("fullTranscript").value = data.Full_Transcript;
 
-            document.getElementById("summary").value = "[" + timeString + "] " + data.Summary + `
+            document.getElementById("current_idea").value = "[" + timeString + "] " + data.Current_Idea + `
+
+` + document.getElementById("current_idea").value;
+
+            document.getElementById("summary").value = "[" + timeString + "] " + data.Full_Summary + `
 
 ` + document.getElementById("summary").value;
 
