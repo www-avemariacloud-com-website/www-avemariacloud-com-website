@@ -70,14 +70,11 @@
             <span id="statusText">Not recording</span>
         </span>
     </div>
-    <BR><BR>
+
+    <BR>
     
-    <div class="control-group">
-        <label for="showInterim">Show Interim Results:</label>
-        <input type="checkbox" id="showInterim" checked>
-        <span class="tooltip">Showing interim results provides immediate feedback but may be less accurate</span>
-    </div>
-    
+    <input type="checkbox" id="showInterim" checked hidden>
+
     <div class="control-group">
         <label for="confidenceThreshold">Confidence Threshold:</label>
         <input type="range" id="confidenceThreshold" min="0.00" max="1" step="0.05" value="0.00">
