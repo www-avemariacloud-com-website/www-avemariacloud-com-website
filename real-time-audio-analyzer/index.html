@@ -187,7 +187,7 @@
 
     <BR>
     <BR>
-    <label>AI API Response</label>
+    <label id="timeToUpdate">AI API Response</label>
     <textarea id="aiAPIResponse" class="response-area" readonly></textarea>
     <BR>
     <label>Analyzed Transcript</label>
@@ -245,6 +245,17 @@
             }
 
             watchdogTimer = setInterval(async () => {
+
+                
+                console.log(Date.now() - lastRequestTime);
+
+                var remainingTime = (document.getElementById('analysis_time_delay').value - (Date.now() - lastRequestTime));
+
+                console.log(remainingTime);
+
+                document.getElementById("timeToUpdate").innerText = "AI API Response ("+ remainingTime+"ms)";
+
+
                 if (isRecognizing && !recognitionPaused) {
                     const timeSinceLastActivity = Date.now() - lastChatTime;
                     if (timeSinceLastActivity > 7000) { // 7 seconds of inactivity
@@ -256,7 +267,7 @@
                         startTranscription();
                     }
                 }
-            }, 1000);
+            }, 100);
         }
 
 
@@ -480,7 +491,15 @@
                     sendToAI(document.getElementById('transcript').value); // Send to AI function
                 }
                 else{
+
                     console.log(Date.now() - lastRequestTime);
+
+                    var remainingTime = (document.getElementById('analysis_time_delay').value - (Date.now() - lastRequestTime));
+
+                    console.log(remainingTime);
+
+                    document.getElementById("timeToUpdate").innerText = "AI API Response ("+ remainingTime+"ms)";
+
                 }
             };
 
