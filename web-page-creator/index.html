@@ -365,67 +365,72 @@ document.getElementById('upload-button').addEventListener('click', () => {
 });
 
 document.getElementById('image-upload').addEventListener('change', async (e) => {
-    const files = e.target.files;
-    if (files.length === 0) return;
-    
-    const responseText = document.getElementById('response-text');
-    responseText.innerHTML = '<div class="status-icon"><i class="fas fa-spinner fa-spin"></i></div><div class="status-text">Uploading images...</div>';
-    
-    const imagePreview = document.getElementById('image-preview');
-    imagePreview.innerHTML = '';
-    
-    let uploadedUrls = [];
-    
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+        const files = e.target.files;
+        if (files.length === 0) return;
         
-        // Show preview
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.maxWidth = '100px';
-            img.style.maxHeight = '100px';
-            img.style.borderRadius = '4px';
-            imagePreview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
+        const responseText = document.getElementById('response-text');
+        responseText.innerHTML = '<div class="status-icon"><i class="fas fa-spinner fa-spin"></i></div><div class="status-text">Uploading and analyzing images...</div>';
         
-        // Upload to server
-        try {
-            const formData = new FormData();
-            formData.append('image', file);
+        const imagePreview = document.getElementById('image-preview');
+        imagePreview.innerHTML = '';
+        
+        let uploadedData = [];
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
             
-            const response = await fetch('https://image-uploader.small-recipe-9582.workers.dev/', {
-                method: 'POST',
-                body: formData
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100px';
+                img.style.maxHeight = '100px';
+                img.style.borderRadius = '4px';
+                imagePreview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+            
+            // Upload to server and analyze
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+                
+                const response = await fetch('https://image-uploader-and-analyzer.small-recipe-9582.workers.dev/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) throw new Error('Upload failed');
+                
+                const data = await response.json();
+                if (data.results && data.results[0].success) {
+                    uploadedData.push({
+                        url: data.results[0].url,
+                        description: data.results[0].aiResponse?.Image_Description || "No description available"
+                    });
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            }
+        }
+        
+        // Update textarea with image URLs and descriptions
+        if (uploadedData.length > 0) {
+            const textarea = document.getElementById('user-message');
+            let imageText = '\n\nI am interested in using these images.\n\n';
+            uploadedData.forEach((item, index) => {
+                imageText += `Image ${index + 1}) ${item.url} (Image Description: ${item.description})\n\n`;
             });
             
-            if (!response.ok) throw new Error('Upload failed');
-            
-            const data = await response.json();
-            if (data.results && data.results[0].success) {
-                uploadedUrls.push(data.results[0].url);
-            }
-        } catch (error) {
-            console.error('Error uploading image:', error);
+            textarea.value += imageText;
+            responseText.innerHTML = '<div class="status-icon"><i class="fas fa-check-circle"></i></div><div class="status-text">Images uploaded and analyzed successfully!</div>';
+        } else {
+            responseText.innerHTML = '<div class="status-icon"><i class="fas fa-exclamation-circle"></i></div><div class="status-text">No images were uploaded successfully.</div>';
         }
-    }
-    
-    // Update textarea with image URLs
-    if (uploadedUrls.length > 0) {
-        const textarea = document.getElementById('user-message');
-        let imageText = '\n\nI am interested in using these images.\n\n';
-        uploadedUrls.forEach((url, index) => {
-            imageText += `Image ${index + 1}) ${url}\n`;
-        });
-        
-        textarea.value += imageText;
-        responseText.innerHTML = '<div class="status-icon"><i class="fas fa-check-circle"></i></div><div class="status-text">Images uploaded successfully!</div>';
-    } else {
-        responseText.innerHTML = '<div class="status-icon"><i class="fas fa-exclamation-circle"></i></div><div class="status-text">No images were uploaded successfully.</div>';
-    }
-});
+    });
+
+
 
 // Clear images button
 document.getElementById('clear-images').addEventListener('click', () => {
@@ -444,18 +449,21 @@ It was established in 2016 by the CEO KIiza Abel
 
 Reminder the district changed post office number from 37 to 78
 
-I am interested in a placeholder for an image relating to a registration certificate.
+I am interested in using these images.
 
-I am interested in a placeholder for 6 images relating to children.
+Image 1) https://public-web-pages.github.io/custom-web-page/images/700784ad8554f62c.jpg (Image Description: A group of children are standing together in a circle, looking up at the camera. They are all smiling and appear to be happy. The children are all wearing casual clothing, such as t-shirts and tank tops, and some of them have their arms around each other. The background is a dirt ground, suggesting that the photo was taken outdoors in a rural or natural setting. Overall, the image conveys a sense of joy and camaraderie among the children.)
 
-I am interested in using these filenames for the images: Registration Certificate: https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/474663702_1961297890947709_5774887105836912620_n.jpg
+Image 2) https://public-web-pages.github.io/custom-web-page/images/49f0b5acf418b895.jpg (Image Description: A group of young children, all with dark skin and short hair, are gathered together and looking up at the camera. They are all wearing casual clothing, such as t-shirts and button-down shirts, and some of them have their hands raised in the air. The background is out of focus, but it appears to be a dirt or sandy area.)
 
-Images of children: https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/475959075_486809424198316_5942271838188391739_n.jpg
-https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/462645937_526882123505663_5047352384923728137_n.jpg
-https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/473624869_1370452380993452_6921505269088550201_n.jpg
-https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/475991653_9456989881025437_6678792483254816546_n.jpg
-https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/476895237_9299211063455856_9188159984815553006_n.jpg
-https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/486126991_2122833564811798_6412124356222377784_n.jpg`;
+Image 3) https://public-web-pages.github.io/custom-web-page/images/c46d299ea855c48d.jpg (Image Description: A young boy is holding a large bunch of bananas in front of a group of children.)
+
+Image 4) https://public-web-pages.github.io/custom-web-page/images/3a309159f07b1c4b.jpg (Image Description: A young boy holding a yellow sign that reads 'SUPPORT US WITH A DAILY MEAL' in red letters. He is surrounded by other children, some of whom are also holding signs or bottles. The background is blurry, but it appears to be an outdoor setting with greenery and trees. The overall atmosphere suggests a fundraising or awareness campaign for a cause related to food or nutrition.)
+
+Image 5) https://public-web-pages.github.io/custom-web-page/images/000012cfafa4a1a5.jpg (Image Description: A group of children gathered around a table with watermelons and bananas, with some of them raising their hands in the air.)
+
+Image 6) https://public-web-pages.github.io/custom-web-page/images/7ae6586126fc5fe4.jpg (Image Description: A registration certificate for a community development project in Uganda, featuring a government seal and stamps, with text describing the project's purpose and details.)
+
+Image 7) https://public-web-pages.github.io/custom-web-page/images/7f41ac7a6b6b6534.jpg (Image Description: A young boy is holding a large crucifix in front of his chest. He is wearing a red and gray striped shirt and a green beaded necklace. In the background, there are several other children sitting on the ground, but they are out of focus.)`;
                         }
                     </script>
                     
@@ -480,6 +488,8 @@ https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/486126991_21
                             <option value="animations">Animations</option>
                         </select>
                     </div>
+
+                    <BR>
 
                     <button type="button" id="submit-button" class="btn btn-primary btn-block">
                         <i class="fas fa-magic"></i> Create Web Page
@@ -525,7 +535,7 @@ https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/486126991_21
 
 I am interested in a complete web page in a single HTML file.
 
-I am interested in using vanilla HTML, vanilla CSS, and vanilla JS.
+I am interested in using vanilla HTML and vanilla CSS
 
 I am interested in having full ownership of this code, and I am interested in releasing it into the public domain.
 
@@ -537,8 +547,6 @@ I am interested in content that is acceptable to a Christian audience.
 
 I am interested in this web page being usable in a production environment.
 
-I am interested in ensuring that the design and JS code functions perfectly. I am interested in the idea of reverting to something simpler to guarantee functionality when applicable.
-
 I am interested in requiring that this HTML code be included in the web page at the bottom of the web page: \`\`\`HTML
 <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
 \`\`\`
@@ -546,6 +554,8 @@ I am interested in requiring that this HTML code be included in the web page at 
 I am interested in requiring that this external Javascript file be run on this web page after the informationFooter: https://www.avemariacloud.com/generic-loader.js
 
 The Javascript code that I referenced earlier will populate the “informationFooter” div with some information that I have.
+
+I am interested in https://www.avemariacloud.com/generic-loader.js being the only JS code on the page.
 
 Please respond in JSON with the labels HTML_FILE and FILE_NAME 
 
