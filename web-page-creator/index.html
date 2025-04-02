@@ -321,19 +321,24 @@
             
             <div class="card-body">
                 <form id="generator-form">
-                    <div class="form-group">
-                        <label for="user-message">
-                            <i class="fas fa-lightbulb"></i> Web Page Idea and/or Information
-                        </label>
-                        <div id="htmlFileButtons" class="btn-group">
-                            <button type="button" id="exampleIdea" class="btn btn-primary" onclick="exampleWebPageIdea();">
-                                <i class="fas fa-download"></i>Example Web Page Idea
-                            </button>
-                            <a href="https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/" id="openInNewTab" class="btn btn-primary" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>Example Web Page Creation
-                            </a>
-                        </div>
-                    </div>
+
+<div class="form-group">
+    <label for="image-upload">
+        <i class="fas fa-image"></i> Web Page Idea and/or Information
+    </label>
+    <input type="file" id="image-upload" multiple accept="image/*" style="display: none;">
+    <div class="btn-group">
+        <button type="button" onclick="exampleWebPageIdea();" id="upload-button" class="btn btn-primary">
+            <i class="fas fa-upload"></i> Example Web Page Idea
+        </button>
+        <button type="button" onclick="window.open('https://www.avemariacloud.com/Jesus-Loves/Andrew-Outreach-Orphanage/', '_blank');" id="clear-images" class="btn btn-primary">
+            <i class="fas fa-trash"></i> Example Web Page Creation
+        </button>
+    </div>
+    <div id="image-preview" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+</div>
+
+
                         <BR>
                         <textarea id="user-message" placeholder="Describe your web page idea here..."></textarea>
 
