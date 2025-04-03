@@ -356,6 +356,97 @@
     </div>
     <div id="image-preview" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
 </div>
+
+
+<div class="form-group">
+    <label for="favicon-upload">
+        <i class="fas fa-image"></i> Upload Favicon (It may take some time for images to be displayed on the web page)
+    </label>
+    <input type="file" id="favicon-upload" accept="image/*" style="display: none;">
+    <div class="btn-group">
+        <button type="button" id="favicon-upload-button" class="btn btn-primary">
+            <i class="fas fa-upload"></i> Select Favicon
+        </button>
+        <button type="button" id="clear-favicon" class="btn btn-primary">
+            <i class="fas fa-trash"></i> Clear Favicon
+        </button>
+    </div>
+    <div id="favicon-preview" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+</div>
+
+
+
+<script>
+    // Favicon Upload Functionality
+    document.getElementById('favicon-upload-button').addEventListener('click', () => {
+        document.getElementById('favicon-upload').click();
+    });
+    
+    document.getElementById('favicon-upload').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const responseText = document.getElementById('response-text');
+        responseText.innerHTML = '<div class="status-icon"><i class="fas fa-spinner fa-spin"></i></div><div class="status-text">Uploading favicon...</div>';
+        
+        const faviconPreview = document.getElementById('favicon-preview');
+        faviconPreview.innerHTML = '';
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.maxWidth = '64px';
+            img.style.maxHeight = '64px';
+            img.style.borderRadius = '4px';
+            faviconPreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+        
+        // Upload to server
+        try {
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            const response = await fetch('https://image-uploader-and-analyzer.small-recipe-9582.workers.dev/', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) throw new Error('Favicon upload failed');
+            
+            const data = await response.json();
+            if (data.results && data.results[0].success) {
+                const faviconUrl = data.results[0].url;
+                
+                // Update textarea with favicon URL
+                const textarea = document.getElementById('user-message');
+                const faviconText = `\n\nI am interested in using this image URL as a favicon: ${faviconUrl}`;
+                textarea.value += faviconText;
+                
+                responseText.innerHTML = '<div class="status-icon"><i class="fas fa-check-circle"></i></div><div class="status-text">Favicon uploaded successfully!</div>';
+            } else {
+                throw new Error('Favicon upload processing failed');
+            }
+        } catch (error) {
+            console.error('Error uploading favicon:', error);
+            responseText.innerHTML = `<div class="status-icon"><i class="fas fa-exclamation-circle"></i></div><div class="status-text">Favicon upload failed: ${error.message}</div>`;
+        }
+    });
+    
+    // Clear favicon button
+    document.getElementById('clear-favicon').addEventListener('click', () => {
+        document.getElementById('favicon-upload').value = '';
+        document.getElementById('favicon-preview').innerHTML = '';
+        
+        // Remove favicon text from textarea if present
+        const textarea = document.getElementById('user-message');
+        const faviconRegex = /\n\nI am interested in using this image URL as a Favicon: .+/g;
+        textarea.value = textarea.value.replace(faviconRegex, '');
+    });
+    </script>
+
                     
                     <script>
 
@@ -457,6 +548,8 @@ It was established in 2016 by the CEO KIiza Abel
 
 Reminder the district changed post office number from 37 to 78
 
+I am interested in using this image URL as a Favicon: https://public-web-pages.github.io/custom-web-page/images/7ae6586126fc5fe4.jpg
+
 I am interested in using these images.
 
 Image URL 1) https://public-web-pages.github.io/custom-web-page/images/700784ad8554f62c.jpg (Image Description: A group of children are standing together in a circle, looking up at the camera. They are all smiling and appear to be happy. The children are all wearing casual clothing, such as t-shirts and tank tops, and some of them have their arms around each other. The background is a dirt ground, suggesting that the photo was taken outdoors in a rural or natural setting. Overall, the image conveys a sense of joy and camaraderie among the children.)
@@ -542,7 +635,7 @@ Image URL 7) https://public-web-pages.github.io/custom-web-page/images/7f41ac7a6
 function copyToClipboard() {
     var textarea = document.getElementById("HTMLCode");
     navigator.clipboard.writeText(textarea.value).then(() => {
-        alert("Copied to clipboard!");
+        //alert("Copied to clipboard!");
     }).catch(err => {
         console.error("Error copying text: ", err);
     });
