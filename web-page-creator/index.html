@@ -422,14 +422,11 @@
                 
                 // Update textarea with favicon URL
                 const textarea = document.getElementById('user-message');
-                const faviconText = `\n\n
-\`\`\`Favicon, also known as a shortcut icon, website icon, tab icon, URL icon, or bookmark icon
+                const faviconText = `\n\n\`\`\`Favicon, also known as a shortcut icon, website icon, tab icon, URL icon, or bookmark icon
 
 I am interested in using this image URL as a favicon, also known as a shortcut icon, website icon, tab icon, URL icon, or bookmark icon: "${faviconUrl}"
 
-\`\`\`
-
-`;
+\`\`\``;
                 textarea.value += faviconText;
                 
                 responseText.innerHTML = '<div class="status-icon"><i class="fas fa-check-circle"></i></div><div class="status-text">Favicon uploaded successfully!</div>';
@@ -520,19 +517,17 @@ document.getElementById('image-upload').addEventListener('change', async (e) => 
             var imageText = '';
 
             if (uploadedData.length > 1) {
-                imageText = `\n\n
-\`\`\`Images in the Web Page
+                imageText = `\n\n\`\`\`Images in the Web Page
 
 I am interested in using these images.\n\n`;
             }
             else {
-                imageText = `\n\n
-\`\`\`Image in the Web Page
+                imageText = `\n\n\`\`\`Image in the Web Page
 
 I am interested in using this image.\n\n`;
             }
             uploadedData.forEach((item, index) => {
-                imageText += `Image URL ${index + 1}: "${item.url}" (Image Description: ${item.description})\n\n`;
+                imageText += `Image URL ${index + 1}: "${item.url}" (Image Description, according to AI: ${item.description})\n\n`;
             });
             
             imageText += `\`\`\`
@@ -568,19 +563,19 @@ Reminder the district changed post office number from 37 to 78
 
 I am interested in using these images.
 
-Image URL 1: "https://public-web-pages.github.io/custom-web-page/images/700784ad8554f62c.jpg" (Image Description: A group of children are standing together in a circle, looking up at the camera. They are all smiling and appear to be happy. The children are all wearing casual clothing, such as t-shirts and tank tops, and some of them have their arms around each other. The background is a dirt ground, suggesting that the photo was taken outdoors in a rural or natural setting. Overall, the image conveys a sense of joy and camaraderie among the children.)
+Image URL 1: "https://public-web-pages.github.io/custom-web-page/images/700784ad8554f62c.jpg" (Image Description, according to AI: A group of children are standing together in a circle, looking up at the camera. They are all smiling and appear to be happy. The children are all wearing casual clothing, such as t-shirts and tank tops, and some of them have their arms around each other. The background is a dirt ground, suggesting that the photo was taken outdoors in a rural or natural setting. Overall, the image conveys a sense of joy and camaraderie among the children.)
 
-Image URL 2: "https://public-web-pages.github.io/custom-web-page/images/49f0b5acf418b895.jpg" (Image Description: A group of young children, all with dark skin and short hair, are gathered together and looking up at the camera. They are all wearing casual clothing, such as t-shirts and button-down shirts, and some of them have their hands raised in the air. The background is out of focus, but it appears to be a dirt or sandy area.)
+Image URL 2: "https://public-web-pages.github.io/custom-web-page/images/49f0b5acf418b895.jpg" (Image Description, according to AI: A group of young children, all with dark skin and short hair, are gathered together and looking up at the camera. They are all wearing casual clothing, such as t-shirts and button-down shirts, and some of them have their hands raised in the air. The background is out of focus, but it appears to be a dirt or sandy area.)
 
-Image URL 3: "https://public-web-pages.github.io/custom-web-page/images/7ae6586126fc5fe4.jpg" (Image Description: A registration certificate for a community development project in Uganda, featuring a government seal and stamps, with text describing the project's purpose and details.)
+Image URL 3: "https://public-web-pages.github.io/custom-web-page/images/7ae6586126fc5fe4.jpg" (Image Description, according to AI: A registration certificate for a community development project in Uganda, featuring a government seal and stamps, with text describing the project's purpose and details.)
 
-Image URL 4: "https://public-web-pages.github.io/custom-web-page/images/000012cfafa4a1a5.jpg" (Image Description: A group of children gathered around a table with watermelons and bananas, with some of them raising their hands in the air.)
+Image URL 4: "https://public-web-pages.github.io/custom-web-page/images/000012cfafa4a1a5.jpg" (Image Description, according to AI: A group of children gathered around a table with watermelons and bananas, with some of them raising their hands in the air.)
 
-Image URL 5: "https://public-web-pages.github.io/custom-web-page/images/3a309159f07b1c4b.jpg" (Image Description: A young boy holding a yellow sign that reads 'SUPPORT US WITH A DAILY MEAL' in red letters. He is surrounded by other children, some of whom are also holding signs or bottles. The background is blurry but appears to be outdoors, possibly in a park or field. The overall atmosphere suggests a charity event or fundraiser for a good cause.)
+Image URL 5: "https://public-web-pages.github.io/custom-web-page/images/3a309159f07b1c4b.jpg" (Image Description, according to AI: A young boy holding a yellow sign that reads 'SUPPORT US WITH A DAILY MEAL' in red letters. He is surrounded by other children, some of whom are also holding signs or bottles. The background is blurry but appears to be outdoors, possibly in a park or field. The overall atmosphere suggests a charity event or fundraiser for a good cause.)
 
-Image URL 6: "https://public-web-pages.github.io/custom-web-page/images/c46d299ea855c48d.jpg" (Image Description: A young boy is holding a large bunch of bananas in front of a group of children.)
+Image URL 6: "https://public-web-pages.github.io/custom-web-page/images/c46d299ea855c48d.jpg" (Image Description, according to AI: A young boy is holding a large bunch of bananas in front of a group of children.)
 
-Image URL 7: "https://public-web-pages.github.io/custom-web-page/images/7f41ac7a6b6b6534.jpg" (Image Description: A young boy is holding a large crucifix in front of his chest. He is wearing a red and gray striped shirt and a green beaded necklace. In the background, there are several other children sitting on the ground, but they are out of focus.)
+Image URL 7: "https://public-web-pages.github.io/custom-web-page/images/7f41ac7a6b6b6534.jpg" (Image Description, according to AI: A young boy is holding a large crucifix in front of his chest. He is wearing a red and gray striped shirt and a green beaded necklace. In the background, there are several other children sitting on the ground, but they are out of focus.)
 
 \`\`\`
 
@@ -792,13 +787,13 @@ I am interested in the content on this web page being fact checked and accurate.
 
 I would like a very strong bias for caution and perfect information.
 
-Please do not display Scripture text within the web page at this time.
+Please do not display Scripture or quote Scripture within the web page at this time, only link to Scripture @ https://bible.usccb.org/
 
 I would like you to always and only refer to Scripture by linking to https://bible.usccb.org/bible/
 
 Format: https://bible.usccb.org/bible/ + chapter + starting_verse
 
-For example the link for Genesis 1:5 would be "https://bible.usccb.org/bible/genesis/1?5"
+For example, the link for Genesis, Chapter 1, Verse 5 would be "https://bible.usccb.org/bible/genesis/1?5"
 
 Please refer to the links after this sentence for the https://bible.USCCB.org website.
 
