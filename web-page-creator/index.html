@@ -422,7 +422,14 @@
                 
                 // Update textarea with favicon URL
                 const textarea = document.getElementById('user-message');
-                const faviconText = `\n\nI am interested in using this image URL as a favicon: ${faviconUrl}`;
+                const faviconText = `\n\n
+\`\`\`Favicon, also known as a shortcut icon, website icon, tab icon, URL icon, or bookmark icon
+
+I am interested in using this image URL as a favicon, also known as a shortcut icon, website icon, tab icon, URL icon, or bookmark icon: "${faviconUrl}"
+
+\`\`\`
+
+`;
                 textarea.value += faviconText;
                 
                 responseText.innerHTML = '<div class="status-icon"><i class="fas fa-check-circle"></i></div><div class="status-text">Favicon uploaded successfully!</div>';
@@ -513,15 +520,23 @@ document.getElementById('image-upload').addEventListener('change', async (e) => 
             var imageText = '';
 
             if (uploadedData.length > 1) {
-                imageText = '\n\nI am interested in using these images.\n\n';
+                imageText = `\n\n
+\`\`\`Images in the Web Page
+
+I am interested in using these images.\n\n`;
             }
             else {
-                imageText = '\n\nI am interested in using this image.\n\n';
+                imageText = `\n\n
+\`\`\`Image in the Web Page
+
+I am interested in using this image.\n\n`;
             }
             uploadedData.forEach((item, index) => {
-                imageText += `Image URL ${index + 1}) ${item.url} (Image Description: ${item.description})\n\n`;
+                imageText += `Image URL ${index + 1}: "${item.url}" (Image Description: ${item.description})\n\n`;
             });
             
+            imageText += `\`\`\`
+`;
             textarea.value += imageText;
             responseText.innerHTML = '<div class="status-icon"><i class="fas fa-check-circle"></i></div><div class="status-text">Images uploaded and analyzed successfully!</div>';
         } else {
@@ -548,7 +563,13 @@ It was established in 2016 by the CEO KIiza Abel
 
 Reminder the district changed post office number from 37 to 78
 
-I am interested in using this image URL as a Favicon: https://public-web-pages.github.io/custom-web-page/images/7ae6586126fc5fe4.jpg
+\`\`\`Favicon, also known as a shortcut icon, website icon, tab icon, URL icon, or bookmark icon
+
+I am interested in using this image URL as a A favicon, also known as a shortcut icon, website icon, tab icon, URL icon, or bookmark icon: https://public-web-pages.github.io/custom-web-page/images/7ae6586126fc5fe4.jpg
+
+\`\`\`
+
+\`\`\`Images in the Web Page
 
 I am interested in using these images.
 
@@ -564,7 +585,10 @@ Image URL 5) https://public-web-pages.github.io/custom-web-page/images/000012cfa
 
 Image URL 6) https://public-web-pages.github.io/custom-web-page/images/7ae6586126fc5fe4.jpg (Image Description: A registration certificate for a community development project in Uganda, featuring a government seal and stamps, with text describing the project's purpose and details.)
 
-Image URL 7) https://public-web-pages.github.io/custom-web-page/images/7f41ac7a6b6b6534.jpg (Image Description: A young boy is holding a large crucifix in front of his chest. He is wearing a red and gray striped shirt and a green beaded necklace. In the background, there are several other children sitting on the ground, but they are out of focus.)`;
+Image URL 7) https://public-web-pages.github.io/custom-web-page/images/7f41ac7a6b6b6534.jpg (Image Description: A young boy is holding a large crucifix in front of his chest. He is wearing a red and gray striped shirt and a green beaded necklace. In the background, there are several other children sitting on the ground, but they are out of focus.)
+
+\`\`\`
+`;
                         }
                     </script>
                     
@@ -635,7 +659,41 @@ Image URL 7) https://public-web-pages.github.io/custom-web-page/images/7f41ac7a6
 function copyToClipboard() {
     var textarea = document.getElementById("HTMLCode");
     navigator.clipboard.writeText(textarea.value).then(() => {
-        //alert("Copied to clipboard!");
+        function showToast(message) {
+    let toast = document.createElement("div");
+    toast.textContent = message;
+    toast.style.position = "fixed";
+    toast.style.bottom = "20px";
+    toast.style.left = "50%";
+    toast.style.transform = "translateX(-50%)";
+    toast.style.background = "rgba(0, 0, 0, 0.8)";
+    toast.style.color = "#fff";
+    toast.style.padding = "10px 20px";
+    toast.style.borderRadius = "5px";
+    toast.style.fontSize = "14px";
+    toast.style.zIndex = "1000";
+    toast.style.opacity = "0";
+    toast.style.transition = "opacity 0.3s ease-in-out";
+
+    document.body.appendChild(toast);
+
+    // Fade in
+    setTimeout(() => {
+        toast.style.opacity = "1";
+    }, 10);
+
+    // Fade out and remove
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 2000); // Adjust timing as needed
+}
+
+// Example usage:
+showToast("Copied to clipboard!");
+
     }).catch(err => {
         console.error("Error copying text: ", err);
     });
@@ -727,11 +785,11 @@ I am interested in requiring that this HTML code be included in the web page at 
 <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
 \`\`\`
 
-I am interested in requiring that this external Javascript file be run on this web page after the informationFooter: https://www.avemariacloud.com/generic-loader.js
+I am interested in requiring that this external Javascript file be run on this web page after the informationFooter: "https://www.avemariacloud.com/generic-loader.js"
 
 The Javascript code that I referenced earlier will populate the “informationFooter” div with some information that I have.
 
-I am interested in https://www.avemariacloud.com/generic-loader.js being the only JS code on the page.
+I am interested in "https://www.avemariacloud.com/generic-loader.js" being the only JS code on the page.
 
 Please respond in JSON with the labels HTML_FILE and FILE_NAME 
 
