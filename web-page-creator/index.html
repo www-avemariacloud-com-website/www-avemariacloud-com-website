@@ -985,5 +985,166 @@ function downloadHTML(filename, content) {
     
     <script src="https://avemariacloud.com/generic-loader.js"></script>
 
+
+    <div id="chatbot-container" style="position: fixed; bottom: 0; right: 0; width: 350px; z-index: 1000;">
+        <div id="chatbot-header" style="background-color: var(--primary); color: white; padding: 12px; border-top-left-radius: var(--radius-sm); border-top-right-radius: var(--radius-sm); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <span>AI Web Page Assistant</span>
+            <span id="chatbot-toggle">−</span>
+        </div>
+        <div id="chatbot-body" style="background-color: var(--bg-white); height: 400px; display: flex; flex-direction: column; border-left: 1px solid var(--border-light); border-right: 1px solid var(--border-light);">
+            <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 12px;"></div>
+            <div style="padding: 12px; border-top: 1px solid var(--border-light);">
+                <textarea id="chat-input" placeholder="Type your message here..." style="width: 100%; padding: 8px; border: 1px solid var(--border-light); border-radius: var(--radius-sm); margin-bottom: 8px; resize: none;"></textarea>
+                <button id="chat-send" class="btn btn-primary" style="width: 100%;">Send</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        // Chatbot functionality
+const chatbotContainer = document.getElementById('chatbot-container');
+const chatbotHeader = document.getElementById('chatbot-header');
+const chatbotBody = document.getElementById('chatbot-body');
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+const chatbotToggle = document.getElementById('chatbot-toggle');
+
+let isChatMinimized = false;
+
+// Toggle chatbot visibility
+chatbotHeader.addEventListener('click', () => {
+    isChatMinimized = !isChatMinimized;
+    if (isChatMinimized) {
+        chatbotBody.style.display = 'none';
+        chatbotToggle.textContent = '+';
+    } else {
+        chatbotBody.style.display = 'flex';
+        chatbotToggle.textContent = '−';
+    }
+});
+
+// Send message function
+async function sendChatMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message to chat
+    addChatMessage('user', message);
+    chatInput.value = '';
+    
+    // Show loading message
+    const loadingId = 'loading-' + Date.now();
+    addChatMessage('assistant', 'Thinking...', loadingId);
+    
+    try {
+        // Get current HTML content
+        const currentHtml = sessionStorage.getItem('HTML_FILE') || '';
+        
+        // Prepare the API request
+        const requestBody = {
+            model: document.getElementById('modelSelect').value,
+            messages: [
+                { 
+                    role: 'system', 
+                    content: `You are an AI assistant that helps modify HTML web pages. 
+                    You will receive JSON objects with either chat messages or HTML code.
+                    Respond with JSON containing either a "chat_message" or "HTML_code" field.
+                    Only provide HTML code when explicitly asked to modify the page.`
+                },
+                {
+                    role: 'user',
+                    content: JSON.stringify({
+                        current_html: currentHtml,
+                        user_message: message
+                    })
+                }
+            ],
+            response_format: { type: "json_object" }
+        };
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(requestBody)
+        });
+        
+        if (!response.ok) throw new Error('API request failed');
+        
+        const data = await response.json();
+        const content = data.choices[0]?.message?.content;
+        
+        // Remove loading message
+        document.getElementById(loadingId)?.remove();
+        
+        try {
+            const jsonResponse = JSON.parse(content);
+            
+            if (jsonResponse.HTML_code) {
+                // Update the HTML file
+                sessionStorage.setItem('HTML_FILE', jsonResponse.HTML_code);
+                document.getElementById('HTMLCode').value = jsonResponse.HTML_code;
+                
+                // Update the preview iframe
+                const blob = new Blob([jsonResponse.HTML_code], { type: 'text/html' });
+                document.getElementById('myIframe').src = URL.createObjectURL(blob);
+                
+                addChatMessage('assistant', 'I\'ve updated the HTML file. You can preview it above or download the updated version.');
+            } else if (jsonResponse.chat_message) {
+                addChatMessage('assistant', jsonResponse.chat_message);
+            } else {
+                addChatMessage('assistant', 'I received an unexpected response format. Please try again.');
+            }
+        } catch (e) {
+            addChatMessage('assistant', 'There was an error processing the response. Please try again.');
+        }
+    } catch (error) {
+        document.getElementById(loadingId)?.remove();
+        addChatMessage('assistant', `Error: ${error.message}`);
+    }
+}
+
+// Helper function to add messages to the chat
+function addChatMessage(role, content, id = '') {
+    const messageDiv = document.createElement('div');
+    if (id) messageDiv.id = id;
+    messageDiv.style.marginBottom = '8px';
+    messageDiv.style.padding = '8px';
+    messageDiv.style.borderRadius = '4px';
+    messageDiv.style.backgroundColor = role === 'user' ? 'var(--bg-light)' : 'var(--primary)';
+    messageDiv.style.color = role === 'user' ? 'var(--text-dark)' : 'white';
+    messageDiv.style.alignSelf = role === 'user' ? 'flex-end' : 'flex-start';
+    messageDiv.style.maxWidth = '80%';
+    
+    messageDiv.textContent = content;
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Event listeners for chat
+chatSend.addEventListener('click', sendChatMessage);
+chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChatMessage();
+    }
+});
+
+// Initial welcome message
+setTimeout(() => {
+    addChatMessage('assistant', 'Hello! I can help you modify your web page. What changes would you like to make?');
+}, 1000);
+
+
+if (chatbotHeader) {
+    chatbotHeader.click();
+}
+
+    </script>
 </body>
 </html>
