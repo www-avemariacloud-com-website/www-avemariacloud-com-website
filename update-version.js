@@ -44,7 +44,7 @@ const versionNotifier = {
     console.log(`Checking for deployments...`);
     
     try {
-      const apiUrl = `https://general-proxy.small-recipe-9582.workers.dev/?target=https://api.github.com/repos/${repoOwner}/${repoName}/deployments`;
+      const apiUrl = `https://get-deployment.small-recipe-9582.workers.dev/`;
       const response = await fetch(apiUrl);
       
       if (!response.ok) throw new Error(`Failed to fetch deployments for ${filePath}`);
