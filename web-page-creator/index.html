@@ -531,6 +531,23 @@ Image 7) https://public-web-pages.github.io/custom-web-page/images/7f41ac7a6b6b6
                     <i class="fas fa-eye"></i> Preview
                 </h2>
                 <iframe id="myIframe" class="preview-frame" title="Web Page Preview"></iframe>
+
+                <h2 class="preview-title">
+                    <i class="fas fa-eye"></i> HTML Code
+                </h2>
+                <textarea id="HTMLCode" readonly></textarea>
+<button class="btn btn-primary btn-block" onclick="copyToClipboard()">Copy HTML Code</button>
+
+<script>
+function copyToClipboard() {
+    var textarea = document.getElementById("HTMLCode");
+    navigator.clipboard.writeText(textarea.value).then(() => {
+        alert("Copied to clipboard!");
+    }).catch(err => {
+        console.error("Error copying text: ", err);
+    });
+}
+</script>
             </div>
         </div>
         
@@ -692,6 +709,8 @@ Please ensure that the FILE_NAME ends in .html`;
                           sessionStorage.setItem("HTML_FILE", jsonContent.HTML_FILE);
 
                           sessionStorage.setItem("FILE_NAME", jsonContent.FILE_NAME);
+
+                          document.getElementById("HTMLCode").innerHTML = jsonContent.HTML_FILE;
                           
                           console.log(jsonContent.FILE_NAME);
                           console.log(jsonContent.HTML_FILE);
