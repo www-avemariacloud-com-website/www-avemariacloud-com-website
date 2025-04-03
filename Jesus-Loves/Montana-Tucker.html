@@ -4,405 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jesus Loves Montana Tucker</title>
+    <link rel="icon" type="image/png" href="https://public-web-pages.github.io/custom-web-page/images/3cdbce32f3e6f4f1.png">
     <style>
-        /* CSS Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Base Styling */
         body {
-            font-family: 'Georgia', serif;
+            font-family: Garamond, serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f7f3;
-        }
-
-        header {
-            background: linear-gradient(to right, #3a5894, #8b48a3);
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .header-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('/api/placeholder/800/400');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.2;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            font-style: italic;
-            margin-bottom: 1.5rem;
-        }
-
-        .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 20px;
+            background-color: #f8f9fa;
         }
-
-        .section {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        h2 {
-            color: #3a5894;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 0.5rem;
-        }
-
-        h3 {
-            color: #6a409c;
-            margin: 1.5rem 0 1rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        .scripture {
-            background-color: #f8f7f3;
-            border-left: 4px solid #8b48a3;
-            padding: 1rem;
-            margin: 1rem 0 1.5rem;
-            font-style: italic;
-        }
-
-        .scripture-ref {
-            display: block;
-            text-align: right;
-            font-weight: bold;
-            color: #3a5894;
-            margin-top: 0.5rem;
-        }
-
-        .scripture-ref a {
-            color: #3a5894;
-            text-decoration: none;
-        }
-
-        .scripture-ref a:hover {
-            text-decoration: underline;
-        }
-
-        .love-point {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-        }
-
-        .love-point-icon {
-            color: #8b48a3;
-            margin-right: 1rem;
-            font-size: 1.5rem;
-        }
-
-        footer {
+        header {
             text-align: center;
-            padding: 2rem;
-            background-color: #333;
-            color: white;
+            padding: 40px 0;
+            border-bottom: 2px solid #dee2e6;
         }
-
-        .cta-button {
-            display: inline-block;
-            background-color: #8b48a3;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-top: 1rem;
-            transition: background-color 0.2s;
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        .cta-button:hover {
-            background-color: #6a3b7a;
+        h1, h2 {
+            color: #2c3e50;
         }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-            }
-        }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate {
-            animation: fadeIn 0.8s ease-out forwards;
-            opacity: 0;
-        }
-
-        #prayer-section {
-            background-color: #f0ebf7;
+        .footer-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="header-bg"></div>
-        <div class="header-content">
-            <h1>Jesus Loves Montana Tucker</h1>
-            <div class="subtitle">Exploring God's Unconditional Love Through Scripture</div>
-        </div>
+        <h1>Jesus Loves Montana Tucker</h1>
     </header>
 
-    <div class="container">
-        <section class="section animate" id="intro-section">
-            <h2>The Universal Love of Jesus</h2>
-            <p>God's love extends to each and every one of His children, including Montana Tucker. This page explores the depth and breadth of Christ's love as revealed in Scripture, reminding us that no matter who we are, where we come from, or what we've done, we are deeply loved by our God.</p>
-            
-            <div class="scripture">
-                "For God so loved the world that he gave his only Son, so that everyone who believes in him might not perish but might have eternal life. For God did not send his Son into the world to condemn the world, but that the world might be saved through him."
-                <span class="scripture-ref"><a href="https://bible.usccb.org/bible/john/3:16" target="_blank">John 3:16-17</a></span>
-            </div>
-            
-            <p>This famous verse reminds us that God's love is not selective or exclusive. It encompasses "the world" - every person, including Montana Tucker and each one of us. This love is so profound that God sent his Son into the world.</p>
-        </section>
+    <section class="container">
+        <h2>A Message of Divine Love</h2>
+        <p>Jesus Christ demonstrates unconditional love for all people, including Montana Tucker. This fundamental Christian teaching emphasizes God's infinite compassion and mercy towards humanity.</p>
+    </section>
 
-        <section class="section animate" id="characteristics-section">
-            <h2>How Jesus Loves Us</h2>
-            
-            <div class="love-point">
-                <div class="love-point-icon">❤️</div>
-                <div>
-                    <h3>Unconditionally</h3>
-                    <p>Jesus loves us without conditions or prerequisites. His love isn't based on our accomplishments, status, or even our faithfulness.</p>
-                    <div class="scripture">
-                        "But God proves his love for us in that while we were still sinners Christ died for us."
-                        <span class="scripture-ref"><a href="https://bible.usccb.org/bible/romans/5:8" target="_blank">Romans 5:8</a></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="love-point">
-                <div class="love-point-icon">❤️</div>
-                <div>
-                    <h3>Sacrificially</h3>
-                    <p>Jesus demonstrated the greatest form of love.</p>
-                    <div class="scripture">
-                        "No one has greater love than this, to lay down one's life for one's friends."
-                        <span class="scripture-ref"><a href="https://bible.usccb.org/bible/john/15:13" target="_blank">John 15:13</a></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="love-point">
-                <div class="love-point-icon">❤️</div>
-                <div>
-                    <h3>Eternally</h3>
-                    <p>The love of Christ is not temporary or fickle; it is constant and eternal.</p>
-                    <div class="scripture">
-                        "from afar the LORD appears:
+    <section class="container">
+        <h2>About Jesus' Teachings</h2>
+        <p>Jesus' teachings revolve around love, forgiveness, and kindness. His message transcends individuals, reaching all people regardless of their background or circumstances.</p>
+    </section>
 
-                        With age-old love I have loved you;
-                        
-                        so I have kept my mercy toward you."
-                        <span class="scripture-ref"><a href="https://bible.usccb.org/bible/jeremiah/31:3" target="_blank">Jeremiah 31:3</a></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="love-point">
-                <div class="love-point-icon">❤️</div>
-                <div>
-                    <h3>Personally</h3>
-                    <p>Jesus knows each of us intimately and loves us individually, including Montana Tucker.</p>
-                    <div class="scripture">
-                        "Before I formed you in the womb I knew you,
+    <section class="container">
+        <h2>The Importance of Love in Christianity</h2>
+        <p>John 13:34-35
+New American Bible (Revised Edition)<BR><BR>
+I give you a new commandment: love one another. As I have loved you, so you also should love one another. This is how all will know that you are my disciples, if you have love for one another.”</p>
+    </section>
 
-                        before you were born I dedicated you,
-                        
-                        a prophet to the nations I appointed you."
-                        <span class="scripture-ref"><a href="https://bible.usccb.org/bible/jeremiah/1:5" target="_blank">Jeremiah 1:5</a></span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section animate" id="personal-section">
-            <h2>Personal Love for Each Individual</h2>
-            <p>The beautiful truth of Christianity is that Jesus doesn't just love humanity in a general sense - He loves each person individually, with specific knowledge of who they are. This means that Jesus loves Montana Tucker with a personal, intimate love that acknowledges her unique identity, gifts, struggles, and purpose.</p>
-            
-            <div class="scripture">
-                "Can a mother forget her infant,
-
-                be without tenderness for the child of her womb?
-                
-                Even should she forget,
-                
-                I will never forget you.
-
-                See, upon the palms of my hands I have engraved you;
-                
-                your walls are ever before me."
-                <span class="scripture-ref"><a href="https://bible.usccb.org/bible/isaiah/49:15" target="_blank">Isaiah 49:15-16</a></span>
-            </div>
-            
-            <p>This powerful image shows how God's love protects us. The metaphor of our names being engraved on God's palms illustrates how we are always present to Him, always remembered, always loved.</p>
-            
-            <h3>No One Is Beyond God's Love</h3>
-            <p>Scripture repeatedly emphasizes that no one falls outside the sphere of God's love. Regardless of one's past, present circumstances, or future choices, God's love remains constant.</p>
-            
-            <div class="scripture">
-                "For I am convinced that neither death, nor life, nor angels, nor principalities, nor present things, nor future things, nor powers, nor height, nor depth, nor any other creature will be able to separate us from the love of God in Christ Jesus our Lord."
-                <span class="scripture-ref"><a href="https://bible.usccb.org/bible/romans/8:38" target="_blank">Romans 8:38-39</a></span>
-            </div>
-        </section>
-
-        <section class="section animate" id="prayer-section">
-            <h2>A Prayer of God's Love</h2>
-            <p>As we reflect on God's love for Montana Tucker and for each of us, let us pray:</p>
-            
-            <div class="scripture" style="font-style: normal;">
-                Loving Father,<br><br>
-                
-                We thank You for Your boundless love that reaches every person, including Montana Tucker. Help us to comprehend the width, length, height, and depth of Your love that surpasses understanding.<br><br>
-                
-                May Montana and all who visit this page experience the personal, unconditional love of Jesus Christ. May we be reminded that nothing can separate us from Your love.<br><br>
-                
-                In Jesus' name we pray,<br>
-                Amen.
-            </div>
-            
-            <div class="scripture">
-                "For this reason I kneel before the Father,
-                
-                from whom every family in heaven and on earth is named,
-                
-                that he may grant you in accord with the riches of his glory to be strengthened with power through his Spirit in the inner self,
-                
-                and that Christ may dwell in your hearts through faith; that you, rooted and grounded in love,
-                
-                may have strength to comprehend with all the holy ones what is the breadth and length and height and depth,
-                
-                and to know the love of Christ that surpasses knowledge, so that you may be filled with all the fullness of God.
-                
-                Now to him who is able to accomplish far more than all we ask or imagine, by the power at work within us,
-                
-                to him be glory in the church and in Christ Jesus to all generations, forever and ever. Amen."
-                <span class="scripture-ref"><a href="https://bible.usccb.org/bible/ephesians/3:14" target="_blank">Ephesians 3:14-21</a></span>
-            </div>
-        </section>
+    <div class="footer-section">
+        <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
     </div>
 
-    <footer>
-        <p>
-            © 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
-            <a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
-            <BR><BR>
-            Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
-            <br><br>
-            Software, code, text, an image, images and/or things may have been created and may be created using services, tools, software, API, APIs, or things relating to
-            <a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
-            <a href="https://www.anthropic.com/" target="_blank">Anthropicand/or Claude AI </a>, 
-            <a href="https://ai.meta.com/" target="_blank">Meta and/or Meta Llama 3 </a>, 
-            <a href="https://ai.google/" target="_blank">Google and/or Gemma</a>,
-            <a href="https://stability.ai/" target="_blank">Stability AI and/or Stable Diffusion</a>,
-            <a href="https://blackforestlabs.com/" target="_blank">Black Forest Labs and/or FLUX.1 [dev]</a>,
-            <a href=”https://huggingface.co/”>Hugging Face</a>,
-            <a href="https://groq.com/" target="_blank">Groq</a>, and
-            <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>
-            
-            You may benefit from consulting, reading, and/or agreeing to terms of service, usage guidelines, and/or other documentation relating to 
-            <a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>, 
-            <a href="https://www.anthropic.com/" target="_blank">Anthropicand/or Claude AI </a>, 
-            <a href="https://ai.meta.com/" target="_blank">Meta and/or Meta Llama 3 </a>, 
-            <a href="https://ai.google/" target="_blank">Google and/or Gemma</a>,
-            <a href="https://stability.ai/" target="_blank">Stability AI and/or Stable Diffusion</a>,
-            <a href="https://blackforestlabs.com/" target="_blank">Black Forest Labs and/or FLUX.1 [dev]</a>,
-            <a href=”https://huggingface.co/”>Hugging Face</a>,
-            <a href="https://groq.com/" target="_blank">Groq, Inc. and/or Groq</a>, and
-            <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>
-            
-            <br><br>
-            HuggingFace: Relevant links may include: <a href="https://huggingface.co/terms-of-service">Terms of Service</a>, <a href="https://huggingface.co/privacy">Hugging Face Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Policy 🤗</a>, <a href="https://huggingface.co/docs">Docs</a>, and <a href="Contributor Covenant Code of Conduct">Contributor Covenant Code of Conduct</a><br>
-            Groq, Inc. and/or Groq: Relevant links may include <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
-            Stability AI and/or Stable Diffusion: Relevant links may include <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
-            Black Forest Labs and/or FLUX.1 [dev]: Relevant links may include <a href=”https://blackforestlabs.ai/impressum/”>Impressum</a> <a href=”https://blackforestlabs.ai/terms-of-service/”>Terms Of Service</a> <a href=”https://blackforestlabs.ai/privacy-policy/”> Privacy Policy</a>
-            OpenAI and/or ChatGPT: Relevant links may include <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
-            Anthropic PBC and/or Claude AI: Relevant links may include <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
-            Meta and/or Meta Llama 3: Relevant links may include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
-            Google and/or Gemma: Relevant links may include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
-            Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href=”https://trust.mistral.ai/”>Trust Center</a>.
-            <br><br>
-            Some notices may be relevant.<br><br>
-            <strong>Built with Meta Llama 3:</strong> <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 is licensed under the Meta Llama 3 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.</a><br>
-            <strong>Gemma:</strong> Gemma is provided under and subject to the Gemma Terms of Use found at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>.<br>
-            <strong>Mixtral-8x7B License:</strong> Mixtral-8x7B is distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.<br>
-            <strong><a href="https://avemariacloud.com/stability-ai-notice.txt">Notice</a>: Powered by Stability AI:</strong> This Stability AI Model is licensed under the <a href="https://stability.ai/community-license-agreement">Stability AI Community License</a>, Copyright ©  Stability AI Ltd. All Rights Reserved. Stability AI<br>
-            <strong>Hugging Face API:</strong> This tool may use an API, APIs, or things relating to Hugging Face, and may be subject to their<a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
-            <strong>Attribution Notice: FLUX.1 [dev] Model</strong> any rights to use the FLUX.1 [dev] Models and/or Derivatives shall be directly granted by Company to said third-party recipients pursuant to this <a href="https://huggingface.co/black-forest-labs/FLUX.1-dev/blob/main/LICENSE.md">License</a> "The FLUX.1 [dev] Model is licensed by Black Forest Labs. Inc. under the FLUX.1 [dev] Non-Commercial License. Copyright Black Forest Labs. Inc. IN NO EVENT SHALL BLACK FOREST LABS, INC. BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH USE OF THIS MODEL." I may have have modified the applicable FLUX.1 [dev] Model. <a href="https://avemariacloud.com/flux.1-[dev]-notice.txt">FLUX.1 [dev] Model Notice</a>
-            
-            </p>            
-    </footer>
-
-    <script>
-        // Simple animation for sections as they come into view
-        document.addEventListener('DOMContentLoaded', function() {
-            const animatedElements = document.querySelectorAll('.animate');
-            
-            function checkIfInView() {
-                animatedElements.forEach(function(element, index) {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const windowHeight = window.innerHeight;
-                    
-                    if (elementTop < windowHeight - 100) {
-                        setTimeout(function() {
-                            element.style.opacity = '1';
-                            element.style.transform = 'translateY(0)';
-                        }, index * 200);
-                    }
-                });
-            }
-            
-            // Check on load
-            checkIfInView();
-            
-            // Check on scroll
-            window.addEventListener('scroll', checkIfInView);
-        });
-    </script>
+    <script src="https://www.avemariacloud.com/generic-loader.js"></script>
 </body>
 </html>
