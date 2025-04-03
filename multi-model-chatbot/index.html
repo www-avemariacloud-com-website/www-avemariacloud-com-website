@@ -398,15 +398,7 @@
             errorMessage: document.getElementById('errorMessage')
         };
 
-        // Application state
-        const state = {
-            conversationHistory: [],
-            currentImage: null,
-            originalModel: null,
-            systemPrompts: {
-                universal: {
-                    greeting: "Welcome to AveMariaCloud! You can upload images for analysis.",
-                    content: `I would like you to be a helpful AI chatbot for a Christian website.
+        var universalPrompt = `I would like you to be a helpful AI chatbot for a Christian website.
 
 I would like a very strong bias for caution and perfect information.
 
@@ -457,16 +449,26 @@ James: https://bible.usccb.org/bible/james/0
 Jude: https://bible.usccb.org/bible/jude/0
 Revelation: https://bible.usccb.org/bible/revelation/0
 
-\`\`\``
+\`\`\``;
+
+        // Application state
+        const state = {
+            conversationHistory: [],
+            currentImage: null,
+            originalModel: null,
+            systemPrompts: {
+                universal: {
+                    greeting: "Welcome to AveMariaCloud!",
+                    content: universalPrompt
                 },
                 christian_zionism: {
-                    greeting: "Shalom! You can upload images for analysis.",
-                    content: `[Same as universal content...]
+                    greeting: "Shalom!",
+                    content: universalPrompt + `
 
 I would like you to share information within the context of Christian Zionism.`
                 },
                 raw: {
-                    greeting: "Welcome! You can upload images for analysis.",
+                    greeting: "Welcome!",
                     content: ``
                 }
             }
@@ -474,23 +476,23 @@ I would like you to share information within the context of Christian Zionism.`
 
         // Core functions
         function updateSystemPrompt(type) {
-            try {
-                localStorage.setItem("chatbotSystemPrompt", type);
-                
-                if (type === 'custom') {
-                    const customPrompt = prompt("Enter custom system prompt:");
-                    if (customPrompt) {
-                        resetChat("Hello!", customPrompt);
-                    }
-                    return;
-                }
-                
-                const prompt = state.systemPrompts[type] || state.systemPrompts.universal;
-                resetChat(prompt.greeting, prompt.content);
-            } catch (error) {
-                console.error("Error updating system prompt:", error);
-            }
+    localStorage.setItem("chatbotSystemPrompt", type);
+    
+    if (type == 'custom') {
+        var customPrompt = prompt("Enter custom system prompt:");  // Renaming variable to avoid conflict
+        if (customPrompt) {
+            resetChat("Hello!", universalPrompt + `
+
+` + customPrompt);
         }
+        return;
+    }
+    
+    // Renaming 'prompt' to 'systemPrompt' to avoid conflict with the variable above
+    const systemPrompt = state.systemPrompts[type] || state.systemPrompts.universal;
+    resetChat(systemPrompt.greeting, systemPrompt.content);
+}
+
 
         function resetChat(greeting, systemContent) {
             try {
