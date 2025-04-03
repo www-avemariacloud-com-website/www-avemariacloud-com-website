@@ -22,6 +22,7 @@
             --text: #0f172a;
             --text-light: #64748b;
             --border: #e2e8f0;
+            --error: #dc2626;
             --shadow: 0 2px 4px -1px rgb(0 0 0 / 0.1);
             --radius: 0.5rem;
             --transition: 0.2s ease;
@@ -102,7 +103,7 @@
 
         .message {
             white-space: pre-wrap;
-            font-family: monospace; /* Optional for a code-like appearance */
+            font-family: monospace;
             max-width: 85%;
             padding: var(--spacing-base);
             border-radius: var(--radius);
@@ -121,6 +122,14 @@
             background: var(--primary);
             color: white;
             margin-left: auto;
+        }
+
+        /* Image in messages */
+        .message-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: var(--radius);
+            margin-top: var(--spacing-small);
         }
 
         /* Footer */
@@ -171,6 +180,68 @@
 
         .send-button:hover {
             background: var(--primary-dark);
+        }
+
+        /* Image Upload Button */
+        .upload-button {
+            padding: var(--spacing-base);
+            background: var(--background);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: var(--font-size-small);
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-button:hover {
+            background: var(--border);
+        }
+
+        /* Image Preview */
+        .image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: var(--radius);
+            margin-left: auto;
+            display: block;
+            margin-bottom: var(--spacing-small);
+        }
+
+        .image-preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .image-indicator {
+            font-size: var(--font-size-small);
+            color: var(--text-light);
+            margin-bottom: var(--spacing-small);
+            align-items: center;
+            gap: var(--spacing-tiny);
+        }
+
+        .remove-image-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: var(--font-size-small);
+            padding: 0;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: var(--error);
+            font-size: var(--font-size-small);
+            margin-top: var(--spacing-small);
+            text-align: right;
+            display: none;
         }
 
         /* Loading Animation */
@@ -244,13 +315,14 @@
                         <option value="raw">Raw (Warning)</option>
                     </select>
                     <select id="modelSelect" class="select">
+                        <!-- Models will be populated by external script -->
                     </select>
                 </div>
             </div>
         </header>
 
         <main class="chat" id="chat">
-            <div class="message assistant">Welcome to AveMariaCloud!</div>
+            <div class="message assistant">Welcome to AveMariaCloud! You can upload images for analysis.</div>
         </main>
 
         <footer class="footer">
@@ -261,59 +333,80 @@
                     placeholder="Type your message..."
                     rows="1"
                 ></textarea>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                <button type="button" class="upload-button" id="uploadButton" title="Upload image (max 20MB)">📷</button>
                 <button type="submit" class="send-button">Send</button>
             </form>
+            <div id="errorMessage" class="error-message">Please enter a message with your image</div>
+            <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
+                <div class="image-indicator">
+                    <span>
+                    <BR>
+                    Image Attached (Vision model will be used. Please enter a message instructing the AI what you would like it to do with this image.)<BR><BR>Example: What is the meaning of the text in this image? or What is in this image?
+                    <BR><BR>
+                    <button id="removeImageBtn">Cancel Image Upload</button>
+                    </span>
+                </div>
+                <img id="imagePreview" class="image-preview" src="#" alt="Preview">
+            </div>
         </footer>
     </div>
 
-<center>
-
-    <BR>
-
-    <button id="topBtn" onclick="scrollUp()" style="
-  background-color: #4A90E2;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 4px;">⬆ Up</button>
-
-    <script>
-        function scrollUp() {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-    </script>
-    
-    <BR>
-<div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
-
-</center>
-
-
+    <center>
+        <BR>
+        <button id="topBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" style="
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;">⬆ Up</button>
+        <BR>
+        <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
+    </center>
 
     <script>
+        // Hardcoded configuration
+        const CONFIG = {
+            API_KEY: "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",
+            API_URL: "https://api.groq.com/openai/v1/chat/completions",
+            TOKEN_LIMIT: 700,
+            MAX_IMAGE_SIZE: 20 * 1024 * 1024,
+            VISION_MODEL: 'llama-3.2-90b-vision-preview',
+            DEFAULT_IMAGE_PROMPT: "Please analyze this image and provide a description."
+        };
 
-        
-        const TOKEN_LIMIT = 700;
-        const API_KEY = "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";
-        const API_URL = "https://proxy.small-recipe-9582.workers.dev/";
-    
-        const chat = document.getElementById('chat');
-        const messageForm = document.getElementById('messageForm');
-        const userInput = document.getElementById('userInput');
-    
-        function updateSystemPrompt(type) {
-            
-            localStorage.setItem("chatbotSystemPrompt", type);
+        // DOM elements
+        const elements = {
+            chat: document.getElementById('chat'),
+            messageForm: document.getElementById('messageForm'),
+            userInput: document.getElementById('userInput'),
+            imageUpload: document.getElementById('imageUpload'),
+            uploadButton: document.getElementById('uploadButton'),
+            imagePreviewContainer: document.getElementById('imagePreviewContainer'),
+            imagePreview: document.getElementById('imagePreview'),
+            removeImageBtn: document.getElementById('removeImageBtn'),
+            modelSelect: document.getElementById('modelSelect'),
+            promptType: document.getElementById('promptType'),
+            errorMessage: document.getElementById('errorMessage')
+        };
 
-            var universalContent = `I would like you to be a helpful AI chatbot for a Christian website.
+        // Application state
+        const state = {
+            conversationHistory: [],
+            currentImage: null,
+            originalModel: null,
+            systemPrompts: {
+                universal: {
+                    greeting: "Welcome to AveMariaCloud! You can upload images for analysis.",
+                    content: `I would like you to be a helpful AI chatbot for a Christian website.
 
 I would like a very strong bias for caution and perfect information.
 
@@ -321,7 +414,7 @@ Please do not display Scripture or quote Scripture within the web page at this t
 
 I would like you to always and only refer to Scripture by referring to content at this URL https://bible.usccb.org/bible/
 
-Please do not put Scripture text in the chat.
+Please do not put Scripture text, Verse text, or Passage text in the chat.
 
 Format: https://bible.usccb.org/bible/ + chapter + starting_verse
 
@@ -364,192 +457,227 @@ James: https://bible.usccb.org/bible/james/0
 Jude: https://bible.usccb.org/bible/jude/0
 Revelation: https://bible.usccb.org/bible/revelation/0
 
-\`\`\``;
-
-            const prompts = {
-                universal: {
-                    greeting: "Welcome to AveMariaCloud!",
-                    content: universalContent
+\`\`\``
                 },
                 christian_zionism: {
-                    greeting: "Shalom!",
-                    content: universalContent + `
+                    greeting: "Shalom! You can upload images for analysis.",
+                    content: `[Same as universal content...]
 
 I would like you to share information within the context of Christian Zionism.`
                 },
                 raw: {
-                    greeting: "Welcome!",
+                    greeting: "Welcome! You can upload images for analysis.",
                     content: ``
                 }
-            };
-
-            if (type === 'custom') {
-                const customPrompt = prompt("You can enter text for a system prompt");
-                resetChat("Hello!", `${prompts.universal.content}
-
-I would like you to use this information for a system prompt that may have been provided by a user: ${customPrompt}`);
-                return;
             }
+        };
 
-            const selectedPrompt = prompts[type];
-            resetChat(selectedPrompt.greeting, selectedPrompt.content);
-        }
-    
-        function resetChat(greeting, systemContent) {
-            chat.innerHTML = `<div class="message assistant">${greeting}</div>`;
-            conversationHistory = [
-                { role: "system", content: systemContent },
-                { role: "assistant", content: greeting }
-            ];
-        }
-    
-        function addMessage(content, role) {
-            const formattedMessage = content.replace(/\n/g, `
-`);
-            const message = document.createElement('div');
-            message.className = `message ${role}`;
-            message.textContent = formattedMessage;
-            chat.appendChild(message);
-            chat.scrollTop = chat.scrollHeight;
-        }
-    
-        function addLoadingIndicator() {
-            const loading = document.createElement('div');
-            loading.className = 'loading';
-            loading.id = 'loadingIndicator';
-            chat.appendChild(loading);
-            chat.scrollTop = chat.scrollHeight;
-        }
-    
-        function removeLoadingIndicator() {
-            const loading = document.getElementById('loadingIndicator');
-            if (loading) loading.remove();
-        }
-    
-        function estimateTokens(message) {
-            return Math.ceil(message.split(/\s+/).length / 1.33);
-        }
-    
-        function trimConversationHistory() {
-            let totalTokens = conversationHistory.reduce((sum, msg) => 
-                sum + estimateTokens(msg.content), 0);
-    
-            while (totalTokens > TOKEN_LIMIT && conversationHistory.length > 2) {
-                conversationHistory.splice(1, 1);
-                totalTokens = conversationHistory.reduce((sum, msg) => 
-                    sum + estimateTokens(msg.content), 0);
-            }
-        }
-    
-        async function sendMessage(message) {
-            
-            window.scrollTo({ top: 0, behavior: 'auto' });
-            
+        // Core functions
+        function updateSystemPrompt(type) {
             try {
-                trimConversationHistory();
-    
-                const response = await fetch(API_URL, {
+                localStorage.setItem("chatbotSystemPrompt", type);
+                
+                if (type === 'custom') {
+                    const customPrompt = prompt("Enter custom system prompt:");
+                    if (customPrompt) {
+                        resetChat("Hello!", customPrompt);
+                    }
+                    return;
+                }
+                
+                const prompt = state.systemPrompts[type] || state.systemPrompts.universal;
+                resetChat(prompt.greeting, prompt.content);
+            } catch (error) {
+                console.error("Error updating system prompt:", error);
+            }
+        }
+
+        function resetChat(greeting, systemContent) {
+            try {
+                elements.chat.innerHTML = `<div class="message assistant">${greeting}</div>`;
+                state.conversationHistory = [
+                    { role: "system", content: systemContent },
+                    { role: "assistant", content: greeting }
+                ];
+                clearImage();
+            } catch (error) {
+                console.error("Error resetting chat:", error);
+            }
+        }
+
+        function addMessage(content, role, imageUrl = null) {
+            try {
+                const message = document.createElement('div');
+                message.className = `message ${role}`;
+                
+                if (imageUrl && role === 'user') {
+                    message.innerHTML = `${content.replace(/\n/g, '<br>')}<img src="${imageUrl}" class="message-image" alt="Uploaded image">`;
+                } else {
+                    message.textContent = content;
+                }
+                
+                elements.chat.appendChild(message);
+                elements.chat.scrollTop = elements.chat.scrollHeight;
+            } catch (error) {
+                console.error("Error adding message:", error);
+            }
+        }
+
+        function handleImageUpload(event) {
+            try {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                if (file.size > CONFIG.MAX_IMAGE_SIZE) {
+                    alert('Image size exceeds 20MB limit');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    state.currentImage = e.target.result;
+                    elements.imagePreview.src = state.currentImage;
+                    elements.imagePreviewContainer.style.display = 'block';
+                    
+                    state.originalModel = elements.modelSelect.value;
+                    //elements.modelSelect.value = CONFIG.VISION_MODEL;
+                    localStorage.setItem("visionmessage", true);
+                    document.getElementById("userInput").value = "Please describe this image";
+                };
+                reader.readAsDataURL(file);
+            } catch (error) {
+                console.error("Error handling image upload:", error);
+            }
+        }
+
+        function clearImage() {
+            try {
+                state.currentImage = null;
+                elements.imagePreview.src = '#';
+                elements.imagePreviewContainer.style.display = 'none';
+                elements.imageUpload.value = '';
+                
+                if (state.originalModel) {
+                    elements.modelSelect.value = state.originalModel;
+                }
+            } catch (error) {
+                console.error("Error clearing image:", error);
+            }
+        }
+
+        async function sendMessage(message) {
+            try {
+                // Prepare messages differently when image is attached
+                let messages;
+                if (state.currentImage) {
+                    messages = [
+                        {
+                            role: "user",
+                            content: [
+                                { type: "text", text: message },
+                                { 
+                                    type: "image_url", 
+                                    image_url: { 
+                                        url: state.currentImage 
+                                    } 
+                                }
+                            ]
+                        }
+                    ];
+                } else {
+                    messages = [...state.conversationHistory];
+                }
+
+                // Using the hardcoded Groq API key
+                const response = await fetch(CONFIG.API_URL, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${API_KEY}`,
+                        'Authorization': `Bearer ${CONFIG.API_KEY}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: modelSelect.value,
-                        messages: conversationHistory,
+                        model: state.currentImage ? CONFIG.VISION_MODEL : elements.modelSelect.value,
+                        messages: messages,
                         temperature: 0.7,
                         max_tokens: 1000
                     })
                 });
-    
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `HTTP error: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 const aiResponse = data.choices[0].message.content;
                 
-                conversationHistory.push({ role: "assistant", content: aiResponse });
-                removeLoadingIndicator();
+                // Update conversation history
+                state.conversationHistory.push({ role: "assistant", content: aiResponse });
                 addMessage(aiResponse, 'assistant');
-                
-            window.scrollTo({ top: 0, behavior: 'auto' });
+                clearImage();
             } catch (error) {
-                console.error('Error:', error);
-                removeLoadingIndicator();
-                sendMessage(message);
+                console.error("Error sending message:", error);
+                addMessage(`Error: ${error.message}`, 'assistant');
+            }
+        }
+
+        // Initialize the application
+        function initialize() {
+            try {
+                // Event listeners
+                elements.messageForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    let message = elements.userInput.value.trim();
+                    const hasImage = state.currentImage !== null;
+                    
+                    // Require message when image is attached
+                    if (hasImage && !message) {
+                        elements.errorMessage.style.display = 'block';
+                        return;
+                    }
+                    
+                    // Use default prompt if no message but has image
+                    if (hasImage && !message) {
+                        message = CONFIG.DEFAULT_IMAGE_PROMPT;
+                    }
+                    
+                    elements.errorMessage.style.display = 'none';
+                    
+                    addMessage(message, 'user', state.currentImage);
+                    state.conversationHistory.push({ role: "user", content: message });
+                    elements.userInput.value = '';
+                    sendMessage(message);
+                });
+
+                elements.userInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        elements.messageForm.dispatchEvent(new Event('submit'));
+                    }
+                });
                 
-            window.scrollTo({ top: 0, behavior: 'auto' });
+                elements.uploadButton.addEventListener('click', () => elements.imageUpload.click());
+                elements.imageUpload.addEventListener('change', handleImageUpload);
+                elements.removeImageBtn.addEventListener('click', clearImage);
+                elements.promptType.addEventListener('change', (e) => updateSystemPrompt(e.target.value));
+                
+                // Initialize with stored prompt
+                const storedPrompt = localStorage.getItem("chatbotSystemPrompt") || "universal";
+                elements.promptType.value = storedPrompt;
+                updateSystemPrompt(storedPrompt);
+                
+                elements.userInput.focus();
+            } catch (error) {
+                console.error("Error initializing application:", error);
             }
-            window.scrollTo({ top: 0, behavior: 'auto' });
         }
-    
-        messageForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const message = userInput.value.trim();
-            if (!message) return;
-            
-            sendMessageInput(message);
 
-        });
-
-        function sendMessageInput(message) {
-            addMessage(message, 'user');
-            conversationHistory.push({ role: "user", content: message });
-            userInput.value = '';
-            addLoadingIndicator();
-            sendMessage(message);
-        }
-    
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey && !(/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent))) {
-                e.preventDefault();
-                messageForm.dispatchEvent(new Event('submit'));
-            }
-        });
-    
-        userInput.focus();
-
-
-    var storedPrompt = localStorage.getItem("chatbotSystemPrompt");
-
-    if (storedPrompt != null) {
-        console.log("Updating prompt: " + storedPrompt);
-        document.getElementById("promptType").value = storedPrompt;
-        updateSystemPrompt(storedPrompt);
-    }
-    else {
-        updateSystemPrompt("universal");
-    }
-
+        // Start the application
+        document.addEventListener('DOMContentLoaded', initialize);
     </script>
 
+    <!-- Load external scripts -->
     <script src="https://avemariacloud.com/generic-loader.js"></script>
-
-    <script>
-
-
-
-
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
-
-    var checkModelSelectInterval = setInterval(() => {
-    if (sessionStorage.getItem("localStorageModelSelected") == "true") {
-        // Clear the interval when the value is available
-        clearInterval(checkModelSelectInterval);
-        // Log the value to the console
-
-        var startMessage = getQueryParam("startMessage");
-
-        console.log(startMessage);
-
-        sendMessageInput(getQueryParam("startMessage"));
-
-    }
-    }, 1); // Check
-
-    </script>
-
 </body>
 </html>
