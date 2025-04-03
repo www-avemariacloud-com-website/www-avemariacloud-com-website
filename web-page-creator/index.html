@@ -418,7 +418,15 @@ document.getElementById('image-upload').addEventListener('change', async (e) => 
         // Update textarea with image URLs and descriptions
         if (uploadedData.length > 0) {
             const textarea = document.getElementById('user-message');
-            let imageText = '\n\nI am interested in using these images.\n\n';
+
+            var imageText = '';
+
+            if (uploadedData.length > 1) {
+                imageText = '\n\nI am interested in using these images.\n\n';
+            }
+            else {
+                imageText = '\n\nI am interested in using this image.\n\n';
+            }
             uploadedData.forEach((item, index) => {
                 imageText += `Image ${index + 1}) ${item.url} (Image Description: ${item.description})\n\n`;
             });
