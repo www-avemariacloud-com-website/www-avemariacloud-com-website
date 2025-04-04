@@ -149,11 +149,5 @@ const versionNotifier = {
   }
 };
 
-// Initialize when information is loaded
-var checkInformationLoaded = setInterval(() => {
-  if (sessionStorage.getItem("informationLoaded") == "true") {
-    clearInterval(checkInformationLoaded);
-    console.log("Starting deployment checking...");
-    versionNotifier.startVersionChecking('www-avemariacloud-com-website', 'www-avemariacloud-com-website');
-  }
-}, 100);
+versionNotifier.checkVersion('www-avemariacloud-com-website', 'www-avemariacloud-com-website');
+
