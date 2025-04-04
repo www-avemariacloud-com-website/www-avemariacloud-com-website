@@ -140,14 +140,20 @@ const versionNotifier = {
       notification.style.display = 'none';
     });
     
-    // Auto-hide after 30 seconds
+    // Auto-hide after 100ms
     setTimeout(() => {
       if (notification.parentNode) {
         notification.style.display = 'none';
       }
-    }, 30000);
+    }, 100);
   }
 };
 
-versionNotifier.checkVersion('www-avemariacloud-com-website', 'www-avemariacloud-com-website');
-
+// Initialize when information is loaded
+var checkInformationLoaded = setInterval(() => {
+  if (sessionStorage.getItem("informationLoaded") == "true") {
+    clearInterval(checkInformationLoaded);
+    console.log("Starting deployment checking...");
+    versionNotifier.startVersionChecking('www-avemariacloud-com-website', 'www-avemariacloud-com-website');
+  }
+}, 100);
