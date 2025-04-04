@@ -140,12 +140,12 @@ const versionNotifier = {
       notification.style.display = 'none';
     });
     
-    // Auto-hide after 100ms
+    // Auto-hide
     setTimeout(() => {
       if (notification.parentNode) {
         notification.style.display = 'none';
       }
-    }, 100);
+    }, 500);
   }
 };
 
