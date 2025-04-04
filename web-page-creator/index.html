@@ -837,6 +837,8 @@ I am interested in requiring that this HTML code be included in the web page at 
 <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
 \`\`\`
 
+If no URL specifically for a favicon is provided by the user, use an image URL that the user has provided. If the user has not provided a URL for an image or a URL specifically for a favicon use this URL for a favicon: "https://public-web-pages.github.io/custom-web-page/images/42e9b261d0a26e41.png"
+
 I am interested in requiring that this external Javascript file be run on this web page after the informationFooter: "https://www.avemariacloud.com/generic-loader.js"
 
 The Javascript code that I referenced earlier will populate the “informationFooter” div with some information that I have.
@@ -1067,12 +1069,12 @@ async function sendChatMessage() {
                 { 
                     role: 'system', 
                     content: `You are an AI assistant that helps modify HTML web pages. 
-                    The user will provide their current HTML code and a request for changes.
-                    When responding:
-                    - If the user wants code changes, respond with a JSON object containing the complete updated HTML code in the "HTML_code" field.
-                    - If the user is just asking a question or having a conversation, respond with a JSON object containing your message in the "chat_message" field.
-                    - Always use either "chat_message" or "HTML_code" as your response labels.
-                    - When providing HTML code, include the complete updated HTML document, not just the changed portions.`
+The user will provide their current HTML code and a request for changes.
+When responding:
+- If the user wants code changes, respond with a JSON object containing the complete updated HTML code in the "HTML_code" field.
+- If the user is just asking a question or having a conversation, respond with a JSON object containing your message in the "chat_message" field.
+- Always use either "chat_message" or "HTML_code" as your response labels.
+- When providing HTML code, include the complete updated HTML document, not just the changed portions.`
                 },
                 {
                     role: 'user',
