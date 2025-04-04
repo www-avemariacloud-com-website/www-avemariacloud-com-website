@@ -990,12 +990,14 @@ function downloadHTML(filename, content) {
     <script src="https://avemariacloud.com/generic-loader.js"></script>
 
 
-    <div id="chatbot-container" style="position: fixed; bottom: 0; right: 0; width: 350px; z-index: 1000;">
+
+    
+    <div id="chatbot-container" style="position: fixed; bottom: 0; right: 0; width: 350px; z-index: 1000; margin-bottom: 0;">
         <div id="chatbot-header" style="background-color: var(--primary); color: white; padding: 12px; border-top-left-radius: var(--radius-sm); border-top-right-radius: var(--radius-sm); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
             <span>AI Web Page Assistant</span>
-            <span id="chatbot-toggle">−</span>
+            <span id="chatbot-toggle">+</span>
         </div>
-        <div id="chatbot-body" style="background-color: var(--bg-white); height: 400px; display: flex; flex-direction: column; border-left: 1px solid var(--border-light); border-right: 1px solid var(--border-light);">
+        <div id="chatbot-body" style="background-color: var(--bg-white); height: 400px; display: none; flex-direction: column; border-left: 1px solid var(--border-light); border-right: 1px solid var(--border-light);">
             <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 12px;"></div>
             <div style="padding: 12px; border-top: 1px solid var(--border-light);">
                 <textarea id="chat-input" placeholder="Type your message here..." style="width: 100%; padding: 8px; border: 1px solid var(--border-light); border-radius: var(--radius-sm); margin-bottom: 8px; resize: none;"></textarea>
@@ -1007,7 +1009,7 @@ function downloadHTML(filename, content) {
 
     <script>
 
-        // Chatbot functionality
+// Chatbot functionality
 const chatbotContainer = document.getElementById('chatbot-container');
 const chatbotHeader = document.getElementById('chatbot-header');
 const chatbotBody = document.getElementById('chatbot-body');
@@ -1016,9 +1018,20 @@ const chatInput = document.getElementById('chat-input');
 const chatSend = document.getElementById('chat-send');
 const chatbotToggle = document.getElementById('chatbot-toggle');
 
-let isChatMinimized = false;
+// Set initial state to minimized
+let isChatMinimized = true;
+chatbotBody.style.display = 'none';
+chatbotToggle.textContent = '+';
 
-// Toggle chatbot visibility
+// Update the container styling to be positioned at the bottom right with no gap
+chatbotContainer.style.position = 'fixed';
+chatbotContainer.style.bottom = '0';
+chatbotContainer.style.right = '0';
+chatbotContainer.style.width = '350px';
+chatbotContainer.style.zIndex = '1000';
+chatbotContainer.style.marginBottom = '0';
+
+// Toggle chatbot visibility when clicking anywhere on the header
 chatbotHeader.addEventListener('click', () => {
     isChatMinimized = !isChatMinimized;
     if (isChatMinimized) {
@@ -1044,19 +1057,22 @@ async function sendChatMessage() {
     addChatMessage('assistant', 'Thinking...', loadingId);
     
     try {
-        // Get current HTML content
+        // Get ONLY the current HTML content (most recent version)
         const currentHtml = sessionStorage.getItem('HTML_FILE') || '';
         
-        // Prepare the API request
+        // Prepare the API request with proper JSON structure
         const requestBody = {
             model: document.getElementById('modelSelect').value,
             messages: [
                 { 
                     role: 'system', 
                     content: `You are an AI assistant that helps modify HTML web pages. 
-                    You will receive JSON objects with either chat messages or HTML code.
-                    Respond with JSON containing either a "chat_message" or "HTML_code" field.
-                    Only provide HTML code when explicitly asked to modify the page.`
+                    The user will provide their current HTML code and a request for changes.
+                    When responding:
+                    - If the user wants code changes, respond with a JSON object containing the complete updated HTML code in the "HTML_code" field.
+                    - If the user is just asking a question or having a conversation, respond with a JSON object containing your message in the "chat_message" field.
+                    - Always use either "chat_message" or "HTML_code" as your response key, but not both.
+                    - When providing HTML code, include the complete updated HTML document, not just the changed portions.`
                 },
                 {
                     role: 'user',
@@ -1098,7 +1114,7 @@ async function sendChatMessage() {
                 const blob = new Blob([jsonResponse.HTML_code], { type: 'text/html' });
                 document.getElementById('myIframe').src = URL.createObjectURL(blob);
                 
-                addChatMessage('assistant', 'I\'ve updated the HTML file. You can preview it above or download the updated version.');
+                addChatMessage('assistant', 'I\'ve updated the HTML file. You can preview the changes in the iframe above.');
             } else if (jsonResponse.chat_message) {
                 addChatMessage('assistant', jsonResponse.chat_message);
             } else {
@@ -1144,12 +1160,12 @@ setTimeout(() => {
     addChatMessage('assistant', 'Hello! I can help you modify your web page. What changes would you like to make?');
 }, 1000);
 
-
-if (chatbotHeader) {
+// Ensure chat starts minimized
+if (!isChatMinimized) {
     chatbotHeader.click();
 }
+
 
     </script>
 </body>
 </html>
-
