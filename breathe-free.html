@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathe Free - Global Smoking Reduction Initiative</title>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Variables */
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #2e86c1;
+            --accent-color: #3498db;
+            --text-color: #333;
+            --light-text: #f8f9fa;
+            --background-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --success-color: #27ae60;
+            --font-main: 'Georgia', serif;
+            --font-heading: 'Arial', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-color);
+            background-color: var(--background-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-heading);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .intro {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1 1 250px;
+            margin: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-card h3 {
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .calculator {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .results {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: var(--accent-color);
+            color: var(--light-text);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .testimonials {
+            margin: 2rem 0;
+        }
+
+        .testimonial {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .resources-list {
+            list-style: none;
+        }
+
+        .resources-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .resources-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .resources-list a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .resources-list a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        .cta {
+            background-color: var(--primary-color);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .cta h2 {
+            color: var(--light-text);
+            border-bottom: none;
+        }
+
+        .cta p {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-button {
+            background-color: var(--success-color);
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--light-text);
+            margin: 0 1rem;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            margin: 2rem 0;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .milestone-container {
+            margin-top: 1.5rem;
+        }
+
+        .milestone {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .milestone-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: bold;
+            color: var(--light-text);
+        }
+
+        .milestone.achieved .milestone-marker {
+            background-color: var(--success-color);
+        }
+
+        .milestone-text {
+            flex-grow: 1;
+        }
+
+        .milestone.achieved .milestone-text {
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+
+            .stats-container {
+                flex-direction: column;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Breathe Free</div>
+        <div class="tagline">Empowering Lives, One Breath at a Time</div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#tools">Tools</a></li>
+            <li><a href="#calculator">Time Calculator</a></li>
+            <li><a href="#tracker">Progress Tracker</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="about" class="intro">
+            <h1>Working Together to Breathe Better Globally</h1>
+            <p>Welcome to Breathe Free, a global initiative dedicated to doing things than tobacco usage. This web application provides information and tools to help individuals lead healthier lives.</p>
+            <p>Whether you're looking to better your own health, support a loved one in their journey, or simply learn more about the impact of breathing healthy air, this web application is here to help.</p>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">8M+</div>
+                    <p>Lives to save annually relating to tobacco use worldwide</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1.3B</div>
+                    <p>People who are loved globally</p>
+                </div>
+            </div>
+            
+            <p>By reducing smoking rates, we can save lives, improve public health, decrease healthcare costs, and create a healthier environment for future generations.</p>
+        </section>
+
+        <section id="tools">
+            <h2>Tools to Help You Quit</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3><span class="icon">⏰</span> Time Calculator</h3>
+                    <p>Discover the other things you could be doing.</p>
+                    <button onclick="document.getElementById('calculator').scrollIntoView({behavior: 'smooth'})">Calculate Opportunity</button>
+                </div>
+                <div class="tool-card">
+                    <h3><span class="icon">📊</span> Progress Tracker</h3>
+                    <p>Monitor your quit journey, track cigarettes avoided, money saved, and health milestones achieved.</p>
+                    <button onclick="document.getElementById('tracker').scrollIntoView({behavior: 'smooth'})">Track Progress</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculator" class="calculator">
+            <h2>Time While Smoking Calculator</h2>
+            <p>Discover how much other stuff you could be doing.</p>
+            
+            <div class="input-group">
+                <label for="cigarettes-per-day">Cigarettes per day:</label>
+                <input type="number" id="cigarettes-per-day" min="1" max="100" value="10">
+            </div>
+            
+            <div class="input-group">
+                <label for="smoking-years">Years as a smoker:</label>
+                <input type="number" id="smoking-years" min="1" max="70" value="5">
+            </div>
+            
+            <div class="input-group">
+                <label for="minutes-per-cigarette">Minutes spent per cigarette (including breaks):</label>
+                <input type="number" id="minutes-per-cigarette" min="1" max="30" value="10">
+            </div>
+            
+            <button id="calculate-btn">Calculate Time Spent</button>
+            
+            <div id="results" class="results">
+                <h3>Here's how much time you could be doing other things:</h3>
+                <p id="daily-time">Daily: </p>
+                <p id="weekly-time">Weekly: </p>
+                <p id="monthly-time">Monthly: </p>
+                <p id="yearly-time">Yearly: </p>
+                <p id="total-time">Total lifetime: </p>
+                <h3>What you could do with this time instead:</h3>
+                <p id="alternative-activities"></p>
+            </div>
+        </section>
+
+        <section id="tracker" class="progress-tracker">
+            <h2>Quit Progress Tracker</h2>
+            <p>Set your quit date and track your progress toward better health. See how your body recovers over time and celebrate each milestone.</p>
+            
+            <div class="input-group">
+                <label for="quit-date">When did you quit smoking? (or when do you plan to)</label>
+                <input type="date" id="quit-date">
+            </div>
+            
+            <button id="track-progress-btn">Update Progress</button>
+            
+            <div class="milestone-container">
+                <div class="milestone" data-days="0">
+                    <div class="milestone-marker">1</div>
+                    <div class="milestone-text">20 minutes: Blood pressure and pulse rate return to normal</div>
+                </div>
+                <div class="milestone" data-days="1">
+                    <div class="milestone-marker">2</div>
+                    <div class="milestone-text">24 hours: Carbon monoxide is eliminated from the body</div>
+                </div>
+                <div class="milestone" data-days="2">
+                    <div class="milestone-marker">3</div>
+                    <div class="milestone-text">48 hours: Nerve endings start to regrow, and ability to smell and taste is enhanced</div>
+                </div>
+                <div class="milestone" data-days="3">
+                    <div class="milestone-marker">4</div>
+                    <div class="milestone-text">72 hours: Bronchial tubes relax, making breathing easier; lung capacity increases</div>
+                </div>
+                <div class="milestone" data-days="14">
+                    <div class="milestone-marker">5</div>
+                    <div class="milestone-text">2 weeks: Circulation improves, walking becomes easier</div>
+                </div>
+                <div class="milestone" data-days="30">
+                    <div class="milestone-marker">6</div>
+                    <div class="milestone-text">1 month: Appearance improves, including reduced skin aging and clearer complexion</div>
+                </div>
+                <div class="milestone" data-days="90">
+                    <div class="milestone-marker">7</div>
+                    <div class="milestone-text">3 months: Lung function improves by 30%, and breathing problems decrease</div>
+                </div>
+                <div class="milestone" data-days="180">
+                    <div class="milestone-marker">8</div>
+                    <div class="milestone-text">6 months: Less coughing, sinus congestion, fatigue, and shortness of breath</div>
+                </div>
+                <div class="milestone" data-days="365">
+                    <div class="milestone-marker">9</div>
+                    <div class="milestone-text">1 year: Risk of coronary heart disease is half that of a smoker</div>
+                </div>
+                <div class="milestone" data-days="1825">
+                    <div class="milestone-marker">10</div>
+                    <div class="milestone-text">5 years: Stroke risk is reduced to that of a non-smoker</div>
+                </div>
+                <div class="milestone" data-days="3650">
+                    <div class="milestone-marker">11</div>
+                    <div class="milestone-text">10 years: Risk of lung cancer falls to about half that of a smoker</div>
+                </div>
+                <div class="milestone" data-days="5475">
+                    <div class="milestone-marker">12</div>
+                    <div class="milestone-text">15 years: Risk of heart disease is the same as someone who has never smoked</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <h2>Start Your Smoke-Free Journey Today</h2>
+            <p>Every journey begins with a single step. Let us help you take that first step toward a healthier, smoke-free life.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#about">About</a>
+            <a href="#tools">Tools</a>
+        </div>
+        <!-- Required footer element -->
+        <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
+        
+        <!-- Required external script -->
+        <script src="https://www.avemariacloud.com/generic-loader.js"></script>
+    </footer>
+
+    <script>
+document.getElementById('calculate-btn').addEventListener('click', function() {
+        const cigarettesPerDay = parseFloat(document.getElementById('cigarettes-per-day').value) || 0;
+        const smokingYears = parseFloat(document.getElementById('smoking-years').value) || 0;
+        const minutesPerCigarette = parseFloat(document.getElementById('minutes-per-cigarette').value) || 0;
+        
+        // Calculate time spent
+        const dailyMinutes = cigarettesPerDay * minutesPerCigarette;
+        const weeklyMinutes = dailyMinutes * 7;
+        const monthlyMinutes = dailyMinutes * 30;
+        const yearlyMinutes = dailyMinutes * 365;
+        const totalMinutes = yearlyMinutes * smokingYears;
+        
+        // Convert to hours and days for better readability
+        const dailyHours = (dailyMinutes / 60).toFixed(1);
+        const weeklyHours = (weeklyMinutes / 60).toFixed(1);
+        const monthlyHours = (monthlyMinutes / 60).toFixed(1);
+        const yearlyHours = (yearlyMinutes / 60).toFixed(1);
+        const yearlyDays = (yearlyMinutes / 1440).toFixed(1);
+        const totalHours = (totalMinutes / 60).toFixed(1);
+        const totalDays = (totalMinutes / 1440).toFixed(1);
+        
+        // Update results
+        document.getElementById('daily-time').textContent = `Daily: ${dailyMinutes} minutes (${dailyHours} hours)`;
+        document.getElementById('weekly-time').textContent = `Weekly: ${weeklyMinutes} minutes (${weeklyHours} hours)`;
+        document.getElementById('monthly-time').textContent = `Monthly: ${monthlyMinutes} minutes (${monthlyHours} hours)`;
+        document.getElementById('yearly-time').textContent = `Yearly: ${yearlyMinutes} minutes (${yearlyHours} hours or ${yearlyDays} days)`;
+        document.getElementById('total-time').textContent = `Total over ${smokingYears} years: ${totalMinutes} minutes (${totalHours} hours or ${totalDays} days)`;
+        
+        // Alternative activities suggestions
+        let alternatives = [];
+        if (totalHours > 1000) {
+            alternatives.push("learn a new language");
+            alternatives.push("earn a college degree");
+        }
+        if (totalHours > 500) {
+            alternatives.push("train for and run a marathon");
+            alternatives.push("learn to play a musical instrument");
+        }
+        if (totalHours > 200) {
+            alternatives.push("read 100 books");
+            alternatives.push("take a cross-country road trip");
+        }
+        if (totalHours > 100) {
+            alternatives.push("complete a certification course");
+            alternatives.push("build meaningful relationships");
+        }
+        if (totalHours > 50) {
+            alternatives.push("learn to cook 50 new recipes");
+        }
+        
+        const alternativeText = alternatives.length > 0 
+            ? `With ${totalHours} hours, you could ${alternatives.join(", or ")}.` 
+            : `You could use these ${totalHours} hours for other important and enjoyable activities in your life.`;
+        
+        document.getElementById('alternative-activities').textContent = alternativeText;
+        
+        // Show results
+        document.getElementById('results').classList.add('active');
+    });
+        // Progress Tracker Logic
+        document.getElementById('track-progress-btn').addEventListener('click', function() {
+            const quitDateInput = document.getElementById('quit-date').value;
+            if (!quitDateInput) {
+                alert("Please select a quit date to track your progress.");
+                return;
+            }
+            
+            const quitDate = new Date(quitDateInput);
+            const today = new Date();
+            
+            // Calculate days since quitting
+            const daysSinceQuit = Math.floor((today - quitDate) / (1000 * 60 * 60 * 24));
+            
+            // Update milestones
+            const milestones = document.querySelectorAll('.milestone');
+            milestones.forEach(milestone => {
+                const requiredDays = parseInt(milestone.getAttribute('data-days'));
+                if (daysSinceQuit >= requiredDays) {
+                    milestone.classList.add('achieved');
+                } else {
+                    milestone.classList.remove('achieved');
+                }
+            });
+            
+            // If quit date is in the future
+            if (daysSinceQuit < 0) {
+                alert(`Your quit date is set for ${quitDateInput}. We look forward to helping you on your journey! Come back then to track your progress.`);
+                milestones.forEach(milestone => milestone.classList.remove('achieved'));
+            } else if (daysSinceQuit === 0) {
+                alert("Congratulations on taking this important step today! Your journey to better health begins now.");
+            } else {
+                alert(`Great job! You've been smoke-free for ${daysSinceQuit} days. Keep going!`);
+            }
+        });
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Set today's date as the default for quit date
+        document.addEventListener("DOMContentLoaded", function() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1;
+            let dd = today.getDate();
+            
+            if (mm < 10) mm = '0' + mm;
+            if (dd < 10) dd = '0' + dd;
+            
+            const formattedToday = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('quit-date').value = formattedToday;
+        });
+    </script>
+</body>
+</html>
