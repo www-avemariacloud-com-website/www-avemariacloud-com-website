@@ -37,6 +37,12 @@
       margin: 0.5em 0;
     }
 
+    .total {
+      margin-top: 0.5em;
+      font-size: 1em;
+      color: #374151;
+    }
+
     button {
       font-size: 1.2em;
       padding: 0.5em 1.5em;
@@ -65,7 +71,7 @@
       background-color: #ef4444;
     }
 
-    .history {
+    .history, .graph {
       margin-top: 1.5em;
       background: #f9fafb;
       border: 1px solid #e5e7eb;
@@ -74,8 +80,6 @@
       max-width: 400px;
       width: 100%;
       font-size: 0.9em;
-      overflow-y: auto;
-      max-height: 200px;
     }
 
     .history-entry {
@@ -86,6 +90,31 @@
     .history-entry:last-child {
       border-bottom: none;
     }
+
+    .bar-container {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 100px;
+      margin-top: 1em;
+    }
+
+    .bar {
+      background-color: #3b82f6;
+      width: 12%;
+      text-align: center;
+      color: white;
+      font-size: 0.7em;
+      border-radius: 0.25em 0.25em 0 0;
+    }
+
+    .bar-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 0.6em;
+      margin-top: 0.25em;
+      color: #374151;
+    }
   </style>
 </head>
 <body>
@@ -94,9 +123,15 @@
     <div class="count" id="countDisplay">0</div>
     <button class="increment" onclick="incrementCount()">+1</button>
     <button class="reset" onclick="resetCount()">Reset</button>
+    <div class="total" id="totalDisplay">Total All-Time: 0</div>
   </div>
 
-  <div class="history" id="historyLog">
+  <div class="graph">
+    <strong>Count per Day</strong>
+    <div class="bar-container" id="barGraph"></div>
+  </div>
+
+  <div class="history">
     <strong>History</strong>
     <div id="historyEntries"></div>
   </div>
@@ -105,37 +140,54 @@
   <script src="https://www.avemariacloud.com/generic-loader.js"></script>
   <script>
     const countDisplay = document.getElementById('countDisplay');
+    const totalDisplay = document.getElementById('totalDisplay');
     const historyEntries = document.getElementById('historyEntries');
+    const barGraph = document.getElementById('barGraph');
+
+    function getTodayKey() {
+      return new Date().toISOString().split('T')[0];
+    }
 
     function loadState() {
-      const storedCount = localStorage.getItem('tallyCount');
-      const storedHistory = JSON.parse(localStorage.getItem('tallyHistory') || '[]');
-      countDisplay.textContent = storedCount || '0';
+      const count = parseInt(localStorage.getItem('tallyCount') || '0', 10);
+      const total = parseInt(localStorage.getItem('tallyTotal') || '0', 10);
+      const history = JSON.parse(localStorage.getItem('tallyHistory') || '[]');
+      countDisplay.textContent = count;
+      totalDisplay.textContent = `Total All-Time: ${total}`;
       historyEntries.innerHTML = '';
-      storedHistory.forEach(entry => addHistoryEntry(entry));
+      history.forEach(addHistoryEntry);
+      updateGraph();
     }
 
     function incrementCount() {
-      let count = parseInt(countDisplay.textContent, 10);
-      count += 1;
+      let count = parseInt(countDisplay.textContent, 10) + 1;
+      let total = parseInt(localStorage.getItem('tallyTotal') || '0', 10) + 1;
       countDisplay.textContent = count;
-      saveState(count, `+1 → ${count}`);
+      localStorage.setItem('tallyCount', count);
+      localStorage.setItem('tallyTotal', total);
+      totalDisplay.textContent = `Total All-Time: ${total}`;
+      const today = getTodayKey();
+      const dailyData = JSON.parse(localStorage.getItem('tallyDaily') || '{}');
+      dailyData[today] = (dailyData[today] || 0) + 1;
+      localStorage.setItem('tallyDaily', JSON.stringify(dailyData));
+      saveHistory(`+1 → ${count}`);
+      updateGraph();
     }
 
     function resetCount() {
       const oldCount = countDisplay.textContent;
       countDisplay.textContent = '0';
-      saveState(0, `Reset (was ${oldCount})`);
+      localStorage.setItem('tallyCount', '0');
+      saveHistory(`Reset (was ${oldCount})`);
     }
 
-    function saveState(count, historyText) {
-      localStorage.setItem('tallyCount', count);
-      const currentHistory = JSON.parse(localStorage.getItem('tallyHistory') || '[]');
+    function saveHistory(text) {
+      const history = JSON.parse(localStorage.getItem('tallyHistory') || '[]');
       const timestamp = new Date().toLocaleString();
-      const newEntry = `${timestamp}: ${historyText}`;
-      currentHistory.unshift(newEntry);
-      localStorage.setItem('tallyHistory', JSON.stringify(currentHistory.slice(0, 50)));
-      addHistoryEntry(newEntry);
+      const entry = `${timestamp}: ${text}`;
+      history.unshift(entry);
+      localStorage.setItem('tallyHistory', JSON.stringify(history.slice(0, 50)));
+      addHistoryEntry(entry);
     }
 
     function addHistoryEntry(text) {
@@ -143,6 +195,26 @@
       div.className = 'history-entry';
       div.textContent = text;
       historyEntries.insertBefore(div, historyEntries.firstChild);
+    }
+
+    function updateGraph() {
+      const data = JSON.parse(localStorage.getItem('tallyDaily') || '{}');
+      const days = [...Array(7)].map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (6 - i));
+        return d.toISOString().split('T')[0];
+      });
+
+      barGraph.innerHTML = '';
+      const max = Math.max(...days.map(d => data[d] || 0), 1);
+      days.forEach(d => {
+        const value = data[d] || 0;
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = `${(value / max) * 100}%`;
+        bar.innerHTML = `<div class="bar-label">${value}<br>${d.slice(5)}</div>`;
+        barGraph.appendChild(bar);
+      });
     }
 
     loadState();
