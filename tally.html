@@ -49,11 +49,24 @@
     }
     #chartContainer {
       position: relative;
-      height: 200px;
+      height: 250px;
       width: 100%;
       background-color: #f9fafb;
       border-radius: 0.8em;
       margin-top: 1em;
+    }
+    .bar {
+      border-radius: 10px 10px 0 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .bar-number {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: bold;
+      color: #1e3a8a;
+      font-size: 0.9em;
     }
   </style>
 </head>
@@ -167,23 +180,35 @@
       // Clear previous chart content
       chartCanvas.innerHTML = '';
 
-      // Draw chart using Canvas 2D context
+      // Get canvas context
       const ctx = chartCanvas.getContext("2d");
 
       const maxData = Math.max(...data);
       const canvasHeight = chartCanvas.height;
       const barWidth = (chartCanvas.width - 20) / data.length;
 
-      // Draw bars
+      // Draw bars with gradient
       data.forEach((count, index) => {
-        const barHeight = (count / maxData) * (canvasHeight - 20);
+        const barHeight = (count / maxData) * (canvasHeight - 30);  // Adjusting for space at the top for the number
         const x = 10 + index * barWidth;
         const y = canvasHeight - barHeight - 10;
-        ctx.fillStyle = "#60a5fa";
+        
+        // Gradient color
+        const gradient = ctx.createLinearGradient(x, y, x + barWidth, y + barHeight);
+        gradient.addColorStop(0, '#4f81ff');
+        gradient.addColorStop(1, '#60a5fa');
+        
+        ctx.fillStyle = gradient;
         ctx.fillRect(x, y, barWidth - 5, barHeight);
+
+        // Draw the number on top of the bar
+        const barNumber = count;
+        ctx.fillStyle = "#1e3a8a";
+        ctx.font = "bold 14px sans-serif";
+        ctx.fillText(barNumber, x + barWidth / 2, y - 20);
       });
 
-      // Draw labels
+      // Draw labels under the bars
       ctx.fillStyle = "#1e3a8a";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
