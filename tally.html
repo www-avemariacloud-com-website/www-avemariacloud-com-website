@@ -4,220 +4,200 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tally Counter</title>
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="manifest" id="manifest-placeholder" />
   <style>
     body {
+      font-family: sans-serif;
       margin: 0;
-      font-family: system-ui, sans-serif;
-      background: linear-gradient(to bottom right, #dbeafe, #f0f9ff);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2em 1em 6em;
+      padding: 1em;
+      background: #f0f4ff;
+      color: #1e3a8a;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
-
     h1 {
-      margin-bottom: 0.5em;
-      color: #1e40af;
       text-align: center;
     }
-
-    .counter-box {
-      background: white;
-      padding: 2em;
-      border-radius: 1em;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
-    }
-
-    .count {
+    .counter {
       font-size: 4em;
-      color: #2563eb;
+      text-align: center;
       margin: 0.5em 0;
     }
-
-    .total {
-      margin-top: 0.5em;
-      font-size: 1em;
-      color: #374151;
-    }
-
     button {
       font-size: 1.2em;
-      padding: 0.5em 1.5em;
+      padding: 0.6em 1.2em;
       margin: 0.5em;
+      border-radius: 0.5em;
       border: none;
-      border-radius: 0.5em;
       cursor: pointer;
-      transition: background 0.2s;
     }
-
-    .increment {
-      background-color: #60a5fa;
-      color: white;
-    }
-
-    .increment:hover {
-      background-color: #3b82f6;
-    }
-
-    .reset {
-      background-color: #f87171;
-      color: white;
-    }
-
-    .reset:hover {
-      background-color: #ef4444;
-    }
-
-    .history, .graph {
-      margin-top: 1.5em;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 0.5em;
-      padding: 1em;
-      max-width: 400px;
-      width: 100%;
-      font-size: 0.9em;
-    }
-
-    .history-entry {
-      padding: 0.25em 0;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .history-entry:last-child {
-      border-bottom: none;
-    }
-
-    .bar-container {
-      display: flex;
-      align-items: flex-end;
-      gap: 4px;
-      height: 100px;
-      margin-top: 1em;
-    }
-
-    .bar {
-      background-color: #3b82f6;
-      width: 12%;
+    .controls {
       text-align: center;
-      color: white;
-      font-size: 0.7em;
-      border-radius: 0.25em 0.25em 0 0;
     }
-
-    .bar-label {
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      font-size: 0.6em;
-      margin-top: 0.25em;
-      color: #374151;
+    .history, .graph, .total {
+      margin-top: 1.5em;
+      padding: 1em;
+      background: #fff;
+      border-radius: 1em;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+    #chartContainer {
+      position: relative;
+      height: 200px;
+      width: 100%;
+      background-color: #f9fafb;
+      border-radius: 0.8em;
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
   <h1>Tally Counter</h1>
-  <div class="counter-box">
-    <div class="count" id="countDisplay">0</div>
-    <button class="increment" onclick="incrementCount()">+1</button>
-    <button class="reset" onclick="resetCount()">Reset</button>
-    <div class="total" id="totalDisplay">Total All-Time: 0</div>
+  <div class="counter" id="countDisplay">0</div>
+  <div class="controls">
+    <button onclick="increment()">+1</button>
+    <button onclick="reset()">Reset</button>
+  </div>
+
+  <div class="total"><strong>Total Count:</strong> <span id="totalCount">0</span></div>
+  <div class="history">
+    <strong>History:</strong>
+    <ul id="historyList"></ul>
   </div>
 
   <div class="graph">
-    <strong>Count per Day</strong>
-    <div class="bar-container" id="barGraph"></div>
+    <strong>Daily Counts:</strong>
+    <div id="chartContainer">
+      <canvas id="dailyChart"></canvas>
+    </div>
   </div>
 
-  <div class="history">
-    <strong>History</strong>
-    <div id="historyEntries"></div>
-  </div>
+  <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>
 
-  <div id="informationFooter" style="padding-left: 4em; padding-right: 4em;"></div>  
-  <script src="https://www.avemariacloud.com/generic-loader.js"></script>
+  <!-- Manifest & Service Worker Inlined -->
   <script>
-    const countDisplay = document.getElementById('countDisplay');
-    const totalDisplay = document.getElementById('totalDisplay');
-    const historyEntries = document.getElementById('historyEntries');
-    const barGraph = document.getElementById('barGraph');
+    const manifestContent = {
+      name: "Tally Counter",
+      short_name: "Tally",
+      start_url: ".",
+      display: "standalone",
+      background_color: "#dbeafe",
+      theme_color: "#2563eb",
+      icons: [
+        {
+          src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEUAAACnej3aAAAASElEQVR4nO3BMQEAAAgDoJvc6FECrAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACsL8PoAAHsEZatAAAAAElFTkSuQmCC",
+          sizes: "192x192",
+          type: "image/png"
+        }
+      ]
+    };
+    const blob = new Blob([JSON.stringify(manifestContent)], { type: "application/json" });
+    const manifestURL = URL.createObjectURL(blob);
+    document.querySelector("#manifest-placeholder").setAttribute("href", manifestURL);
 
-    function getTodayKey() {
-      return new Date().toISOString().split('T')[0];
+    if ('serviceWorker' in navigator) {
+      const sw = `
+        const cacheName = "tally-cache";
+        self.addEventListener("install", e => {
+          e.waitUntil(caches.open(cacheName).then(c => c.addAll(["./"])));
+        });
+        self.addEventListener("fetch", e => {
+          e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+        });
+      `;
+      const blob = new Blob([sw], { type: "application/javascript" });
+      const swURL = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swURL);
     }
-
-    function loadState() {
-      const count = parseInt(localStorage.getItem('tallyCount') || '0', 10);
-      const total = parseInt(localStorage.getItem('tallyTotal') || '0', 10);
-      const history = JSON.parse(localStorage.getItem('tallyHistory') || '[]');
-      countDisplay.textContent = count;
-      totalDisplay.textContent = `Total All-Time: ${total}`;
-      historyEntries.innerHTML = '';
-      history.forEach(addHistoryEntry);
-      updateGraph();
-    }
-
-    function incrementCount() {
-      let count = parseInt(countDisplay.textContent, 10) + 1;
-      let total = parseInt(localStorage.getItem('tallyTotal') || '0', 10) + 1;
-      countDisplay.textContent = count;
-      localStorage.setItem('tallyCount', count);
-      localStorage.setItem('tallyTotal', total);
-      totalDisplay.textContent = `Total All-Time: ${total}`;
-      const today = getTodayKey();
-      const dailyData = JSON.parse(localStorage.getItem('tallyDaily') || '{}');
-      dailyData[today] = (dailyData[today] || 0) + 1;
-      localStorage.setItem('tallyDaily', JSON.stringify(dailyData));
-      saveHistory(`+1 → ${count}`);
-      updateGraph();
-    }
-
-    function resetCount() {
-      const oldCount = countDisplay.textContent;
-      countDisplay.textContent = '0';
-      localStorage.setItem('tallyCount', '0');
-      saveHistory(`Reset (was ${oldCount})`);
-    }
-
-    function saveHistory(text) {
-      const history = JSON.parse(localStorage.getItem('tallyHistory') || '[]');
-      const timestamp = new Date().toLocaleString();
-      const entry = `${timestamp}: ${text}`;
-      history.unshift(entry);
-      localStorage.setItem('tallyHistory', JSON.stringify(history.slice(0, 50)));
-      addHistoryEntry(entry);
-    }
-
-    function addHistoryEntry(text) {
-      const div = document.createElement('div');
-      div.className = 'history-entry';
-      div.textContent = text;
-      historyEntries.insertBefore(div, historyEntries.firstChild);
-    }
-
-    function updateGraph() {
-      const data = JSON.parse(localStorage.getItem('tallyDaily') || '{}');
-      const days = [...Array(7)].map((_, i) => {
-        const d = new Date();
-        d.setDate(d.getDate() - (6 - i));
-        return d.toISOString().split('T')[0];
-      });
-
-      barGraph.innerHTML = '';
-      const max = Math.max(...days.map(d => data[d] || 0), 1);
-      days.forEach(d => {
-        const value = data[d] || 0;
-        const bar = document.createElement('div');
-        bar.className = 'bar';
-        bar.style.height = `${(value / max) * 100}%`;
-        bar.innerHTML = `<div class="bar-label">${value}<br>${d.slice(5)}</div>`;
-        barGraph.appendChild(bar);
-      });
-    }
-
-    loadState();
   </script>
+
+  <!-- Core App -->
+  <script>
+    const countDisplay = document.getElementById("countDisplay");
+    const historyList = document.getElementById("historyList");
+    const totalCountSpan = document.getElementById("totalCount");
+    const chartCanvas = document.getElementById("dailyChart");
+
+    let count = +localStorage.getItem("count") || 0;
+    let totalCount = +localStorage.getItem("totalCount") || 0;
+    let history = JSON.parse(localStorage.getItem("history") || "[]");
+    let dayCounts = JSON.parse(localStorage.getItem("dayCounts") || "{}");
+
+    function updateDisplay() {
+      countDisplay.textContent = count;
+      totalCountSpan.textContent = totalCount;
+      historyList.innerHTML = history.map(item => `<li>${item}</li>`).reverse().join("");
+      drawChart();
+    }
+
+    function increment() {
+      count++;
+      totalCount++;
+      const timestamp = new Date().toLocaleString();
+      history.push(`${timestamp} — Count: ${count}`);
+      const date = new Date().toISOString().split("T")[0];
+      dayCounts[date] = (dayCounts[date] || 0) + 1;
+      save();
+      updateDisplay();
+    }
+
+    function reset() {
+      count = 0;
+      save();
+      updateDisplay();
+    }
+
+    function save() {
+      localStorage.setItem("count", count);
+      localStorage.setItem("totalCount", totalCount);
+      localStorage.setItem("history", JSON.stringify(history.slice(-100)));
+      localStorage.setItem("dayCounts", JSON.stringify(dayCounts));
+    }
+
+    function drawChart() {
+      const labels = Object.keys(dayCounts).sort();
+      const data = labels.map(k => dayCounts[k]);
+
+      // Clear previous chart content
+      chartCanvas.innerHTML = '';
+
+      // Draw chart using Canvas 2D context
+      const ctx = chartCanvas.getContext("2d");
+
+      const maxData = Math.max(...data);
+      const canvasHeight = chartCanvas.height;
+      const barWidth = (chartCanvas.width - 20) / data.length;
+
+      // Draw bars
+      data.forEach((count, index) => {
+        const barHeight = (count / maxData) * (canvasHeight - 20);
+        const x = 10 + index * barWidth;
+        const y = canvasHeight - barHeight - 10;
+        ctx.fillStyle = "#60a5fa";
+        ctx.fillRect(x, y, barWidth - 5, barHeight);
+      });
+
+      // Draw labels
+      ctx.fillStyle = "#1e3a8a";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      labels.forEach((label, index) => {
+        const x = 10 + index * barWidth;
+        const y = canvasHeight - 10;
+        ctx.fillText(label, x + barWidth / 2, y);
+      });
+    }
+
+    updateDisplay();
+  </script>
+
+  <!-- Load external JS after footer -->
+  <script src="https://www.avemariacloud.com/generic-loader.js"></script>
 </body>
 </html>
