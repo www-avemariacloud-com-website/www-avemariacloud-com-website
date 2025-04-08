@@ -61,11 +61,11 @@
     }
     .bar-number {
       position: absolute;
-      top: -25px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
       font-weight: bold;
-      color: #1e3a8a;
+      color: #fff;
       font-size: 0.9em;
     }
   </style>
@@ -201,11 +201,13 @@
         ctx.fillStyle = gradient;
         ctx.fillRect(x, y, barWidth - 5, barHeight);
 
-        // Draw the number on top of the bar
+        // Draw the number inside the bar
         const barNumber = count;
-        ctx.fillStyle = "#1e3a8a";
+        ctx.fillStyle = "#fff";  // White color for the number inside the bar
         ctx.font = "bold 14px sans-serif";
-        ctx.fillText(barNumber, x + barWidth / 2, y - 20);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(barNumber, x + barWidth / 2, y + barHeight / 2);  // Number inside the bar
       });
 
       // Draw labels under the bars
