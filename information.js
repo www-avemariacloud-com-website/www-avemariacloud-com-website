@@ -20,6 +20,7 @@ Software, code, text, an image, images and/or things may have been created and m
 <a href="https://huggingface.co/">Hugging Face</a>,
 <a href="https://groq.com/" target="_blank">Groq</a>,
 <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>,
+<a href="https://play.ht/">PlayAI</a>,
 <a href="https://www.deepseek.com/" target="_blank">DeepSeek and/or DeepSeek-R1</a>, and
 <a href="https://qwen.ai" target="_blank">Qwen</a> and/or <a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen2.5-Coder</a>.
 
@@ -33,10 +34,12 @@ You may benefit from consulting, reading, and/or agreeing to terms of service, u
 <a href="https://huggingface.co/">Hugging Face</a>,
 <a href="https://groq.com/" target="_blank">Groq, Inc. and/or Groq</a>,
 <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>,
+<a href="https://play.ht/">PlayAI</a>,
 <a href="https://www.deepseek.com/" target="_blank">DeepSeek and/or DeepSeek-R1</a>, and
 <a href="https://qwen.ai" target="_blank">Qwen</a> and/or <a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen2.5-Coder</a>.
 
 <br><br>
+PlayAI: Relevant links may include: <a href="https://play.ht/terms/#partner-hosted-deployment-terms">https://play.ht/terms/#partner-hosted-deployment-terms</a><BR>
 HuggingFace: Relevant links may include: <a href="https://huggingface.co/terms-of-service">Terms of Service</a>, <a href="https://huggingface.co/privacy">Hugging Face Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Policy 🤗</a>, <a href="https://huggingface.co/docs">Docs</a>, and <a href="Contributor Covenant Code of Conduct">Contributor Covenant Code of Conduct</a><br>
 Groq, Inc. and/or Groq: Relevant links may include <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
 Stability AI and/or Stable Diffusion: Relevant links may include <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
@@ -50,6 +53,7 @@ DeepSeek: Relevant links may include <a href="https://cdn.deepseek.com/policies/
 Qwen: Relevant links may include <a href="https://choosealicense.com/licenses/apache-2.0/">License</a> and <a href="https://github.com/QwenLM/Qwen2.5-Coder">Qwen 2.5-Coder GitHub Page</a>
 <br><br>
 Some notices may be relevant.<br><br>
+<strong>PlayAI:</strong> PlayAI may be subject to <a href="https://play.ht/terms/#partner-hosted-deployment-terms">"PLAYAI END USER TERMS OF SERVICE"</a><BR>
 <strong>Qwen:</strong> Qwen models, including Qwen2.5-Coder, may be subject to <a href="https://choosealicense.com/licenses/apache-2.0/">Apache License 2.0</a><br>
 <strong>DeepSeek:</strong> DeepSeek models, including DeepSeek-R1-Distill-Llama-70B and DeepSeek-R1-Distill-Qwen-32B, may be subject to <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.<br>
 <strong>Built with Meta Llama 3:</strong> <a href="https://www.llama.com/llama3/license/" target="_blank">Meta Llama 3 is licensed under the Meta Llama 3 Community License, Copyright © Meta Platforms, Inc. All Rights Reserved.</a><br>
