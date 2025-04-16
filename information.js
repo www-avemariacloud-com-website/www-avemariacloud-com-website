@@ -21,6 +21,8 @@ Software, code, text, an image, images and/or things may have been created and m
 <a href="https://groq.com/" target="_blank">Groq</a>,
 <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>,
 <a href="https://play.ht/">PlayAI</a>,
+Web Search via <a href="https://tavily.com/">Tavily</a>,
+Code Execution via <a href="https://e2b.dev/">E2B (only Python is currently supported)</a>,
 <a href="https://www.deepseek.com/" target="_blank">DeepSeek and/or DeepSeek-R1</a>, and
 <a href="https://qwen.ai" target="_blank">Qwen</a> and/or <a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen2.5-Coder</a>.
 
@@ -35,24 +37,37 @@ You may benefit from consulting, reading, and/or agreeing to terms of service, u
 <a href="https://groq.com/" target="_blank">Groq, Inc. and/or Groq</a>,
 <a href="https://mistral.ai/">Mistral AI (Mixtral)</a>,
 <a href="https://play.ht/">PlayAI</a>,
+Web Search via <a href="https://tavily.com/">Tavily</a>,
+Code Execution via <a href="https://e2b.dev/">E2B (only Python is currently supported)</a>,
 <a href="https://www.deepseek.com/" target="_blank">DeepSeek and/or DeepSeek-R1</a>, and
 <a href="https://qwen.ai" target="_blank">Qwen</a> and/or <a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen2.5-Coder</a>.
 
+<br><br><b>Relevant Links May Include<b><br><br>
+
+<a href="https://tavily.com/">Tavily</a>: <a href="https://tavily.com/privacy">AlphaAI Technologies Inc. Platform Privacy Policy</a> and <a href="https://tavily.com/terms">Tavily Services Agreement</a><BR>
+
+<a href="https://e2b.dev/">E2B (only Python is currently supported)</a>: <a href="https://e2b.dev/privacy">Privacy Policy</a> and <a href="https://e2b.dev/terms">Terms of Service</a><BR>
+
+PlayAI: <a href="https://play.ht/terms/#partner-hosted-deployment-terms">https://play.ht/terms/#partner-hosted-deployment-terms</a><BR>
+HuggingFace: <a href="https://huggingface.co/terms-of-service">Terms of Service</a>, <a href="https://huggingface.co/privacy">Hugging Face Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Policy 🤗</a>, <a href="https://huggingface.co/docs">Docs</a>, and <a href="Contributor Covenant Code of Conduct">Contributor Covenant Code of Conduct</a><br>
+Groq, Inc. and/or Groq: <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
+Stability AI and/or Stable Diffusion: <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
+Black Forest Labs and/or FLUX.1 [dev]: <a href="https://blackforestlabs.ai/impressum/">Impressum</a> <a href="https://blackforestlabs.ai/terms-of-service/">Terms Of Service</a> <a href="https://blackforestlabs.ai/privacy-policy/"> Privacy Policy</a>
+OpenAI and/or ChatGPT: <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
+Anthropic PBC and/or Claude AI: <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
+Meta and/or Meta Llama 3: <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
+Google and/or Gemma: <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
+Mistral AI and/or Mixtral: <a href="https://mistral.ai/terms">Terms of Service</a> and <a href="https://trust.mistral.ai/">Trust Center</a>.<br>
+DeepSeek: <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.<br>
+Qwen: <a href="https://choosealicense.com/licenses/apache-2.0/">License</a> and <a href="https://github.com/QwenLM/Qwen2.5-Coder">Qwen 2.5-Coder GitHub Page</a>
 <br><br>
-PlayAI: Relevant links may include: <a href="https://play.ht/terms/#partner-hosted-deployment-terms">https://play.ht/terms/#partner-hosted-deployment-terms</a><BR>
-HuggingFace: Relevant links may include: <a href="https://huggingface.co/terms-of-service">Terms of Service</a>, <a href="https://huggingface.co/privacy">Hugging Face Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Policy 🤗</a>, <a href="https://huggingface.co/docs">Docs</a>, and <a href="Contributor Covenant Code of Conduct">Contributor Covenant Code of Conduct</a><br>
-Groq, Inc. and/or Groq: Relevant links may include <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy</a>, <a href="https://groq.com/terms-of-use/" target="_blank">Terms of Use</a>, <a href="https://groq.com/security/" target="_blank">Security</a>, <a href="https://groq.com/trademark-policy/" target="_blank">Trademark Policy</a>, <a href="https://groq.com/cookie-policy/" target="_blank">Cookie Policy</a>, and <a href="https://groq.com/brand-guidelines/" target="_blank">Brand Guidelines</a>.<br>
-Stability AI and/or Stable Diffusion: Relevant links may include <a href="https://stability.ai/use-policy" target="_blank">Use Policy</a>, <a href="https://stability.ai/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://stability.ai/terms-of-use" target="_blank">Terms Of Use</a>, and <a href="https://trust.stability.ai/" target="_blank">Trust Page</a>.<br>
-Black Forest Labs and/or FLUX.1 [dev]: Relevant links may include <a href="https://blackforestlabs.ai/impressum/">Impressum</a> <a href="https://blackforestlabs.ai/terms-of-service/">Terms Of Service</a> <a href="https://blackforestlabs.ai/privacy-policy/"> Privacy Policy</a>
-OpenAI and/or ChatGPT: Relevant links may include <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
-Anthropic PBC and/or Claude AI: Relevant links may include <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
-Meta and/or Meta Llama 3: Relevant links may include <a href="https://www.llama.com/llama3/use-policy/">Use Policy</a>, <a href="https://www.facebook.com/privacy/policy/">Privacy Policy</a>, and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>.<br>
-Google and/or Gemma: Relevant links may include <a href="https://policies.google.com/terms">Terms of Service</a> and <a href="https://policies.google.com/privacy">Privacy Policy</a>.<br>
-Mistral AI and/or Mixtral: Relevant links may include <a href="https://mistral.ai/terms">Terms of Service</a> and <a href="https://trust.mistral.ai/">Trust Center</a>.<br>
-DeepSeek: Relevant links may include <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.<br>
-Qwen: Relevant links may include <a href="https://choosealicense.com/licenses/apache-2.0/">License</a> and <a href="https://github.com/QwenLM/Qwen2.5-Coder">Qwen 2.5-Coder GitHub Page</a>
-<br><br>
+
 Some notices may be relevant.<br><br>
+
+<a href="https://tavily.com/">Tavily</a>: Tavily may be subject to <a href="https://tavily.com/privacy">AlphaAI Technologies Inc. Platform Privacy Policy</a> and <a href="https://tavily.com/terms">Tavily Services Agreement</a><BR>
+
+<a href="https://e2b.dev/">E2B (only Python is currently supported)</a>: E2B may be subject to <a href="https://e2b.dev/privacy">Privacy Policy</a> and <a href="https://e2b.dev/terms">Terms of Service</a><BR>
+
 <strong>PlayAI:</strong> PlayAI may be subject to <a href="https://play.ht/terms/#partner-hosted-deployment-terms">"PLAYAI END USER TERMS OF SERVICE"</a><BR>
 <strong>Qwen:</strong> Qwen models, including Qwen2.5-Coder, may be subject to <a href="https://choosealicense.com/licenses/apache-2.0/">Apache License 2.0</a><br>
 <strong>DeepSeek:</strong> DeepSeek models, including DeepSeek-R1-Distill-Llama-70B and DeepSeek-R1-Distill-Qwen-32B, may be subject to <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html">DeepSeek Privacy Policy</a> and <a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html">DeepSeek Terms of Use</a>.<br>
