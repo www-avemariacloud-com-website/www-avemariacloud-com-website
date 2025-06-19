@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LearnLang Groq Hybrid</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3366ff;
+      --bg: #eef3ff;
+      --card-bg: #fff;
+      --text: #333;
+      --text-light: #666;
+      --success: #28a745;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    main {
+      flex: 1;
+      padding: 1rem;
+    }
+    .screen { display: none; }
+    .active { display: block; }
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+    button:disabled {
+      background: #999;
+      cursor: default;
+    }
+    .level-button {
+      width: 100%;
+      text-align: left;
+    }
+    .lesson-link {
+      color: var(--primary);
+      cursor: pointer;
+      text-decoration: underline;
+      margin: 0.3rem 0;
+      display: block;
+      padding: 0.3rem;
+      border-radius: 4px;
+    }
+    .lesson-link:hover {
+      background: rgba(51,102,255,0.1);
+    }
+    .lesson-link.done {
+      color: var(--success);
+      font-weight: bold;
+    }
+    .card {
+      background: var(--card-bg);
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    #loading {
+      display: flex;
+      align-items: center;
+      font-style: italic;
+      color: var(--text-light);
+      margin: 1rem 0;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin-right: 0.5rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .progress-container {
+      background: #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 0.5rem 0 1rem;
+      height: 20px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s;
+    }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .quiz-options button {
+      width: 100%;
+    }
+    @media (min-width: 100%) {
+      main {
+        max-width: 100%;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<main>
+
+  <!-- Level Selection -->
+  <section id="home" class="screen active">
+    <h2>Select Your Level</h2>
+    <button class="level-button" onclick="loadLevel('A1')">A1 (Beginner)</button>
+    <button class="level-button" onclick="loadLevel('A2')">A2 (Elementary)</button>
+    <button class="level-button" onclick="loadLevel('B1')">B1 (Intermediate)</button>
+    <button class="level-button" onclick="loadLevel('B2')">B2 (Upper-Intermediate)</button>
+    <button class="level-button" onclick="loadLevel('C1/C2')">C1/C2 (Advanced)</button>
+
+    <div class="card">
+      <label for="targetLang"><strong>Language to Study:</strong></label>
+      <select id="targetLang">
+        <option value="Spanish" selected>Spanish</option>
+        <option value="French">French</option>
+        <option value="German">German</option>
+        <option value="Mandarin Chinese">Mandarin Chinese</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Italian">Italian</option>
+        <option value="Korean">Korean</option>
+        <option value="Portuguese">Portuguese</option>
+        <option value="Arabic">Arabic</option>
+        <option value="Russian">Russian</option>
+        <option value="Ukrainian">Ukrainian</option>
+        <!-- Add more as needed -->
+      </select>
+      <br><br>
+      
+      <label for="interfaceLang"><strong>Your Fluent Language:</strong></label>
+      <select id="interfaceLang">
+        <option value="English" selected>English</option>
+        <option value="Spanish">Spanish</option>
+        <option value="French">French</option>
+        <option value="German">German</option>
+        <option value="Mandarin Chinese">Mandarin Chinese</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Italian">Italian</option>
+        <option value="Portuguese">Portuguese</option>
+        <option value="Arabic">Arabic</option>
+        <option value="Russian">Russian</option>
+        <option value="Ukrainian">Ukrainian</option>
+        <!-- Add more as needed -->
+      </select>
+      
+      <br><br>
+    
+      <label for="aiModel"><strong>Select AI Model:</strong></label>
+      <select id="aiModel">
+        <option value="compound-beta" selected>compound-beta</option>
+        <option value="meta-llama/llama-4-maverick-17b-128e-instruct">meta-llama/llama-4-maverick-17b-128e-instruct</option>
+        <option value="mixtral/mixtral-8x7b-instruct">Mixtral 8x7B</option>
+        <option value="gemma2-9b-it">gemma2-9b-it</option>
+        <!-- Add more as supported -->
+      </select>
+    </div>
+  </section>
+
+  
+  
+
+  <!-- Lesson List -->
+  <section id="lessonList" class="screen">
+    <button onclick="showScreen('home')">&larr; Back to Levels</button>
+    <h2 id="levelTitle">Lessons</h2>
+    <div id="progressInfo"></div>
+    <div class="progress-container"><div id="progressBar" class="progress-bar"></div></div>
+    <div id="lessonLinks"></div>
+  </section>
+
+  <!-- Lesson Screen -->
+  <section id="lesson" class="screen">
+    <button onclick="showScreen('lessonList')">&larr; Back to Lessons</button>
+    <h2 id="lessonTitle"></h2>
+    <div id="lessonContent"></div>
+    <div id="quizArea"></div>
+    <div id="loading"><div class="spinner"></div><span>Loading lesson content...</span></div>
+    <button id="markCompleteBtn" onclick="markComplete()">Mark Complete</button>
+    <button id="regenerateBtn" onclick="regenerateLesson()">Regenerate Lesson</button>
+  </section>
+
+</main>
+
+<script>
+
+let targetLanguage = "Spanish";
+let interfaceLanguage = "English";
+let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
+
+
+  const groqApiKey = "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";
+
+  const lessonTitlesByLevel = {
+  "A1": [
+    "Greetings", "Colors", "Numbers 1-10", "Days of the Week", "Family Members",
+    "Basic Verbs", "Common Nouns", "Classroom Items", "Food & Drinks", "Simple Questions",
+    "Telling Time", "Basic Adjectives", "Simple Sentences", "Weather", "Parts of the Body",
+    "Simple Directions", "Daily Routine", "Likes and Dislikes", "Plural Nouns", "Simple Commands",
+    "Basic Pronouns", "Yes/No Questions", "Personal Information", "Nationalities", "Simple Negatives"
+  ],
+  "A2": [
+    "Hobbies", "Shopping", "Ordering Food", "Transportation", "Asking for Help",
+    "Describing People", "Rooms in a House", "Chores", "Calendar Terms", "Money and Prices",
+    "Phone Conversations", "Clothing", "Vacation Words", "Restaurants", "Health and Illness",
+    "Making Appointments", "Simple Past Tense", "Prepositions", "Object Pronouns", "Comparisons",
+    "Weather Descriptions", "Making Invitations", "Simple Future Plans", "Talking About Abilities", "Basic Opinions"
+  ],
+  "B1": [
+    "Describing Emotions", "Talking About Work", "Making Suggestions", "Future Tense",
+    "Transportation Problems", "Agreeing and Disagreeing", "Making Plans", "Using 'Se'",
+    "Extended Family", "Making Excuses", "Conditional Sentences", "News and Media",
+    "Giving Advice", "Describing Habits", "Complex Directions", "Past Experiences",
+    "Explaining Opinions", "Expressing Regret", "Describing Events", "Writing Emails",
+    "Narrating Stories", "Politeness Strategies", "Job Interviews", "Entertainment Choices", "Talking About Goals"
+  ],
+  "B2": [
+    "Advanced Tenses", "Subjunctive Mood", "Formal Writing", "Argument Structure",
+    "Environmental Issues", "Cultural Comparisons", "Debates", "Education Systems",
+    "Politics", "Science and Technology", "Legal Terms", "Ethics and Morality",
+    "Relationships", "Emotional Nuance", "Economics", "Public Health", "Social Justice",
+    "World History", "News Analysis", "Public Speaking",
+    "Understanding Humor", "Business Communication", "Literary Summaries", "Analyzing Statistics", "Writing Reviews",
+    "Persuasive Speech", "Expressing Doubt", "Social Etiquette", "Media Influence", "Writing Reports"
+  ],
+  "C1/C2": [
+    "Philosophical Terms", "Literary Analysis", "Idioms and Expressions", "Satire and Irony",
+    "Academic Writing", "Advanced Debate", "Poetry Interpretation", "Rhetorical Devices",
+    "Persuasive Techniques", "Global Politics", "Advanced Vocabulary", "Scientific Method",
+    "Abstract Concepts", "Complex Grammar Structures", "Cultural Critique",
+    "Similes and Metaphors", "Critical Reading", "Essay Construction", "Thesis Defense",
+    "Media Literacy", "Sociolinguistics", "Register and Tone", "Discourse Analysis", "Constructing Abstract Arguments",
+    "Legal Rhetoric", "Thematic Interpretation", "Analyzing Historical Documents", "Philosophy of Language",
+    "Debunking Fallacies", "Interpreting Data", "Bias in Media", "Cross-Disciplinary Language Use",
+    "Creative Writing", "Formal Presentations", "Cultural Identity", "Interview Techniques", "Language and Power"
+  ]
+};
+
+
+  let currentLevel = null;
+  let currentLessonIndex = -1;
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function loadLevel(level) {
+  currentLevel = level;
+
+  targetLanguage = document.getElementById('targetLang').value;
+  interfaceLanguage = document.getElementById('interfaceLang').value;
+  selectedModel = document.getElementById('aiModel').value;
+
+  console.log("Target Language:", targetLanguage);
+  console.log("Interface Language:", interfaceLanguage);
+  console.log("AI Model:", selectedModel);
+
+  renderLessonLinks();
+  showScreen('lessonList');
+}
+
+
+  function renderLessonLinks() {
+    const titles = lessonTitlesByLevel[currentLevel];
+    const c = document.getElementById('lessonLinks');
+    c.innerHTML = '';
+    const prog = getProgress()[currentLevel]||[];
+    const done = prog.filter(x=>x).length, total=titles.length;
+    const pct = total?Math.round(done/total*100):0;
+    document.getElementById('levelTitle').textContent = levelTitle = `${currentLevel} Lessons`;
+    document.getElementById('progressInfo').textContent = `Progress: ${done} / ${total} (${pct}%)`;
+    document.getElementById('progressBar').style.width = pct+'%';
+
+    titles.forEach((t,i)=>{
+      const span = document.createElement('span');
+      span.textContent = `${i+1}. ${t}`;
+      span.className='lesson-link';
+      if(prog[i]) span.classList.add('done');
+      span.onclick=()=>loadLesson(i);
+      c.appendChild(span);
+    });
+  }
+
+  async function loadLesson(index) {
+    currentLessonIndex=index;
+    const title=lessonTitlesByLevel[currentLevel][index];
+    document.getElementById('lessonTitle').textContent=`${currentLevel} - ${title}`;
+    document.getElementById('lessonContent').innerHTML='';
+    document.getElementById('quizArea').innerHTML='';
+    document.getElementById('loading').style.display='flex';
+    document.getElementById('markCompleteBtn').style.display='none';
+    document.getElementById('regenerateBtn').style.display='none';
+
+    const key = `lessonContent_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}_${currentLevel}_${index}`;
+const cached = localStorage.getItem(key);
+
+if (cached) {
+  try {
+    const lesson = JSON.parse(cached);
+    const vocabSample = lesson.vocab?.[0];
+    const keys = vocabSample ? Object.keys(vocabSample).map(k => k.toLowerCase()) : [];
+
+    if (!keys.includes(targetLanguage.toLowerCase()) || !keys.includes(interfaceLanguage.toLowerCase())) {
+      console.warn("Cached lesson keys do not match current languages. Regenerating...");
+      localStorage.removeItem(key);
+      await regenerateLessonCore(title, key);
+    } else {
+      displayLesson(lesson);
+    }
+  } catch (e) {
+    localStorage.removeItem(key);
+    await regenerateLessonCore(title, key);
+  }
+} else {
+  await regenerateLessonCore(title, key);
+}
+
+  }
+
+  async function regenerateLessonCore(title,cacheKey){
+    try{
+      const lesson=await generateLessonContent(title);
+      localStorage.setItem(cacheKey,JSON.stringify(lesson));
+      displayLesson(lesson);
+    }catch(e){
+      document.getElementById('loading').style.display='none';
+      alert('Error: '+e.message);
+      showScreen('lessonList');
+    }
+  }
+
+  function displayLesson(lesson){
+    document.getElementById('loading').style.display='none';
+    const cdiv=document.getElementById('lessonContent'), qdiv=document.getElementById('quizArea');
+    cdiv.innerHTML=''; qdiv.innerHTML='';
+
+const vocabKey = targetLanguage.toLowerCase();
+const transKey = interfaceLanguage.toLowerCase();
+
+lesson.vocab.forEach(v => {
+  const d = document.createElement('div');
+  d.className = 'card';
+
+  // Create strong element for vocab word
+  const wordStrong = document.createElement('strong');
+  wordStrong.textContent = v[vocabKey];
+
+  // Create translation text node
+  const translationText = document.createTextNode(` = ${v[transKey]} `);
+
+  // Create a small button for TTS
+  const ttsBtn = document.createElement('button');
+  ttsBtn.textContent = '🔊';
+  ttsBtn.title = `Listen to "${v[vocabKey]}"`;
+  ttsBtn.style.marginLeft = '10px';
+  ttsBtn.style.padding = '0 6px';
+  ttsBtn.style.fontSize = '1rem';
+  ttsBtn.style.cursor = 'pointer';
+
+  // On click, speak the vocab word
+  ttsBtn.onclick = () => {
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(v[vocabKey]);
+    
+    // Optionally set language for better pronunciation
+    // Map your targetLanguage to a BCP-47 language code for TTS
+    const langMap = {
+      'Spanish': 'es-ES',
+      'French': 'fr-FR',
+      'German': 'de-DE',
+      'Mandarin Chinese': 'zh-CN',
+      'Japanese': 'ja-JP',
+      'Italian': 'it-IT',
+      'Korean': 'ko-KR',
+      'Portuguese': 'pt-PT',
+      'Arabic': 'ar-SA',
+      'Russian': 'ru-RU',
+      'Ukrainian': 'uk-UA',
+      // Add more if needed
+    };
+
+    utterance.lang = langMap[targetLanguage] || 'en-US'; // fallback to English
+    window.speechSynthesis.speak(utterance);
+  };
+
+  d.appendChild(wordStrong);
+  d.appendChild(translationText);
+  d.appendChild(ttsBtn);
+  cdiv.appendChild(d);
+});
+
+
+
+    if(lesson.quiz){
+      const card=document.createElement('div'); card.className='card';
+      const p=document.createElement('p'); p.textContent=lesson.quiz.question;
+      card.appendChild(p);
+      const opts=document.createElement('div'); opts.className='quiz-options';
+
+      lesson.quiz.options.forEach((opt,i)=>{
+        const btn=document.createElement('button');
+        btn.textContent=`${i+1}. ${opt}`;
+        btn.onclick=()=>handleAnswer(i,lesson.quiz.options.indexOf(lesson.quiz.answer));
+        opts.appendChild(btn);
+      });
+      card.appendChild(opts);
+      qdiv.appendChild(card);
+    }
+
+    document.getElementById('markCompleteBtn').style.display='inline-block';
+    document.getElementById('regenerateBtn').style.display='inline-block';
+    showScreen('lesson');
+  }
+
+  function handleAnswer(selIdx,correctIdx){
+    if(selIdx===correctIdx){
+      alert('Correct! Moving to next lesson...');
+      const prog=getProgress();
+      if(!prog[currentLevel]) prog[currentLevel]=[];
+      prog[currentLevel][currentLessonIndex]=true;
+      const key = `lessonProgress_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}`;
+      localStorage.setItem(key, JSON.stringify(prog));
+      setTimeout(()=>{
+        const titles=lessonTitlesByLevel[currentLevel];
+        if(currentLessonIndex+1<titles.length){
+          loadLesson(currentLessonIndex+1);
+        } else {
+          alert(`You've completed all lessons in ${currentLevel}!`);
+          renderLessonLinks();
+          showScreen('lessonList');
+        }
+      },500);
+    } else {
+      alert('Try again!');
+    }
+  }
+
+  function markComplete(){
+    const prog=getProgress();
+    if(!prog[currentLevel]) prog[currentLevel]=[];
+    prog[currentLevel][currentLessonIndex]=true;
+    localStorage.setItem('lessonProgress',JSON.stringify(prog));
+    alert('Lesson marked complete!');
+    renderLessonLinks();
+    showScreen('lessonList');
+  }
+
+  function regenerateLesson(){
+    if(!confirm('Regenerate this lesson? This will overwrite current content.')) return;
+    const key = `lessonContent_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}_${currentLevel}_${currentLessonIndex}`;
+
+    localStorage.removeItem(key);
+    const title=lessonTitlesByLevel[currentLevel][currentLessonIndex];
+    regenerateLessonCore(title,key);
+  }
+
+  function getProgress(){
+    try{
+      const key = `lessonProgress_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}`;
+      return JSON.parse(localStorage.getItem(key) || '{}');
+    } catch{
+      return {};
+    }
+  }
+
+  async function generateLessonContent(title){
+    const prompt=`
+Generate a ${targetLanguage} language lesson for the title: "${title}".
+Instructions should be in ${interfaceLanguage}.
+Include:
+- A list of 5 ${targetLanguage} vocabulary words with ${interfaceLanguage} translations.
+- A simple quiz question with 4 options and the correct answer indicated.
+Respond WITH NO explanation, ONLY a JSON object:
+{"vocab":[{"${targetLanguage.toLowerCase()}":"...","${interfaceLanguage.toLowerCase()}":"..."}...],"quiz":{"question":"...","options":["..."],"answer":"..."}}
+`;
+
+    const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+groqApiKey},
+      body:JSON.stringify({
+        model: selectedModel,
+        messages:[
+          {role:"system",content:"You are a Spanish language lesson generator. Output JSON only."},
+          {role:"user",content:prompt}
+        ],
+        temperature:0.7
+      })
+    });
+    if(!res.ok) throw new Error(res.status+" "+res.statusText);
+    const data=await res.json();
+    let text=data.choices?.[0]?.message?.content.trim();
+    if(text.startsWith("```")) text=text.replace(/^```(?:json)?\s*/,"").replace(/```$/,"").trim();
+    try{
+      return JSON.parse(text);
+    } catch(e){
+      throw new Error("JSON parse error: "+e.message+"\n"+text);
+    }
+  }
+
+  // Keyboard shortcuts 1-4
+  document.addEventListener('keydown',e=>{
+    if(!document.getElementById('lesson').classList.contains('active')) return;
+    const n=parseInt(e.key);
+    if(n>=1&&n<=4){
+      const btns=document.querySelectorAll('.quiz-options button');
+      if(btns[n-1]) btns[n-1].click();
+    }
+  });
+
+  window.addEventListener('load',()=>showScreen('home'));
+</script>
+
+</body>
+</html>
