@@ -309,10 +309,11 @@
                 <h1 class="title">Multi Model Chatbot</h1>
                 <div class="controls">
                     <select id="promptType" class="select" onchange="updateSystemPrompt(this.value)">
-                        <option value="universal">Universal</option>
+                        <option value="universal" selected>Universal</option>
                         <option value="christian_zionism">Christian Zionism</option>
-                        <option value="custom">Custom</option>
-                        <option value="raw">Raw (Warning)</option>
+                        <option value="focus">Focus</option>
+                        <option value="none">None (Warning)</option>
+                        <option value="custom">Custom (Warning)</option>
                     </select>
                     <select id="modelSelect" class="select">
                         <!-- Models will be populated by external script -->
@@ -467,7 +468,7 @@ Revelation: https://bible.usccb.org/bible/revelation/0
 
 I would like you to share information within the context of Christian Zionism.`
                 },
-                raw: {
+                none: {
                     greeting: "Welcome!",
                     content: ``
                 }
@@ -478,16 +479,25 @@ I would like you to share information within the context of Christian Zionism.`
         function updateSystemPrompt(type) {
     localStorage.setItem("chatbotSystemPrompt", type);
     
-    if (type == 'custom') {
-        var customPrompt = prompt("Enter custom system prompt:");  // Renaming variable to avoid conflict
+    if (type == 'focus') {
+        var customPrompt = prompt("Enter a focus for the system prompt to be built around:");  // Renaming variable to avoid conflict
         if (customPrompt) {
-            resetChat("Hello!", universalPrompt + `
+            resetChat("Hello! This chat will have a focus for: " + customPrompt, universalPrompt + `
 
 ` + customPrompt);
         }
         return;
     }
     
+    if (type == 'custom') {
+        var customPrompt = prompt("Enter a custom system prompt:");  // Renaming variable to avoid conflict
+        if (customPrompt) {
+            resetChat("Hello! This is the custom system prompt: " + customPrompt, customPrompt);
+        }
+        return;
+    }
+
+
     // Renaming 'prompt' to 'systemPrompt' to avoid conflict with the variable above
     const systemPrompt = state.systemPrompts[type] || state.systemPrompts.universal;
     resetChat(systemPrompt.greeting, systemPrompt.content);
