@@ -643,7 +643,7 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
       }, 1500);
     }
   }
-  
+
   function loadNextQuiz() {
     if (currentQuizIndex + 1 < currentLessonData.quizzes.length) {
       currentQuizIndex++;
@@ -704,20 +704,27 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
   async function generateLessonContent(title) {
     const prompt = `
 Generate a ${targetLanguage} language lesson for the title: "${title}".
-Instructions should be in ${interfaceLanguage}.
+
+Instructions should be in ${interfaceLanguage}
+
 Include:
-- A fullness of quizzes to teach the entire lesson, each with 4 options and the correct answer indicated. Ensure the quizzes test comprehension of the vocabulary or related concepts for the lesson title.
+- A fullness of quizzes to teach the entire lesson
+
+- Each quiz should contain 4 answer choices and the correct answer indicated.
+
+- Ensure the quizzes test comprehension of the vocabulary or related concepts for the lesson.
 
 - I want to ensure that every aspect of the lesson is being both taught and quizzed.
 
 - A list of 5 ${targetLanguage} vocabulary words with ${interfaceLanguage} translations for each quiz.
 
 Respond WITH NO explanation, ONLY a JSON object:
+
 {"vocab":[{"${targetLanguage.toLowerCase()}":"...","${interfaceLanguage.toLowerCase()}":"..."}...],"quizzes":[{"question":"...","options":["..."],"answer":"..."}, {"question":"...","options":["..."],"answer":"..."}, {"question":"...","options":["..."],"answer":"..."}]}
 `;
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const res = await fetch("https://groqchatcompletionsproxy.small-recipe-9582.workers.dev/", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + groqApiKey },
+      headers: { "Content-Type": "application/json"},
       body: JSON.stringify({
         model: selectedModel,
         messages: [
