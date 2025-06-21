@@ -13,6 +13,8 @@
       --text: #333;
       --text-light: #666;
       --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
     }
     * { box-sizing: border-box; }
     body {
@@ -23,30 +25,32 @@
       color: var(--text);
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
+      height: 100vh; /* Make body fill viewport height */
+      overflow: hidden; /* Main will handle overall scrolling */
     }
     header {
       background: var(--primary);
       color: #fff;
       padding: 1rem;
       text-align: center;
-      flex-shrink: 0;
+      flex-shrink: 0; /* Prevent header from shrinking */
     }
     main {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
+      flex: 1; /* Main takes remaining vertical space */
+      display: flex; /* Flex for horizontal screen switching */
+      overflow: hidden; /* Main hides its own overflow, screens manage internal scroll */
     }
     .screen {
-      display: none;
-      width: 100%;
-      padding: 1rem;
-      flex: 1;
-      flex-direction: column;
+      display: none; /* Hidden by default */
+      width: 100%; /* Take full width of main */
+      flex: 1; /* Active screen takes all available horizontal space */
+      flex-direction: column; /* Content stacks vertically within the screen */
+      overflow-y: auto; /* Allow individual screens to scroll if content exceeds viewport */
+      padding: 1rem; /* Padding for content */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     }
     .active {
-      display: flex;
+      display: flex; /* Show active screen */
     }
     button {
       background: var(--primary);
@@ -57,15 +61,31 @@
       cursor: pointer;
       margin: 0.5rem 0;
       font-size: 1rem;
+      transition: background 0.2s ease;
+    }
+    button:hover {
+      background: rgba(51,102,255,0.8);
     }
     button:disabled {
       background: #999;
       cursor: default;
     }
-    .level-button {
-      width: 100%;
-      text-align: left;
+
+    /* Home screen buttons now use .card style, overrides default card for button-like behavior */
+    #home .card {
+        margin-bottom: 0.5rem; /* Standard margin for cards */
+        width: 100%; /* Make them fill width like original buttons */
+        cursor: pointer;
+        /* Center content within these specific cards */
+        justify-content: center;
+        align-items: center;
+        flex-direction: row; /* Ensure text and potential icons stay in a row */
     }
+    #home .card:hover {
+        background: rgba(51,102,255,0.8);
+        color: #fff;
+    }
+
     .lesson-link {
       color: var(--primary);
       cursor: pointer;
@@ -82,66 +102,37 @@
       color: var(--success);
       font-weight: bold;
     }
-    /* All cards will share these base styles */
+    /* All cards will share these base styles for height, border, shadow */
     .card {
       background: var(--card-bg);
       padding: 1rem;
       margin: 0.5rem 0; /* Standard vertical spacing between all cards */
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      display: flex; /* Keep as flex to easily manage TTS button */
-      flex-direction: row; /* Keep content in a row for vocab, but overridden for quiz */
-      align-items: center; /* Vertically align items in the middle */
-      height: 70px; /* FIXED HEIGHT FOR ALL CARDS - adjust as needed based on content */
+      display: flex;
+      flex-direction: row; /* Default for vocab cards (word + button) */
+      align-items: center; /* Vertically align content in the middle */
+      height: 70px; /* FIXED HEIGHT FOR ALL CARDS */
       flex-shrink: 0; /* Prevent cards from shrinking */
     }
 
-    /* Keep the hover effect for buttons within cards (like TTS button) */
-    .card button:hover {
-        background: rgba(51,102,255,0.8); /* Slightly darker primary on hover */
+    /* Styles for vocabulary words within cards */
+    .card strong {
+      flex-grow: 1; /* Allows word to take most space */
+      text-align: left; /* Ensures vocab words are left-aligned */
+    }
+    .card button { /* TTS button */
+      margin-left: auto; /* Push to the right */
+      flex-shrink: 0; /* Prevent button from shrinking */
     }
 
-    #loading {
-      display: flex;
-      align-items: center;
-      font-style: italic;
-      color: var(--text-light);
-      margin: 1rem 0;
-    }
-    .spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--primary);
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
-      margin-right: 0.5rem;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .progress-container {
-      background: #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      margin: 0.5rem 0 1rem;
-      height: 20px;
-    }
-    .progress-bar {
-      height: 100%;
-      background: var(--primary);
-      width: 0%;
-      transition: width 0.3s;
-    }
 
     /* Styling for quiz question and option cards */
-    /* These specific classes will override the general .card for quiz elements */
     .quiz-card {
         flex-direction: column; /* Force content to stack vertically in quiz cards */
         justify-content: center; /* Center content horizontally within quiz cards */
         align-items: center; /* Center content vertically within quiz cards */
         text-align: center; /* Ensure text is centered */
-        /* min-height will be overridden by fixed 'height' in .card */
     }
 
     /* Style for clickable quiz option cards */
@@ -155,85 +146,139 @@
       color: #fff !important; /* Change text color on hover */
     }
 
-    /* Lesson List Scrolling */
-    #lessonLinks {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 0.5rem;
+    /* Quiz feedback styles */
+    .correct-answer {
+        background-color: var(--success) !important;
+        color: #fff !important;
+    }
+    .incorrect-answer {
+        background-color: var(--danger) !important;
+        color: #fff !important;
     }
 
-    /* --- STYLES for non-scrolling lesson layout --- */
+    /* Global loading overlay */
+    #loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 1000;
+        font-size: 1.2rem;
+        color: var(--primary);
+    }
+    #loading-overlay.visible {
+        display: flex;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Global message display */
+    #app-message {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0.8rem;
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
+        z-index: 1001;
+        transform: translateY(-100%); /* Start off-screen */
+        transition: transform 0.3s ease-out; /* Slide in/out effect */
+    }
+    #app-message.visible {
+        transform: translateY(0);
+    }
+    #app-message.success { background-color: var(--success); }
+    #app-message.error { background-color: var(--danger); }
+    #app-message.warning { background-color: var(--warning); }
+
+
+    /* --- STYLES for Lesson Content Page Layout --- */
     #lesson > h2,
-    #lesson > button,
-    #loading,
+    #lesson > button {
+        flex-shrink: 0; /* Prevent these elements from shrinking */
+    }
+    
     #lessonActions {
         flex-shrink: 0;
+        display: flex; /* Ensure it's a flex container */
+        gap: 10px; /* Add gap between buttons */
+        justify-content: center; /* Center buttons horizontally */
+        flex-wrap: wrap; /* Allow buttons to wrap if space is limited */
     }
 
+
     #lesson-body {
-        flex: 1;
+        flex: 1; /* Lesson body takes remaining vertical space */
         display: flex;
         gap: 1rem;
-        overflow: hidden;
+        overflow: hidden; /* Hide lesson-body's own overflow, columns will manage */
         margin: 1rem 0;
     }
 
-    /* Lesson Content and Quiz Area - CRITICAL for vertical alignment */
+    /* Lesson Content and Quiz Area - CRITICAL for vertical alignment and uniform spacing */
     #lessonContent, #quizArea {
         flex: 1; /* Both columns take equal horizontal space */
         display: flex;
         flex-direction: column; /* Stack content vertically */
-        overflow-y: auto; /* Allow internal scrolling if content is too long */
-        padding-right: 0.5rem;
-        /* Using space-between to evenly distribute fixed-height cards */
-        justify-content: space-between; /* Distributes space between flex items */
+        overflow-y: auto; /* Allow internal scrolling for each column if content exceeds height */
+        padding-right: 0.5rem; /* Space for scrollbar */
+        justify-content: space-between; /* Distributes fixed-height cards evenly */
     }
 
-    /* Critical for bottom alignment: Remove margin from the very last card in each column */
-    /* We don't need this if using space-between and all cards are fixed height */
-    /* #lessonContent .card:last-child,
-    #quizArea .card:last-child {
-        margin-bottom: 0;
-    } */
-
-    #lessonActions {
-      display: flex;
-      gap: 1rem;
+    /* Hide the 'mark complete' button after completing a quiz or when next button is active */
+    #markCompleteBtn.hidden {
+      display: none;
     }
 
-    /* --- Subtle Scrollbar Styling --- */
-    #lessonContent::-webkit-scrollbar,
-    #quizArea::-webkit-scrollbar,
-    #lessonLinks::-webkit-scrollbar {
+    /* --- Subtle Scrollbar Styling (applies to all scrollable areas) --- */
+    ::-webkit-scrollbar {
       width: 8px;
     }
-    #lessonContent::-webkit-scrollbar-track,
-    #quizArea::-webkit-scrollbar-track,
-    #lessonLinks::-webkit-scrollbar-track {
+    ::-webkit-scrollbar-track {
       background: transparent;
     }
-    #lessonContent::-webkit-scrollbar-thumb,
-    #quizArea::-webkit-scrollbar-thumb,
-    #lessonLinks::-webkit-scrollbar-thumb {
+    ::-webkit-scrollbar-thumb {
       background-color: #ccc;
       border-radius: 10px;
     }
-    #lessonContent::-webkit-scrollbar-thumb:hover,
-    #quizArea::-webkit-scrollbar-thumb:hover,
-    #lessonLinks::-webkit-scrollbar-thumb:hover {
+    ::-webkit-scrollbar-thumb:hover {
       background-color: #999;
     }
   </style>
 </head>
 <body>
 <main>
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <span>Generating lesson... Please wait.</span>
+  </div>
+  <div id="app-message" class=""></div>
+
   <section id="home" class="screen active">
     <h2>Select Your Level</h2>
-    <button class="level-button" onclick="loadLevel('A1')">A1 (Beginner)</button>
-    <button class="level-button" onclick="loadLevel('A2')">A2 (Elementary)</button>
-    <button class="level-button" onclick="loadLevel('B1')">B1 (Intermediate)</button>
-    <button class="level-button" onclick="loadLevel('B2')">B2 (Upper-Intermediate)</button>
-    <button class="level-button" onclick="loadLevel('C1/C2')">C1/C2 (Advanced)</button>
+    <div class="card" onclick="loadLevel('A1')">A1 (Beginner)</div>
+    <div class="card" onclick="loadLevel('A2')">A2 (Elementary)</div>
+    <div class="card" onclick="loadLevel('B1')">B1 (Intermediate)</div>
+    <div class="card" onclick="loadLevel('B2')">B2 (Upper-Intermediate)</div>
+    <div class="card" onclick="loadLevel('C1/C2')">C1/C2 (Advanced)</div>
     <div class="card">
       <label for="targetLang"><strong>Language to Study:</strong></label>
       <select id="targetLang">
@@ -296,10 +341,10 @@
       <div id="quizArea"></div>
     </div>
 
-    <div id="loading"><div class="spinner"></div><span>Loading lesson content...</span></div>
     <div id="lessonActions">
         <button id="markCompleteBtn" onclick="markComplete()">Mark Complete</button>
-        <button id="regenerateBtn" onclick="regenerateLesson()">Regenerate Lesson</button>
+        <button id="nextQuizBtn" style="display:none;" onclick="loadNextQuiz()">Next Quiz</button>
+        <button id="nextLessonBtn" style="display:none;" onclick="loadNextLesson()">Next Lesson</button>
     </div>
   </section>
 </main>
@@ -307,14 +352,14 @@
 let targetLanguage = "Spanish";
 let interfaceLanguage = "English";
 let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
-  const groqApiKey = "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";
+  const groqApiKey = "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"; // Replace with your actual Groq API Key
   const lessonTitlesByLevel = {
   "A1": [
     "Greetings", "Colors", "Numbers 1-10", "Days of the Week", "Family Members",
     "Basic Verbs", "Common Nouns", "Classroom Items", "Food & Drinks", "Simple Questions",
     "Telling Time", "Basic Adjectives", "Simple Sentences", "Weather", "Parts of the Body",
-    "Simple Directions", "Daily Routine", "Likes and Dislikes", "Plural Nouns", "Simple Commands",
-    "Basic Pronouns", "Yes/No Questions", "Personal Information", "Nationalities", "Simple Negatives"
+    "Simple Directions", "Daily Routine", "Likes and Dislikes", "Plural Nouns", "Simple Negatives",
+    "Simple Commands", "Basic Pronouns", "Yes/No Questions", "Personal Information", "Nationalities"
   ],
   "A2": [
     "Hobbies", "Shopping", "Ordering Food", "Transportation", "Asking for Help",
@@ -354,242 +399,378 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
 };
   let currentLevel = null;
   let currentLessonIndex = -1;
+  let currentLessonData = null; // Store the full lesson data (vocab + quizzes)
+  let currentQuizIndex = 0; // Track which quiz is currently being displayed
+
   function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+    // Ensure scroll position is reset when changing screens
+    document.getElementById(id).scrollTop = 0;
   }
+
   function loadLevel(level) {
-  currentLevel = level;
-  targetLanguage = document.getElementById('targetLang').value;
-  interfaceLanguage = document.getElementById('interfaceLang').value;
-  selectedModel = document.getElementById('aiModel').value;
-  renderLessonLinks();
-  showScreen('lessonList');
-}
+    currentLevel = level;
+    targetLanguage = document.getElementById('targetLang').value;
+    interfaceLanguage = document.getElementById('interfaceLang').value;
+    selectedModel = document.getElementById('aiModel').value;
+    renderLessonLinks();
+    showScreen('lessonList');
+  }
+
   function renderLessonLinks() {
     const titles = lessonTitlesByLevel[currentLevel];
     const c = document.getElementById('lessonLinks');
     c.innerHTML = '';
-    const prog = getProgress()[currentLevel]||[];
-    const done = prog.filter(x=>x).length, total=titles.length;
-    const pct = total?Math.round(done/total*100):0;
-    document.getElementById('levelTitle').textContent = levelTitle = `${currentLevel} Lessons`;
-    document.getElementById('progressInfo').textContent = `Progress: ${done} / ${total} (${pct}%)`;
-    document.getElementById('progressBar').style.width = pct+'%';
-    titles.forEach((t,i)=>{
+    // Progress now needs to track completion of ALL quizzes for a lesson
+    const prog = getProgress()[currentLevel] || [];
+    // Count lessons that have all quizzes completed
+    const doneLessons = prog.filter(lessonQuizzes => lessonQuizzes && lessonQuizzes.every(q => q)).length;
+    const total = titles.length;
+    const pct = total ? Math.round(doneLessons / total * 100) : 0;
+    document.getElementById('levelTitle').textContent = `${currentLevel} Lessons`;
+    document.getElementById('progressInfo').textContent = `Progress: ${doneLessons} / ${total} (${pct}%)`;
+    document.getElementById('progressBar').style.width = pct + '%';
+
+    titles.forEach((t, i) => {
       const span = document.createElement('span');
-      span.textContent = `${i+1}. ${t}`;
-      span.className='lesson-link';
-      if(prog[i]) span.classList.add('done');
-      span.onclick=()=>loadLesson(i);
+      span.textContent = `${i + 1}. ${t}`;
+      span.className = 'lesson-link';
+      // Check if ALL quizzes for this lesson are marked as done
+      const lessonIsDone = prog[i] && prog[i].every(q => q);
+      if (lessonIsDone) span.classList.add('done');
+      span.onclick = () => loadLesson(i);
       c.appendChild(span);
     });
   }
+
   async function loadLesson(index) {
-    currentLessonIndex=index;
-    const title=lessonTitlesByLevel[currentLevel][index];
-    document.getElementById('lessonTitle').textContent=`${currentLevel} - ${title}`;
-    document.getElementById('lessonContent').innerHTML='';
-    document.getElementById('quizArea').innerHTML='';
-    document.getElementById('loading').style.display='flex';
-    document.getElementById('lessonActions').style.display = 'none';
-    const key = `lessonContent_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}_${currentLevel}_${index}`;
-    const cached = localStorage.getItem(key);
-    if (cached) {
-      try {
-        const lesson = JSON.parse(cached);
-        const vocabSample = lesson.vocab?.[0];
-        const keys = vocabSample ? Object.keys(vocabSample).map(k => k.toLowerCase()) : [];
-        if (!keys.includes(targetLanguage.toLowerCase()) || !keys.includes(interfaceLanguage.toLowerCase())) {
-          console.warn("Cached lesson keys do not match current languages. Regenerating...");
-          localStorage.removeItem(key);
-          await regenerateLessonCore(title, key);
-        } else {
-          displayLesson(lesson);
-        }
-      } catch (e) {
-        localStorage.removeItem(key);
-        await regenerateLessonCore(title, key);
-      }
-    } else {
-      await regenerateLessonCore(title, key);
-    }
+    currentLessonIndex = index;
+    currentQuizIndex = 0; // Reset quiz index for a new lesson
+    const title = lessonTitlesByLevel[currentLevel][index];
+    document.getElementById('lessonTitle').textContent = `${currentLevel} - ${title}`;
+    document.getElementById('lessonContent').innerHTML = '';
+    document.getElementById('quizArea').innerHTML = '';
+    document.getElementById('lessonActions').style.display = 'none'; // Hide actions during load
+    document.getElementById('nextLessonBtn').style.display = 'none';
+    document.getElementById('nextQuizBtn').style.display = 'none';
+    document.getElementById('markCompleteBtn').classList.remove('hidden'); // Ensure mark complete button is visible by default for new load
+
+    await regenerateLessonCore(title);
   }
-  async function regenerateLessonCore(title,cacheKey){
-    try{
-      const lesson=await generateLessonContent(title);
-      localStorage.setItem(cacheKey,JSON.stringify(lesson));
-      displayLesson(lesson);
-    }catch(e){
-      document.getElementById('loading').style.display='none';
-      alert('Error: '+e.message);
+
+  async function regenerateLessonCore(title) {
+    document.getElementById('loading-overlay').classList.add('visible');
+    try {
+      // The API now returns a lesson with multiple quizzes
+      currentLessonData = await generateLessonContent(title);
+      displayCurrentQuiz(); // Display the first quiz
+      displayMessage('Lesson generated!', 'success');
+    } catch (e) {
+      displayMessage(`Error: ${e.message}. Please try again.`, 'error');
+      console.error("Lesson generation error:", e);
       showScreen('lessonList');
+    } finally {
+      document.getElementById('loading-overlay').classList.remove('visible');
     }
   }
-  function displayLesson(lesson){
-    document.getElementById('loading').style.display='none';
-    const cdiv=document.getElementById('lessonContent'), qdiv=document.getElementById('quizArea');
-    cdiv.innerHTML=''; qdiv.innerHTML='';
-    const vocabKey = targetLanguage.toLowerCase();
-    const transKey = interfaceLanguage.toLowerCase();
 
-    // Add a title to the vocabulary column
-    const vocabTitle = document.createElement('h3');
-    vocabTitle.textContent = "Vocabulary";
-    vocabTitle.style.marginTop = 0;
-    cdiv.appendChild(vocabTitle);
+  function displayLessonVocab(lesson) {
+      const cdiv = document.getElementById('lessonContent');
+      cdiv.innerHTML = ''; // Clear existing vocab
 
-    // Vocabulary cards
-    lesson.vocab.forEach(v => {
-      const d = document.createElement('div');
-      d.className = 'card';
-      const wordStrong = document.createElement('strong');
-      wordStrong.textContent = v[vocabKey];
-      const translationText = document.createTextNode(` = ${v[transKey]} `);
-      const ttsBtn = document.createElement('button');
-      ttsBtn.textContent = '🔊';
-      ttsBtn.title = `Listen to "${v[vocabKey]}"`;
-      ttsBtn.style.marginLeft = '10px';
-      ttsBtn.style.padding = '0 6px';
-      ttsBtn.style.fontSize = '1rem';
-      ttsBtn.style.cursor = 'pointer';
-      ttsBtn.onclick = () => {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(v[vocabKey]);
-        const langMap = {
-          'Spanish': 'es-ES', 'French': 'fr-FR', 'German': 'de-DE', 'Mandarin Chinese': 'zh-CN',
-          'Japanese': 'ja-JP', 'Italian': 'it-IT', 'Korean': 'ko-KR', 'Portuguese': 'pt-PT',
-          'Arabic': 'ar-SA', 'Russian': 'ru-RU', 'Ukrainian': 'uk-UA',
-        };
-        utterance.lang = langMap[targetLanguage] || 'en-US';
-        window.speechSynthesis.speak(utterance);
-      };
-      d.appendChild(wordStrong);
-      d.appendChild(translationText);
-      d.appendChild(ttsBtn);
-      cdiv.appendChild(d);
-    });
+      const vocabKey = targetLanguage.toLowerCase();
+      const transKey = interfaceLanguage.toLowerCase();
 
-    if(lesson.quiz){
+      const vocabTitle = document.createElement('h3');
+      vocabTitle.textContent = "Vocabulary";
+      vocabTitle.style.marginTop = 0;
+      cdiv.appendChild(vocabTitle);
+
+      lesson.vocab.forEach(v => {
+          const d = document.createElement('div');
+          d.className = 'card';
+          const wordStrong = document.createElement('strong');
+          wordStrong.textContent = v[vocabKey];
+          const translationText = document.createTextNode(` = ${v[transKey]} `);
+          const ttsBtn = document.createElement('button');
+          ttsBtn.textContent = '🔊';
+          ttsBtn.title = `Listen to "${v[vocabKey]}"`;
+          ttsBtn.style.marginLeft = '10px';
+          ttsBtn.style.padding = '0 6px';
+          ttsBtn.style.fontSize = '1rem';
+          ttsBtn.style.cursor = 'pointer';
+          ttsBtn.onclick = (event) => {
+              event.stopPropagation();
+              window.speechSynthesis.cancel();
+              const utterance = new SpeechSynthesisUtterance(v[vocabKey]);
+              const langMap = {
+                  'Spanish': 'es-ES', 'French': 'fr-FR', 'German': 'de-DE', 'Mandarin Chinese': 'zh-CN',
+                  'Japanese': 'ja-JP', 'Italian': 'it-IT', 'Korean': 'ko-KR', 'Portuguese': 'pt-PT',
+                  'Arabic': 'ar-SA', 'Russian': 'ru-RU', 'Ukrainian': 'uk-UA',
+              };
+              utterance.lang = langMap[targetLanguage] || 'en-US';
+              window.speechSynthesis.speak(utterance);
+          };
+          d.appendChild(wordStrong);
+          d.appendChild(translationText);
+          d.appendChild(ttsBtn);
+          cdiv.appendChild(d);
+      });
+  }
+
+  function displayCurrentQuiz() {
+      const qdiv = document.getElementById('quizArea');
+      qdiv.innerHTML = ''; // Clear existing quiz content
+
+      if (!currentLessonData || !currentLessonData.quizzes || currentLessonData.quizzes.length === 0) {
+          qdiv.innerHTML = '<h3>No quizzes available for this lesson.</h3>';
+          document.getElementById('markCompleteBtn').classList.remove('hidden');
+          document.getElementById('nextQuizBtn').style.display = 'none';
+          document.getElementById('nextLessonBtn').style.display = 'block';
+          document.getElementById('lessonActions').style.display = 'flex';
+          return;
+      }
+
+      displayLessonVocab(currentLessonData); // Ensure vocab is always displayed
+
+      const currentQuiz = currentLessonData.quizzes[currentQuizIndex];
+
       const quizTitle = document.createElement('h3');
-      quizTitle.textContent = "Quiz";
+      quizTitle.textContent = `Quiz ${currentQuizIndex + 1} of ${currentLessonData.quizzes.length}`;
       quizTitle.style.marginTop = 0;
       qdiv.appendChild(quizTitle);
 
-      // Quiz Question Card (Card 1)
       const questionCard = document.createElement('div');
-      questionCard.className = 'card quiz-card'; // Add a specific class for quiz cards if needed for styling
-      questionCard.style.fontWeight = 'bold'; // Make the question stand out
-      questionCard.textContent = lesson.quiz.question;
+      questionCard.className = 'card quiz-card';
+      questionCard.style.fontWeight = 'bold';
+      questionCard.textContent = currentQuiz.question;
       qdiv.appendChild(questionCard);
 
-      // Quiz Options as individual cards (Cards 2-5)
-      lesson.quiz.options.forEach((opt,i)=>{
-        const optionCard = document.createElement('div');
-        optionCard.className = 'card quiz-card quiz-option'; // Apply 'card' class, and new 'quiz-option'
-        optionCard.textContent = `${i+1}. ${opt}`;
-        optionCard.style.cursor = 'pointer'; // Indicate it's clickable
-        // Add hover effects directly in JS for simplicity or in CSS with .quiz-option:hover
-        optionCard.onmouseover = () => { optionCard.style.backgroundColor = 'var(--primary)'; optionCard.style.color = '#fff'; };
-        optionCard.onmouseout = () => { optionCard.style.backgroundColor = 'var(--card-bg)'; optionCard.style.color = 'var(--text)'; };
-        optionCard.onclick = () => handleAnswer(i, lesson.quiz.options.indexOf(lesson.quiz.answer));
-
-        qdiv.appendChild(optionCard);
+      currentQuiz.options.forEach((opt, i) => {
+          const optionCard = document.createElement('div');
+          optionCard.className = 'card quiz-card quiz-option';
+          optionCard.dataset.index = i;
+          optionCard.textContent = `${i + 1}. ${opt}`;
+          optionCard.style.cursor = 'pointer';
+          optionCard.onmouseover = () => { optionCard.style.backgroundColor = 'var(--primary)'; optionCard.style.color = '#fff'; };
+          optionCard.onmouseout = () => {
+              if (!optionCard.classList.contains('correct-answer') && !optionCard.classList.contains('incorrect-answer')) {
+                  optionCard.style.backgroundColor = 'var(--card-bg)';
+                  optionCard.style.color = 'var(--text)';
+              }
+          };
+          optionCard.onclick = () => handleAnswer(optionCard, currentQuiz.options.indexOf(currentQuiz.answer));
+          qdiv.appendChild(optionCard);
       });
-    }
-    document.getElementById('lessonActions').style.display = 'flex';
-    showScreen('lesson');
+
+      // Show/hide buttons based on quiz state
+      document.getElementById('markCompleteBtn').classList.add('hidden'); // Hide manual complete
+      document.getElementById('nextQuizBtn').style.display = 'none'; // Initially hidden, shows on correct answer
+      document.getElementById('nextLessonBtn').style.display = 'none'; // Initially hidden
+      document.getElementById('lessonActions').style.display = 'flex';
+      showScreen('lesson');
   }
-  function handleAnswer(selIdx,correctIdx){
-    if(selIdx===correctIdx){
-      alert('Correct! Moving to next lesson...');
-      const prog=getProgress();
-      if(!prog[currentLevel]) prog[currentLevel]=[];
-      prog[currentLevel][currentLessonIndex]=true;
+
+
+  function handleAnswer(selectedCard, correctIdx) {
+    const allOptions = document.querySelectorAll('.quiz-option');
+    const selectedIdx = parseInt(selectedCard.dataset.index);
+
+    // Disable all options
+    allOptions.forEach(card => {
+      card.style.pointerEvents = 'none';
+      card.onmouseover = null;
+      card.onmouseout = null;
+      if (!card.classList.contains('correct-answer') && !card.classList.contains('incorrect-answer')) {
+        card.style.backgroundColor = 'var(--card-bg)';
+        card.style.color = 'var(--text)';
+      }
+    });
+
+    if (selectedIdx === correctIdx) {
+      selectedCard.classList.add('correct-answer');
+      displayMessage('Correct!', 'success');
+
+      // Mark current quiz as complete in progress
+      const prog = getProgress();
+      if (!prog[currentLevel]) prog[currentLevel] = [];
+      if (!prog[currentLevel][currentLessonIndex]) prog[currentLevel][currentLessonIndex] = [];
+      prog[currentLevel][currentLessonIndex][currentQuizIndex] = true;
       const key = `lessonProgress_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}`;
       localStorage.setItem(key, JSON.stringify(prog));
-      setTimeout(()=>{
-        const titles=lessonTitlesByLevel[currentLevel];
-        if(currentLessonIndex+1<titles.length){
-          loadLesson(currentLessonIndex+1);
-        } else {
-          alert(`You've completed all lessons in ${currentLevel}!`);
-          renderLessonLinks();
-          showScreen('lessonList');
-        }
-      },500);
+
+      // Check if all quizzes for the current lesson are complete
+      const allQuizzesCompleted = currentLessonData.quizzes.every((_, idx) =>
+        (prog[currentLevel] && prog[currentLevel][currentLessonIndex] && prog[currentLevel][currentLessonIndex][idx])
+      );
+
+      // --- MODIFIED LOGIC HERE ---
+      // If all quizzes are completed and this is the last quiz, allow auto-advance.
+      // Otherwise, just show the next quiz if available.
+      if (allQuizzesCompleted && (currentQuizIndex === currentLessonData.quizzes.length - 1)) {
+          // Only auto-advance to next lesson if this was the final quiz and all are done
+          document.getElementById('nextQuizBtn').style.display = 'none';
+          document.getElementById('nextLessonBtn').style.display = 'none'; // Keep hidden, will auto-advance
+          displayMessage('All quizzes for this lesson completed! Moving to next lesson...', 'success', 2500);
+          setTimeout(loadNextLesson, 1500);
+      } else {
+          // If not all quizzes are completed OR it's not the last quiz, just move to the next quiz
+          document.getElementById('nextQuizBtn').style.display = 'none'; // Keep hidden, will auto-advance
+          document.getElementById('nextLessonBtn').style.display = 'none';
+          displayMessage('Correct! Moving to next quiz...', 'success', 1500);
+          setTimeout(loadNextQuiz, 1000); // Automatically load the next quiz
+      }
+      // --- END MODIFIED LOGIC ---
+
     } else {
-      alert('Try again!');
+      selectedCard.classList.add('incorrect-answer');
+      allOptions.forEach(card => {
+        if (parseInt(card.dataset.index) === correctIdx) {
+          card.classList.add('correct-answer');
+        }
+      });
+      displayMessage('Incorrect. Please review and try again.', 'error');
+
+      // If incorrect, user needs to re-attempt the current quiz.
+      // The "Next Quiz" and "Next Lesson" buttons remain hidden.
+      document.getElementById('nextQuizBtn').style.display = 'none';
+      document.getElementById('nextLessonBtn').style.display = 'none';
+
+      // Re-enable options after a delay for user to read feedback, then regenerate quiz.
+      setTimeout(() => {
+        displayCurrentQuiz(); // Re-display the same quiz
+      }, 1500);
     }
   }
-  function markComplete(){
-    const prog=getProgress();
-    if(!prog[currentLevel]) prog[currentLevel]=[];
-    prog[currentLevel][currentLessonIndex]=true;
-    localStorage.setItem('lessonProgress',JSON.stringify(prog));
-    alert('Lesson marked complete!');
+  
+  function loadNextQuiz() {
+    if (currentQuizIndex + 1 < currentLessonData.quizzes.length) {
+      currentQuizIndex++;
+      displayCurrentQuiz();
+      document.getElementById('nextQuizBtn').style.display = 'none'; // Hide until next correct answer
+      document.getElementById('nextLessonBtn').style.display = 'none';
+    } else {
+      // This case should ideally be handled by `handleAnswer` when all quizzes are done.
+      // But as a fallback:
+      displayMessage(`You've completed all quizzes for this lesson!`, 'success');
+      document.getElementById('nextQuizBtn').style.display = 'none';
+      document.getElementById('nextLessonBtn').style.display = 'block';
+    }
+  }
+
+  function loadNextLesson() {
+    const titles = lessonTitlesByLevel[currentLevel];
+    if (currentLessonIndex + 1 < titles.length) {
+      loadLesson(currentLessonIndex + 1);
+    } else {
+      displayMessage(`You've completed all lessons in ${currentLevel}!`, 'success');
+      renderLessonLinks();
+      showScreen('lessonList');
+    }
+  }
+
+  function markComplete() {
+    // This function will now mark ALL quizzes for the current lesson as complete.
+    // This is primarily for manual override or for lessons without quizzes.
+    const prog = getProgress();
+    if (!prog[currentLevel]) prog[currentLevel] = [];
+    
+    // If currentLessonData exists, mark all its quizzes as complete
+    if (currentLessonData && currentLessonData.quizzes) {
+        const quizCompletionStatus = Array(currentLessonData.quizzes.length).fill(true);
+        prog[currentLevel][currentLessonIndex] = quizCompletionStatus;
+    } else {
+        // If no quizzes, just mark the lesson as a single unit complete
+        prog[currentLevel][currentLessonIndex] = [true]; // Represent as a single completed "quiz"
+    }
+    
+    const key = `lessonProgress_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}`;
+    localStorage.setItem(key, JSON.stringify(prog));
+    displayMessage('Lesson manually marked complete!', 'success');
     renderLessonLinks();
     showScreen('lessonList');
   }
-  function regenerateLesson(){
-    if(!confirm('Regenerate this lesson? This will overwrite current content.')) return;
-    const key = `lessonContent_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}_${currentLevel}_${currentLessonIndex}`;
-    localStorage.removeItem(key);
-    const title=lessonTitlesByLevel[currentLevel][currentLessonIndex];
-    regenerateLessonCore(title,key);
-  }
-  function getProgress(){
-    try{
+
+  function getProgress() {
+    try {
       const key = `lessonProgress_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}`;
       return JSON.parse(localStorage.getItem(key) || '{}');
-    } catch{
+    } catch {
       return {};
     }
   }
-  async function generateLessonContent(title){
-    const prompt=`
+
+  async function generateLessonContent(title) {
+    const prompt = `
 Generate a ${targetLanguage} language lesson for the title: "${title}".
 Instructions should be in ${interfaceLanguage}.
 Include:
-- A list of 5 ${targetLanguage} vocabulary words with ${interfaceLanguage} translations.
-- A simple quiz question with 4 options and the correct answer indicated.
+- A fullness of quizzes to teach the entire lesson, each with 4 options and the correct answer indicated. Ensure the quizzes test comprehension of the vocabulary or related concepts for the lesson title.
+
+- I want to ensure that every aspect of the lesson is being both taught and quizzed.
+
+- A list of 5 ${targetLanguage} vocabulary words with ${interfaceLanguage} translations for each quiz.
+
 Respond WITH NO explanation, ONLY a JSON object:
-{"vocab":[{"${targetLanguage.toLowerCase()}":"...","${interfaceLanguage.toLowerCase()}":"..."}...],"quiz":{"question":"...","options":["..."],"answer":"..."}}
+{"vocab":[{"${targetLanguage.toLowerCase()}":"...","${interfaceLanguage.toLowerCase()}":"..."}...],"quizzes":[{"question":"...","options":["..."],"answer":"..."}, {"question":"...","options":["..."],"answer":"..."}, {"question":"...","options":["..."],"answer":"..."}]}
 `;
-    const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","Authorization":"Bearer "+groqApiKey},
-      body:JSON.stringify({
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + groqApiKey },
+      body: JSON.stringify({
         model: selectedModel,
-        messages:[
-          {role:"system",content:"You are a Spanish language lesson generator. Output JSON only."},
-          {role:"user",content:prompt}
+        messages: [
+          { role: "system", content: "You are a language lesson generator. Output JSON only." },
+          { role: "user", content: prompt }
         ],
-        temperature:0.7
+        temperature: 0.7
       })
     });
-    if(!res.ok) throw new Error(res.status+" "+res.statusText);
-    const data=await res.json();
-    let text=data.choices?.[0]?.message?.content.trim();
-    if(text.startsWith("```")) text=text.replace(/^```(?:json)?\s*/,"").replace(/```$/,"").trim();
-    try{
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`API error: ${res.status} ${res.statusText} - ${errorData.error?.message || 'Unknown error'}`);
+    }
+    const data = await res.json();
+    let text = data.choices?.[0]?.message?.content.trim();
+    if (text.startsWith("```")) text = text.replace(/^```(?:json)?\s*\n|\n```$/g, "").trim();
+    try {
       return JSON.parse(text);
-    } catch(e){
-      throw new Error("JSON parse error: "+e.message+"\n"+text);
+    } catch (e) {
+      throw new Error("JSON parse error from API response: " + e.message + "\nReceived text:\n" + text);
     }
   }
-  // Keyboard shortcuts 1-4
-  document.addEventListener('keydown',e=>{
-    if(!document.getElementById('lesson').classList.contains('active')) return;
-    const n=parseInt(e.key);
-    if(n >= 1 && n <= 4){ // Only for options 1-4
-      // Query for the quiz option cards using the new class 'quiz-option'
+
+  function displayMessage(message, type = 'info', duration = 3000) {
+    const msgDiv = document.getElementById('app-message');
+    msgDiv.textContent = message;
+    msgDiv.className = `visible ${type}`;
+
+    clearTimeout(msgDiv._hideTimeout);
+    msgDiv._hideTimeout = setTimeout(() => {
+      msgDiv.classList.remove('visible');
+      msgDiv.textContent = '';
+    }, duration);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lesson').classList.contains('active')) return;
+
+    const firstOption = document.querySelector('.quiz-option');
+    if (firstOption && firstOption.style.pointerEvents === 'none') {
+        return;
+    }
+
+    const n = parseInt(e.key);
+    if (n >= 1 && n <= 4) {
       const btns = document.querySelectorAll('.quiz-option');
-      // Adjust index because question card is first, so option 1 is btns[0]
-      if(btns[n-1]) btns[n-1].click();
+      if (btns[n - 1]) {
+        btns[n - 1].click();
+      }
     }
   });
-  window.addEventListener('load',()=>showScreen('home'));
+
+  window.addEventListener('load', () => showScreen('home'));
 </script>
 </body>
 </html>
