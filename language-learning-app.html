@@ -23,7 +23,8 @@
       color: var(--text);
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
     }
     header {
       background: var(--primary);
@@ -34,10 +35,19 @@
     }
     main {
       flex: 1;
-      padding: 1rem;
+      display: flex;
+      overflow: hidden;
     }
-    .screen { display: none; }
-    .active { display: block; }
+    .screen {
+      display: none;
+      width: 100%;
+      padding: 1rem;
+      flex: 1;
+      flex-direction: column;
+    }
+    .active {
+      display: flex;
+    }
     button {
       background: var(--primary);
       color: #fff;
@@ -72,13 +82,25 @@
       color: var(--success);
       font-weight: bold;
     }
+    /* All cards will share these base styles */
     .card {
       background: var(--card-bg);
       padding: 1rem;
-      margin: 1rem 0;
+      margin: 0.5rem 0; /* Standard vertical spacing between all cards */
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex; /* Keep as flex to easily manage TTS button */
+      flex-direction: row; /* Keep content in a row for vocab, but overridden for quiz */
+      align-items: center; /* Vertically align items in the middle */
+      height: 70px; /* FIXED HEIGHT FOR ALL CARDS - adjust as needed based on content */
+      flex-shrink: 0; /* Prevent cards from shrinking */
     }
+
+    /* Keep the hover effect for buttons within cards (like TTS button) */
+    .card button:hover {
+        background: rgba(51,102,255,0.8); /* Slightly darker primary on hover */
+    }
+
     #loading {
       display: flex;
       align-items: center;
@@ -111,28 +133,100 @@
       width: 0%;
       transition: width 0.3s;
     }
-    .quiz-options {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+
+    /* Styling for quiz question and option cards */
+    /* These specific classes will override the general .card for quiz elements */
+    .quiz-card {
+        flex-direction: column; /* Force content to stack vertically in quiz cards */
+        justify-content: center; /* Center content horizontally within quiz cards */
+        align-items: center; /* Center content vertically within quiz cards */
+        text-align: center; /* Ensure text is centered */
+        /* min-height will be overridden by fixed 'height' in .card */
     }
-    .quiz-options button {
-      width: 100%;
+
+    /* Style for clickable quiz option cards */
+    .quiz-option {
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease; /* Smooth transition for hover */
     }
-    @media (min-width: 100%) {
-      main {
-        max-width: 100%;
-        margin: 0 auto;
-      }
+
+    .quiz-option:hover {
+      background: var(--primary) !important; /* Use !important to override default card background */
+      color: #fff !important; /* Change text color on hover */
+    }
+
+    /* Lesson List Scrolling */
+    #lessonLinks {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    /* --- STYLES for non-scrolling lesson layout --- */
+    #lesson > h2,
+    #lesson > button,
+    #loading,
+    #lessonActions {
+        flex-shrink: 0;
+    }
+
+    #lesson-body {
+        flex: 1;
+        display: flex;
+        gap: 1rem;
+        overflow: hidden;
+        margin: 1rem 0;
+    }
+
+    /* Lesson Content and Quiz Area - CRITICAL for vertical alignment */
+    #lessonContent, #quizArea {
+        flex: 1; /* Both columns take equal horizontal space */
+        display: flex;
+        flex-direction: column; /* Stack content vertically */
+        overflow-y: auto; /* Allow internal scrolling if content is too long */
+        padding-right: 0.5rem;
+        /* Using space-between to evenly distribute fixed-height cards */
+        justify-content: space-between; /* Distributes space between flex items */
+    }
+
+    /* Critical for bottom alignment: Remove margin from the very last card in each column */
+    /* We don't need this if using space-between and all cards are fixed height */
+    /* #lessonContent .card:last-child,
+    #quizArea .card:last-child {
+        margin-bottom: 0;
+    } */
+
+    #lessonActions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* --- Subtle Scrollbar Styling --- */
+    #lessonContent::-webkit-scrollbar,
+    #quizArea::-webkit-scrollbar,
+    #lessonLinks::-webkit-scrollbar {
+      width: 8px;
+    }
+    #lessonContent::-webkit-scrollbar-track,
+    #quizArea::-webkit-scrollbar-track,
+    #lessonLinks::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #lessonContent::-webkit-scrollbar-thumb,
+    #quizArea::-webkit-scrollbar-thumb,
+    #lessonLinks::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 10px;
+    }
+    #lessonContent::-webkit-scrollbar-thumb:hover,
+    #quizArea::-webkit-scrollbar-thumb:hover,
+    #lessonLinks::-webkit-scrollbar-thumb:hover {
+      background-color: #999;
     }
   </style>
 </head>
 <body>
-
 <main>
-
-  <!-- Level Selection -->
   <section id="home" class="screen active">
     <h2>Select Your Level</h2>
     <button class="level-button" onclick="loadLevel('A1')">A1 (Beginner)</button>
@@ -140,7 +234,6 @@
     <button class="level-button" onclick="loadLevel('B1')">B1 (Intermediate)</button>
     <button class="level-button" onclick="loadLevel('B2')">B2 (Upper-Intermediate)</button>
     <button class="level-button" onclick="loadLevel('C1/C2')">C1/C2 (Advanced)</button>
-
     <div class="card">
       <label for="targetLang"><strong>Language to Study:</strong></label>
       <select id="targetLang">
@@ -155,10 +248,9 @@
         <option value="Arabic">Arabic</option>
         <option value="Russian">Russian</option>
         <option value="Ukrainian">Ukrainian</option>
-        <!-- Add more as needed -->
       </select>
       <br><br>
-      
+
       <label for="interfaceLang"><strong>Your Fluent Language:</strong></label>
       <select id="interfaceLang">
         <option value="English" selected>English</option>
@@ -172,26 +264,21 @@
         <option value="Arabic">Arabic</option>
         <option value="Russian">Russian</option>
         <option value="Ukrainian">Ukrainian</option>
-        <!-- Add more as needed -->
       </select>
-      
+
       <br><br>
-    
+
       <label for="aiModel"><strong>Select AI Model:</strong></label>
       <select id="aiModel">
         <option value="compound-beta" selected>compound-beta</option>
         <option value="meta-llama/llama-4-maverick-17b-128e-instruct">meta-llama/llama-4-maverick-17b-128e-instruct</option>
         <option value="mixtral/mixtral-8x7b-instruct">Mixtral 8x7B</option>
         <option value="gemma2-9b-it">gemma2-9b-it</option>
-        <!-- Add more as supported -->
       </select>
     </div>
   </section>
 
-  
-  
 
-  <!-- Lesson List -->
   <section id="lessonList" class="screen">
     <button onclick="showScreen('home')">&larr; Back to Levels</button>
     <h2 id="levelTitle">Lessons</h2>
@@ -200,28 +287,27 @@
     <div id="lessonLinks"></div>
   </section>
 
-  <!-- Lesson Screen -->
   <section id="lesson" class="screen">
     <button onclick="showScreen('lessonList')">&larr; Back to Lessons</button>
     <h2 id="lessonTitle"></h2>
-    <div id="lessonContent"></div>
-    <div id="quizArea"></div>
+
+    <div id="lesson-body">
+      <div id="lessonContent"></div>
+      <div id="quizArea"></div>
+    </div>
+
     <div id="loading"><div class="spinner"></div><span>Loading lesson content...</span></div>
-    <button id="markCompleteBtn" onclick="markComplete()">Mark Complete</button>
-    <button id="regenerateBtn" onclick="regenerateLesson()">Regenerate Lesson</button>
+    <div id="lessonActions">
+        <button id="markCompleteBtn" onclick="markComplete()">Mark Complete</button>
+        <button id="regenerateBtn" onclick="regenerateLesson()">Regenerate Lesson</button>
+    </div>
   </section>
-
 </main>
-
 <script>
-
 let targetLanguage = "Spanish";
 let interfaceLanguage = "English";
 let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
-
-
   const groqApiKey = "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";
-
   const lessonTitlesByLevel = {
   "A1": [
     "Greetings", "Colors", "Numbers 1-10", "Days of the Week", "Family Members",
@@ -266,32 +352,20 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
     "Creative Writing", "Formal Presentations", "Cultural Identity", "Interview Techniques", "Language and Power"
   ]
 };
-
-
   let currentLevel = null;
   let currentLessonIndex = -1;
-
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
   }
-
   function loadLevel(level) {
   currentLevel = level;
-
   targetLanguage = document.getElementById('targetLang').value;
   interfaceLanguage = document.getElementById('interfaceLang').value;
   selectedModel = document.getElementById('aiModel').value;
-
-  console.log("Target Language:", targetLanguage);
-  console.log("Interface Language:", interfaceLanguage);
-  console.log("AI Model:", selectedModel);
-
   renderLessonLinks();
   showScreen('lessonList');
 }
-
-
   function renderLessonLinks() {
     const titles = lessonTitlesByLevel[currentLevel];
     const c = document.getElementById('lessonLinks');
@@ -302,7 +376,6 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
     document.getElementById('levelTitle').textContent = levelTitle = `${currentLevel} Lessons`;
     document.getElementById('progressInfo').textContent = `Progress: ${done} / ${total} (${pct}%)`;
     document.getElementById('progressBar').style.width = pct+'%';
-
     titles.forEach((t,i)=>{
       const span = document.createElement('span');
       span.textContent = `${i+1}. ${t}`;
@@ -312,7 +385,6 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
       c.appendChild(span);
     });
   }
-
   async function loadLesson(index) {
     currentLessonIndex=index;
     const title=lessonTitlesByLevel[currentLevel][index];
@@ -320,35 +392,29 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
     document.getElementById('lessonContent').innerHTML='';
     document.getElementById('quizArea').innerHTML='';
     document.getElementById('loading').style.display='flex';
-    document.getElementById('markCompleteBtn').style.display='none';
-    document.getElementById('regenerateBtn').style.display='none';
-
+    document.getElementById('lessonActions').style.display = 'none';
     const key = `lessonContent_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}_${currentLevel}_${index}`;
-const cached = localStorage.getItem(key);
-
-if (cached) {
-  try {
-    const lesson = JSON.parse(cached);
-    const vocabSample = lesson.vocab?.[0];
-    const keys = vocabSample ? Object.keys(vocabSample).map(k => k.toLowerCase()) : [];
-
-    if (!keys.includes(targetLanguage.toLowerCase()) || !keys.includes(interfaceLanguage.toLowerCase())) {
-      console.warn("Cached lesson keys do not match current languages. Regenerating...");
-      localStorage.removeItem(key);
-      await regenerateLessonCore(title, key);
+    const cached = localStorage.getItem(key);
+    if (cached) {
+      try {
+        const lesson = JSON.parse(cached);
+        const vocabSample = lesson.vocab?.[0];
+        const keys = vocabSample ? Object.keys(vocabSample).map(k => k.toLowerCase()) : [];
+        if (!keys.includes(targetLanguage.toLowerCase()) || !keys.includes(interfaceLanguage.toLowerCase())) {
+          console.warn("Cached lesson keys do not match current languages. Regenerating...");
+          localStorage.removeItem(key);
+          await regenerateLessonCore(title, key);
+        } else {
+          displayLesson(lesson);
+        }
+      } catch (e) {
+        localStorage.removeItem(key);
+        await regenerateLessonCore(title, key);
+      }
     } else {
-      displayLesson(lesson);
+      await regenerateLessonCore(title, key);
     }
-  } catch (e) {
-    localStorage.removeItem(key);
-    await regenerateLessonCore(title, key);
   }
-} else {
-  await regenerateLessonCore(title, key);
-}
-
-  }
-
   async function regenerateLessonCore(title,cacheKey){
     try{
       const lesson=await generateLessonContent(title);
@@ -360,92 +426,80 @@ if (cached) {
       showScreen('lessonList');
     }
   }
-
   function displayLesson(lesson){
     document.getElementById('loading').style.display='none';
     const cdiv=document.getElementById('lessonContent'), qdiv=document.getElementById('quizArea');
     cdiv.innerHTML=''; qdiv.innerHTML='';
+    const vocabKey = targetLanguage.toLowerCase();
+    const transKey = interfaceLanguage.toLowerCase();
 
-const vocabKey = targetLanguage.toLowerCase();
-const transKey = interfaceLanguage.toLowerCase();
+    // Add a title to the vocabulary column
+    const vocabTitle = document.createElement('h3');
+    vocabTitle.textContent = "Vocabulary";
+    vocabTitle.style.marginTop = 0;
+    cdiv.appendChild(vocabTitle);
 
-lesson.vocab.forEach(v => {
-  const d = document.createElement('div');
-  d.className = 'card';
-
-  // Create strong element for vocab word
-  const wordStrong = document.createElement('strong');
-  wordStrong.textContent = v[vocabKey];
-
-  // Create translation text node
-  const translationText = document.createTextNode(` = ${v[transKey]} `);
-
-  // Create a small button for TTS
-  const ttsBtn = document.createElement('button');
-  ttsBtn.textContent = '🔊';
-  ttsBtn.title = `Listen to "${v[vocabKey]}"`;
-  ttsBtn.style.marginLeft = '10px';
-  ttsBtn.style.padding = '0 6px';
-  ttsBtn.style.fontSize = '1rem';
-  ttsBtn.style.cursor = 'pointer';
-
-  // On click, speak the vocab word
-  ttsBtn.onclick = () => {
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(v[vocabKey]);
-    
-    // Optionally set language for better pronunciation
-    // Map your targetLanguage to a BCP-47 language code for TTS
-    const langMap = {
-      'Spanish': 'es-ES',
-      'French': 'fr-FR',
-      'German': 'de-DE',
-      'Mandarin Chinese': 'zh-CN',
-      'Japanese': 'ja-JP',
-      'Italian': 'it-IT',
-      'Korean': 'ko-KR',
-      'Portuguese': 'pt-PT',
-      'Arabic': 'ar-SA',
-      'Russian': 'ru-RU',
-      'Ukrainian': 'uk-UA',
-      // Add more if needed
-    };
-
-    utterance.lang = langMap[targetLanguage] || 'en-US'; // fallback to English
-    window.speechSynthesis.speak(utterance);
-  };
-
-  d.appendChild(wordStrong);
-  d.appendChild(translationText);
-  d.appendChild(ttsBtn);
-  cdiv.appendChild(d);
-});
-
-
+    // Vocabulary cards
+    lesson.vocab.forEach(v => {
+      const d = document.createElement('div');
+      d.className = 'card';
+      const wordStrong = document.createElement('strong');
+      wordStrong.textContent = v[vocabKey];
+      const translationText = document.createTextNode(` = ${v[transKey]} `);
+      const ttsBtn = document.createElement('button');
+      ttsBtn.textContent = '🔊';
+      ttsBtn.title = `Listen to "${v[vocabKey]}"`;
+      ttsBtn.style.marginLeft = '10px';
+      ttsBtn.style.padding = '0 6px';
+      ttsBtn.style.fontSize = '1rem';
+      ttsBtn.style.cursor = 'pointer';
+      ttsBtn.onclick = () => {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(v[vocabKey]);
+        const langMap = {
+          'Spanish': 'es-ES', 'French': 'fr-FR', 'German': 'de-DE', 'Mandarin Chinese': 'zh-CN',
+          'Japanese': 'ja-JP', 'Italian': 'it-IT', 'Korean': 'ko-KR', 'Portuguese': 'pt-PT',
+          'Arabic': 'ar-SA', 'Russian': 'ru-RU', 'Ukrainian': 'uk-UA',
+        };
+        utterance.lang = langMap[targetLanguage] || 'en-US';
+        window.speechSynthesis.speak(utterance);
+      };
+      d.appendChild(wordStrong);
+      d.appendChild(translationText);
+      d.appendChild(ttsBtn);
+      cdiv.appendChild(d);
+    });
 
     if(lesson.quiz){
-      const card=document.createElement('div'); card.className='card';
-      const p=document.createElement('p'); p.textContent=lesson.quiz.question;
-      card.appendChild(p);
-      const opts=document.createElement('div'); opts.className='quiz-options';
+      const quizTitle = document.createElement('h3');
+      quizTitle.textContent = "Quiz";
+      quizTitle.style.marginTop = 0;
+      qdiv.appendChild(quizTitle);
 
+      // Quiz Question Card (Card 1)
+      const questionCard = document.createElement('div');
+      questionCard.className = 'card quiz-card'; // Add a specific class for quiz cards if needed for styling
+      questionCard.style.fontWeight = 'bold'; // Make the question stand out
+      questionCard.textContent = lesson.quiz.question;
+      qdiv.appendChild(questionCard);
+
+      // Quiz Options as individual cards (Cards 2-5)
       lesson.quiz.options.forEach((opt,i)=>{
-        const btn=document.createElement('button');
-        btn.textContent=`${i+1}. ${opt}`;
-        btn.onclick=()=>handleAnswer(i,lesson.quiz.options.indexOf(lesson.quiz.answer));
-        opts.appendChild(btn);
-      });
-      card.appendChild(opts);
-      qdiv.appendChild(card);
-    }
+        const optionCard = document.createElement('div');
+        optionCard.className = 'card quiz-card quiz-option'; // Apply 'card' class, and new 'quiz-option'
+        optionCard.textContent = `${i+1}. ${opt}`;
+        optionCard.style.cursor = 'pointer'; // Indicate it's clickable
+        // Add hover effects directly in JS for simplicity or in CSS with .quiz-option:hover
+        optionCard.onmouseover = () => { optionCard.style.backgroundColor = 'var(--primary)'; optionCard.style.color = '#fff'; };
+        optionCard.onmouseout = () => { optionCard.style.backgroundColor = 'var(--card-bg)'; optionCard.style.color = 'var(--text)'; };
+        optionCard.onclick = () => handleAnswer(i, lesson.quiz.options.indexOf(lesson.quiz.answer));
 
-    document.getElementById('markCompleteBtn').style.display='inline-block';
-    document.getElementById('regenerateBtn').style.display='inline-block';
+        qdiv.appendChild(optionCard);
+      });
+    }
+    document.getElementById('lessonActions').style.display = 'flex';
     showScreen('lesson');
   }
-
   function handleAnswer(selIdx,correctIdx){
     if(selIdx===correctIdx){
       alert('Correct! Moving to next lesson...');
@@ -468,7 +522,6 @@ lesson.vocab.forEach(v => {
       alert('Try again!');
     }
   }
-
   function markComplete(){
     const prog=getProgress();
     if(!prog[currentLevel]) prog[currentLevel]=[];
@@ -478,16 +531,13 @@ lesson.vocab.forEach(v => {
     renderLessonLinks();
     showScreen('lessonList');
   }
-
   function regenerateLesson(){
     if(!confirm('Regenerate this lesson? This will overwrite current content.')) return;
     const key = `lessonContent_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}_${currentLevel}_${currentLessonIndex}`;
-
     localStorage.removeItem(key);
     const title=lessonTitlesByLevel[currentLevel][currentLessonIndex];
     regenerateLessonCore(title,key);
   }
-
   function getProgress(){
     try{
       const key = `lessonProgress_${targetLanguage.toLowerCase()}_${interfaceLanguage.toLowerCase()}`;
@@ -496,7 +546,6 @@ lesson.vocab.forEach(v => {
       return {};
     }
   }
-
   async function generateLessonContent(title){
     const prompt=`
 Generate a ${targetLanguage} language lesson for the title: "${title}".
@@ -507,7 +556,6 @@ Include:
 Respond WITH NO explanation, ONLY a JSON object:
 {"vocab":[{"${targetLanguage.toLowerCase()}":"...","${interfaceLanguage.toLowerCase()}":"..."}...],"quiz":{"question":"...","options":["..."],"answer":"..."}}
 `;
-
     const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
       method:"POST",
       headers:{"Content-Type":"application/json","Authorization":"Bearer "+groqApiKey},
@@ -530,19 +578,18 @@ Respond WITH NO explanation, ONLY a JSON object:
       throw new Error("JSON parse error: "+e.message+"\n"+text);
     }
   }
-
   // Keyboard shortcuts 1-4
   document.addEventListener('keydown',e=>{
     if(!document.getElementById('lesson').classList.contains('active')) return;
     const n=parseInt(e.key);
-    if(n>=1&&n<=4){
-      const btns=document.querySelectorAll('.quiz-options button');
+    if(n >= 1 && n <= 4){ // Only for options 1-4
+      // Query for the quiz option cards using the new class 'quiz-option'
+      const btns = document.querySelectorAll('.quiz-option');
+      // Adjust index because question card is first, so option 1 is btns[0]
       if(btns[n-1]) btns[n-1].click();
     }
   });
-
   window.addEventListener('load',()=>showScreen('home'));
 </script>
-
 </body>
 </html>
