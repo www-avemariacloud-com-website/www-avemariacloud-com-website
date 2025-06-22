@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LearnLang Groq Hybrid</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #3366ff;
@@ -18,7 +17,8 @@
     }
     * { box-sizing: border-box; }
     body {
-      font-family: 'Roboto', sans-serif;
+      /* UPDATED: Using system font stack */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
       margin: 0;
       padding: 0;
       background: var(--bg);
@@ -399,7 +399,7 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
 };
   let currentLevel = null;
   let currentLessonIndex = -1;
-  let currentLessonData = null; // Store the full lesson data (vocab + quizzes)
+  let currentLessonData = null; // Store the full lesson data (information + quizzes)
   let currentQuizIndex = 0; // Track which quiz is currently being displayed
 
   function showScreen(id) {
@@ -475,53 +475,12 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
     }
   }
 
-  function displayLessonVocab(lesson) {
-      const cdiv = document.getElementById('lessonContent');
-      cdiv.innerHTML = ''; // Clear existing vocab
-
-      const vocabKey = targetLanguage.toLowerCase();
-      const transKey = interfaceLanguage.toLowerCase();
-
-      const vocabTitle = document.createElement('h3');
-      vocabTitle.textContent = "Vocabulary";
-      vocabTitle.style.marginTop = 0;
-      cdiv.appendChild(vocabTitle);
-
-      lesson.vocab.forEach(v => {
-          const d = document.createElement('div');
-          d.className = 'card';
-          const wordStrong = document.createElement('strong');
-          wordStrong.textContent = v[vocabKey];
-          const translationText = document.createTextNode(` = ${v[transKey]} `);
-          const ttsBtn = document.createElement('button');
-          ttsBtn.textContent = '🔊';
-          ttsBtn.title = `Listen to "${v[vocabKey]}"`;
-          ttsBtn.style.marginLeft = '10px';
-          ttsBtn.style.padding = '0 6px';
-          ttsBtn.style.fontSize = '1rem';
-          ttsBtn.style.cursor = 'pointer';
-          ttsBtn.onclick = (event) => {
-              event.stopPropagation();
-              window.speechSynthesis.cancel();
-              const utterance = new SpeechSynthesisUtterance(v[vocabKey]);
-              const langMap = {
-                  'Spanish': 'es-ES', 'French': 'fr-FR', 'German': 'de-DE', 'Mandarin Chinese': 'zh-CN',
-                  'Japanese': 'ja-JP', 'Italian': 'it-IT', 'Korean': 'ko-KR', 'Portuguese': 'pt-PT',
-                  'Arabic': 'ar-SA', 'Russian': 'ru-RU', 'Ukrainian': 'uk-UA',
-              };
-              utterance.lang = langMap[targetLanguage] || 'en-US';
-              window.speechSynthesis.speak(utterance);
-          };
-          d.appendChild(wordStrong);
-          d.appendChild(translationText);
-          d.appendChild(ttsBtn);
-          cdiv.appendChild(d);
-      });
-  }
-
   function displayCurrentQuiz() {
       const qdiv = document.getElementById('quizArea');
       qdiv.innerHTML = ''; // Clear existing quiz content
+      const cdiv = document.getElementById('lessonContent'); // Get lessonContent div
+      cdiv.innerHTML = ''; // Clear existing lesson content (old information)
+
 
       if (!currentLessonData || !currentLessonData.quizzes || currentLessonData.quizzes.length === 0) {
           qdiv.innerHTML = '<h3>No quizzes available for this lesson.</h3>';
@@ -532,9 +491,52 @@ let selectedModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
           return;
       }
 
-      displayLessonVocab(currentLessonData); // Ensure vocab is always displayed
-
       const currentQuiz = currentLessonData.quizzes[currentQuizIndex];
+
+      // --- NEW INFORMATION RENDERING LOGIC FOR EACH QUIZ ---
+      if (currentQuiz.information && currentQuiz.information.length > 0) {
+          const informationTitle = document.createElement('h3');
+          informationTitle.textContent = "Information for this Quiz";
+          informationTitle.style.marginTop = 0;
+          cdiv.appendChild(informationTitle);
+
+          const informationKey = targetLanguage.toLowerCase();
+          const transKey = interfaceLanguage.toLowerCase();
+
+          currentQuiz.information.forEach(v => { // Iterate over currentQuiz.information
+              const d = document.createElement('div');
+              d.className = 'card';
+              const wordStrong = document.createElement('strong');
+              wordStrong.textContent = v[informationKey];
+              const translationText = document.createTextNode(` = ${v[transKey]} `);
+              const ttsBtn = document.createElement('button');
+              ttsBtn.textContent = '🔊';
+              ttsBtn.title = `Listen to "${v[informationKey]}"`;
+              ttsBtn.style.marginLeft = '10px';
+              ttsBtn.style.padding = '0 6px';
+              ttsBtn.style.fontSize = '1rem';
+              ttsBtn.style.cursor = 'pointer';
+              ttsBtn.onclick = (event) => {
+                  event.stopPropagation();
+                  window.speechSynthesis.cancel();
+                  const utterance = new SpeechSynthesisUtterance(v[informationKey]);
+                  const langMap = {
+                      'Spanish': 'es-ES', 'French': 'fr-FR', 'German': 'de-DE', 'Mandarin Chinese': 'zh-CN',
+                      'Japanese': 'ja-JP', 'Italian': 'it-IT', 'Korean': 'ko-KR', 'Portuguese': 'pt-PT',
+                      'Arabic': 'ar-SA', 'Russian': 'ru-RU', 'Ukrainian': 'uk-UA',
+                  };
+                  utterance.lang = langMap[targetLanguage] || 'en-US';
+                  window.speechSynthesis.speak(utterance);
+              };
+              d.appendChild(wordStrong);
+              d.appendChild(translationText);
+              d.appendChild(ttsBtn);
+              cdiv.appendChild(d);
+          });
+      } else {
+          cdiv.innerHTML = '<h3>No specific information for this quiz.</h3>';
+      }
+      // --- END NEW INFORMATION RENDERING LOGIC ---
 
       const quizTitle = document.createElement('h3');
       quizTitle.textContent = `Quiz ${currentQuizIndex + 1} of ${currentLessonData.quizzes.length}`;
@@ -708,19 +710,48 @@ Generate a ${targetLanguage} language lesson for the title: "${title}".
 Instructions should be in ${interfaceLanguage}
 
 Include:
-- A fullness of quizzes to teach the entire lesson
+- A fullness of quizzes necessary to teach the entire lesson.
 
 - Each quiz should contain 4 answer choices and the correct answer indicated.
 
-- Ensure the quizzes test comprehension of the vocabulary or related concepts for the lesson.
+- Ensure the quizzes test comprehension of the information or related concepts for the lesson.
 
 - I want to ensure that every aspect of the lesson is being both taught and quizzed.
 
-- A list of 5 ${targetLanguage} vocabulary words with ${interfaceLanguage} translations for each quiz.
+- For EACH QUIZ, include a list of 5 ${targetLanguage} pieces of information with ${interfaceLanguage} translations that are relevant to THAT SPECIFIC QUIZ.
+
+- I want the order of the information and answers to be random.
+
+- I want the quizzes and information to be designed in a way that is the most effective for teaching, and also makes it fun and easy for the user to learn.
 
 Respond WITH NO explanation, ONLY a JSON object:
 
-{"vocab":[{"${targetLanguage.toLowerCase()}":"...","${interfaceLanguage.toLowerCase()}":"..."}...],"quizzes":[{"question":"...","options":["..."],"answer":"..."}, {"question":"...","options":["..."],"answer":"..."}, {"question":"...","options":["..."],"answer":"..."}]}
+{
+  "quizzes": [
+    {
+      "question": "...",
+      "options": ["..."],
+      "answer": "...",
+      "information": [
+        {
+          "${targetLanguage.toLowerCase()}": "...",
+          "${interfaceLanguage.toLowerCase()}": "..."
+        }
+      ]
+    },
+    {
+      "question": "...",
+      "options": ["..."],
+      "answer": "...",
+      "information": [
+        {
+          "${targetLanguage.toLowerCase()}": "...",
+          "${interfaceLanguage.toLowerCase()}": "..."
+        }
+      ]
+    }
+  ]
+}
 `;
     const res = await fetch("https://groqchatcompletionsproxy.small-recipe-9582.workers.dev/", {
       method: "POST",
