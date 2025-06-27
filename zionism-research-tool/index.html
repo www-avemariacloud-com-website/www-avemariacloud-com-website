@@ -534,7 +534,7 @@
         result.style.display = "none";
         error.style.display = "none";
     
-        const apiUrl = 'https://proxy.small-recipe-9582.workers.dev/';
+        const apiUrl = 'https://groqchatcompletionsproxy.small-recipe-9582.workers.dev/';
         const requestData = {
             model: selectedModel,
             messages: createPromptMessages(selectedPrompt, inputText),
@@ -853,7 +853,7 @@ Respond in JSON.`
     messageHistory.push({ role: "user", content: message });
 
     // Prepare API request
-    const apiUrl = "https://proxy.small-recipe-9582.workers.dev/";
+    const apiUrl = "https://groqchatcompletionsproxy.small-recipe-9582.workers.dev/";
     const requestData = {
         model: document.getElementById("modelSelect").value,
         messages: messageHistory
