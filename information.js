@@ -1,6 +1,15 @@
 sessionStorage.setItem("informationLoaded", "false");
 
     var informationHTML = `<center>
+<p>
+<div id="version" style="display: inline-block;"></div><BR><BR>
+© 2025 Internet Services LLC | AveMariaCloud.com<BR><BR>
+<a href="mailto:website@avemariacloud.com">website@avemariacloud.com</a>
+<BR><BR>
+Maybe you should read and agree to these <a href="https://avemariacloud.com/terms.html" target="_blank">Terms of Service</a> and this <a href="https://avemariacloud.com/privacy.html" target="_blank">Privacy Policy</a>.
+<br><br>
+I am interested in this work being in the Public Domain.
+<BR><BR>
 Software, code, text, an image, images and/or things may have been created and may be created using services, tools, software, API, APIs, or things relating to
 <a href="https://openai.com/" target="_blank">OpenAI and/or ChatGPT</a>,
 <a href="https://www.anthropic.com/" target="_blank">Anthropic and/or Claude AI</a>,
@@ -91,7 +100,9 @@ AI-generated content may be inaccurate or incomplete and should not be considere
 <strong>OpenAI and/or ChatGPT:</strong> <a href="https://openai.com/policies/terms-of-use/">Terms of Use</a>, <a href="https://openai.com/policies/row-privacy-policy/">Privacy Policy</a>, <a href="https://openai.com/brand/">Brand Guidelines</a>, and <a href="https://openai.com/policies/">General Policies</a>.<br>
 <strong>Anthropic PBC and/or Claude AI:</strong> <a href="https://www.anthropic.com/legal/consumer-terms">Consumer Terms</a>, <a href="https://www.anthropic.com/legal/commercial-terms">Commercial Terms</a>, <a href="https://www.anthropic.com/legal/privacy">Privacy Policy</a>, <a href="https://www.anthropic.com/responsible-disclosure-policy">Responsible Disclosure Policy</a>, and <a href="https://trust.anthropic.com/">Trust Center</a>.<br>
 <strong>Hugging Face API:</strong> This tool may use an API, APIs, or things relating to Hugging Face, and may be subject to their <a href="https://huggingface.co/terms-of-service" target="_blank">Terms of Service</a>, <a href="https://huggingface.co/privacy" target="_blank">Privacy Policy</a>, <a href="https://huggingface.co/content-guidelines">Content Guidelines</a>, and <a href="https://huggingface.co/code-of-conduct">Code of Conduct</a>.<br>
-<p></p>
+<BR><BR><p>Don't mix models’ outputs in a deceptive way.
+<BR>
+Don't reuse outputs across models in ways that violate original usage rights.</p>
 </center>`;
 
     document.getElementById("informationFooter").innerHTML = informationHTML;
